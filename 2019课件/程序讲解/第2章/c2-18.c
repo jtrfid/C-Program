@@ -10,7 +10,7 @@ int main( )
   t=t*i;
   i=i+1;
  }
- printf("%d\n",t);
+ printf("%d\n",t); 
  return 0;
 }
 
