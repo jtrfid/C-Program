@@ -1,0 +1,451 @@
+% !Mode::"TeX:UTF-8"
+% !Mode:: "TeX:UTF-8"
+\documentclass[xcolor=svgnames,serif,table,10pt]{beamer}
+\mode<presentation>{
+% Setup appearance:
+\useoutertheme{infolines}
+\usetheme{Darmstadt}
+\setbeamercovered{transparent}
+\setbeamertemplate{caption}[numbered]
+\setbeamertemplate{navigation symbols}{}
+\setbeamertemplate{blocks}[rounded][shadow=true]
+\setbeamertemplate{enumerate items}[circle]
+
+% 修改样式
+\setbeamercolor{box}{bg=black!20!orange,fg=white}
+\setbeamercolor{block title}{use=sidebar,fg=sidebar.fg!10!white,bg=orange!70!black}
+\setbeamercolor{block title example}{use=sidebar,fg=sidebar.fg!10!white,bg=black!60!green}
+\setbeamercolor{block title alerted}{use=sidebar,fg=sidebar.fg!10!white,bg=black!50!red}
+
+\setbeamertemplate{headline}
+{%
+  \begin{beamercolorbox}[shadow=true]{section in head/foot}
+  \vskip2pt\insertnavigation{\paperwidth}\vskip2pt
+  \end{beamercolorbox}%
+}
+}
+\usepackage{url}
+\usepackage{animate}
+\usepackage[english]{babel}
+\usepackage{times}
+\usepackage[T1]{fontenc}
+\usepackage{multirow,multicol,longtable}
+\usepackage{graphics}
+\usepackage{xcolor}
+\usepackage[no-math]{fontspec}%-------------------------------------------------- 提供字体选择命令
+\usepackage{xunicode}%----------------------------------------------------------- 提供Unicode字符宏
+\usepackage{xltxtra}%------------------------------------------------------------ 提供了针对XeTeX的改进并且加入了XeTeX的LOGO
+\usepackage[BoldFont,SlantFont,CJKchecksingle]{xeCJK}%--------------------------- 使用xeCJK宏包
+
+
+%================================== 设置中文字体 ================================%
+%\setCJKmainfont{Adobe Heiti Std}%------------------------------------------------设置正文为黑体
+%\setCJKmonofont{Adobe Song Std}%-------------------------------------------------设置等距字体
+%\setCJKsansfont{Adobe Kaiti Std}%------------------------------------------------设置无衬线字体
+% \setCJKfamilyfont{zxzt}{FZShouJinShu-S10S}
+% \setCJKfamilyfont{FZDH}{FZDaHei-B02S}
+%================================== 设置中文字体 ================================%
+
+%================================== 设置英文字体 ================================%
+\setmainfont[Mapping=tex-text]{Times New Roman}%--------------------------------英文衬线字体
+\setsansfont[Mapping=tex-text]{Arial}%------------------------------------英文无衬线字体
+\setmonofont[Mapping=tex-text]{Courier New}%-------------------------------------英文等宽字体
+\newfontfamily\Arial{Arial}
+%================================== 设置英文字体 ================================%
+
+%================================== 设置数学字体 ================================%
+%\setmathsfont(Digits,Latin,Greek)[Numbers={Lining,Proportional}]{Minion Pro}
+%================================== 设置数学字体 ================================%
+\punctstyle{kaiming}%------------------------------------------------------------ 开明式标点格式
+\usepackage{graphicx}
+\usepackage{tikz}
+\usetikzlibrary{positioning,backgrounds}
+\usetikzlibrary{fadings}
+\usetikzlibrary{patterns}
+\usetikzlibrary{calc}
+\usetikzlibrary{shadings}
+\pgfdeclarelayer{background}
+\pgfdeclarelayer{foreground}
+\pgfsetlayers{background,main,foreground}
+\usepackage{xifthen}
+\usepackage{colortbl,dcolumn}
+\usepackage{enumerate}
+\usepackage{pifont}
+\usepackage{tabularx}
+\usepackage{booktabs}
+\usepackage{hyperref}
+
+\usepackage{bm} % 字体加粗的方法
+\usetikzlibrary{arrows,automata,matrix,arrows}
+
+%=================================== 数学符号 =================================%
+\newcommand{\rtn}{\mathrm{\mathbf{R}}}
+\newcommand{\N}{\mathrm{\mathbf{N}}}
+\newcommand{\As}{\mathrm{a.s.}}
+\newcommand{\Ae}{\mathrm{a.e.}}
+\newcommand*{\PR}{\mathrm{\mathbf{P}}}
+\newcommand*{\EX}{\mathrm{\mathbf{E}}}
+\newcommand{\EXlr}[1]{\mathrm{\mathbf{E}}\left[#1\right]}
+\newcommand*{\dif}{\,\mathrm{d}}
+\newcommand*{\F}{\mathcal{F}}
+\newcommand*{\h}{\mathcal{H}}
+\newcommand*{\vp}{\varepsilon}
+\newcommand*{\prs}{\dif\PR-\As}
+\newcommand*{\dte}{\dif t-\Ae}
+\newcommand*{\pts}{\dif\PR\times\dif t-\Ae}
+\newcommand{\Ito}{It\^{o}}
+\newcommand{\tT}[1][0]{[#1,T]}
+\newcommand{\intT}[2][T]{\int^{#1}_{#2}}
+\newcommand{\intTe}[1][t]{\intT[t+\varepsilon]{#1}}
+\newcommand{\s}{\mathcal{S}}
+\newcommand{\me}{\mathrm{e}}
+\newcommand{\one}[1]{{\bf 1}_{#1}}
+\renewcommand{\M}{{\rm M}}
+\newcommand{\Me}[1][t]{M^{\varepsilon}_{#1}}
+\newcommand{\Ne}[1][t]{N^{\varepsilon}_{#1}}
+\newcommand{\Pe}[1][t]{P^{\varepsilon}_{#1}}
+\DeclareMathOperator*{\sgn}{sgn}
+% =================================== 数学符号 =================================%
+
+% 定义罗马数字
+\makeatletter
+\newcommand{\rmnum}[1]{\romannumeral #1}
+\newcommand{\Rmnum}[1]{\expandafter\@slowromancap\romannumeral #1@}
+\makeatother
+
+% 定义破折号
+\newcommand{\pozhehao}{\kern0.3ex\rule[0.8ex]{2em}{0.1ex}\kern0.3ex}
+% 中文日期
+\def\CJK@today{\the\year 年 \the\month 月}
+\newcommand\zhtoday{\CJK@today}
+
+% 中文图表
+\renewcommand\figurename{图}
+\renewcommand\tablename{表}
+
+\usepackage{verbatim} % \begin{comment} xxxx \end{comment}
+
+\usetheme{Berlin} %主题
+%\usecolortheme{sustech} %主题颜色
+
+\usepackage{algorithm}  
+\usepackage{algorithmicx}  
+\usepackage{algpseudocode}
+\floatname{algorithm}{算法}
+\renewcommand{\algorithmicrequire}{\textbf{输入:}} 
+\renewcommand{\algorithmicensure}{\textbf{输出:}}  
+
+\algrenewcommand{\algorithmiccomment}[1]{ $//$ #1}
+
+\definecolor{mygreen}{rgb}{0,0.6,0}
+\definecolor{mygray}{rgb}{0.5,0.5,0.5}
+\definecolor{mymauve}{rgb}{0.58,0,0.82}
+\usepackage{listings}
+\lstset{ %
+	backgroundcolor=\color{white},   % choose the background color
+	basicstyle=\footnotesize\ttfamily,     % size of fonts used for the code
+	columns=fullflexible,
+	breaklines=true,                 % automatic line breaking only at whitespace
+	captionpos=b,                    % sets the caption-position to bottom
+	tabsize=4,
+	commentstyle=\color{mygreen},    % comment style
+	escapeinside={\%*}{*)},          % if you want to add LaTeX within your code
+	keywordstyle=\color{blue},       % keyword style
+	stringstyle=\color{mymauve}\ttfamily,     % string literal style
+	numbers=left, 
+	%	frame=single,
+	rulesepcolor=\color{red!20!green!20!blue!20},
+	% identifierstyle=\color{red},
+	language=c
+}
+
+\graphicspath{{figures/},} 
+
+% Author, Title, etc.
+
+\title{计算机导论与程序设计[CS006001-60]}
+
+%% \subtitle{Foreground-constrained Eulerian Video Motion Magnification}
+
+\author[段江涛]{段江涛
+\\机电工程学院}
+
+\institute[]{\includegraphics[height=1cm]{xd.jpg}}
+
+\date{\zhtoday}
+
+\setlength{\baselineskip}{22pt}
+\renewcommand{\baselinestretch}{1.4}
+
+% The main document
+
+\begin{document}
+\setlength{\abovedisplayskip}{1ex}%------------------------------------------ 公式前的距离
+\setlength{\belowdisplayskip}{1ex}%------------------------------------------ 公式后的距离
+
+\begin{frame}
+  \titlepage
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\include{lecture-1}
+
+%%%%%%%%%%%%%%%%%%% last frame
+\begin{frame}[plain]{}
+  \begin{center}
+    \begin{tikzpicture}
+      \node[above,xscale=1.2,yscale=1.2]{\Huge 欢迎批评指正！};
+    \end{tikzpicture}
+  \end{center}
+\end{frame}
+
+\end{document}
+
+
+%%%%下面的内容不参与文档的编译。使用者在想用某个东西时直接可通过查阅，并复制黏贴和修改使用。
+
+\iffalse　　%注释开始
+
+\section{第一部分}
+
+%垂直居中
+\begin{frame}
+  \begin{center}
+  需要居中的内容！
+  \end{center}
+\end{frame}
+或者
+\begin{frame}
+  \centering
+  一些内容
+\end{frame}
+
+%幻灯片标题的使用
+\begin{frame}
+\frametitle{第一部分第一张幻灯}
+  一些内容
+\end{frame}
+
+%项目编号的使用
+\begin{frame}
+  \frametitle{条目}
+  \begin{itemize}
+  \item 项目1
+  \item 项目2
+  \item 项目3
+  \item 项目4
+    \begin{itemize}
+    \item 二级项目1
+    \item 二级项目2
+    \end{itemize}
+  \end{itemize}
+\end{frame}
+
+%表格的使用
+\begin{frame}
+  \frametitle{表格}
+  \begin{table}[htbp!]
+  	\small %\tiny,\scriptsize,\footnotesize,\small,\normalsize,\large,\LARGE,\huge,\Huge
+    \centering
+    \caption{主流机器学习框架}
+    \begin{tabular}{c|c|c|c|c}
+      \toprule[1pt]
+      机器学习库	& 机构 & 支持语言  & 平台 & Tensor \\
+      \toprule[1pt]
+      TensorFlow	& Google & C++，Python &跨平台 & Good \\
+ 	  \hline
+      Pytorch	&  Facebook& Python & 跨平台 & Good \\
+ 	  \bottomrule[1pt]
+    \end{tabular}
+  \end{table}
+\end{frame}
+
+%区块的使用
+\begin{frame}
+  \frametitle{分析}
+  \begin{block}{XXX 算法}
+	\begin{itemize}
+		\item 步骤1
+	 	\item 步骤2
+	 	\item 步骤3
+	 \end{itemize}
+  \end{block}
+\end{frame}
+
+%使用区块来强调内容
+\begin{frame}
+  \frametitle{强调}
+  \begin{itemize}
+  \item 这是内容
+  \end{itemize}
+  \only<1>\begin{block}{}
+    这里蹦出来一个强调！
+  \end{block}
+\end{frame}
+
+%section中目录的使用
+\begin{frame}
+  \frametitle{技术影响力}
+    \tableofcontents[currentsection,hideallsubsections]
+\end{frame}
+
+%插入图片
+\begin{frame}
+\begin{figure}[!h]
+  \centering
+  % Requires \usepackage{graphicx}
+  \includegraphics[width=2cm]{pics/logo.jpg}\\
+  \caption{logo图片样例}\label{pic6}
+\end{figure}
+\end{frame}
+
+%分栏实现图文混排
+\begin{frame}
+分栏前面的一些内容！！
+\begin{columns}%0.6 0.4表示相对比例
+\column{0.6\textwidth}%<1->
+分栏的左侧，文字叙述。
+\column{0.4\textwidth}%<1->
+分栏的右侧插入了图片。
+ \begin{figure}[!h]
+  \centering
+  % Requires \usepackage{graphicx}
+  \includegraphics[width=4cm]{pics/logo.jpg}\\
+  \caption{logo图片样例}\label{pic6}
+\end{figure}
+\end{columns}
+分栏后面的一些内容！！
+\end{frame}
+
+%% last frame
+\begin{frame}[plain]{}
+\begin{center}
+	\begin{tikzpicture}
+	\node[above,xscale=1.2,yscale=1.2]{\Huge 欢迎批评指正！};
+	\end{tikzpicture}
+\end{center}
+\end{frame}
+
+% 大括号
+$\left\{ .....  \right\}$
+$\left[ .....  \right]$
+$\left( ..... \right)$
+$\left\{ .....  \right.$ %有左无右
+
+$\delta_{jk}=
+\begin{cases}
+1, & (i=k)\\
+0, & (i\ne k)
+\end{cases}
+$
+
+\tikzstyle{int}=[draw, fill=blue!20, minimum size=2em]
+\tikzstyle{init} = [pin edge={to-,thin,black}]
+\begin{tikzpicture}[node distance=2.5cm,auto,>=latex']
+\node [int, pin={[init]above:$v_0$}] (a) {$\frac{1}{s}$};
+\node (b) [left of=a,node distance=2cm, coordinate] {a};
+\node [int, pin={[init]above:$p_0$}] (c) [right of=a] {$\frac{1}{s}$};
+\node [coordinate] (end) [right of=c, node distance=2cm]{};
+\path[->] (b) edge node {$a$} (a);
+\path[->] (a) edge node {$v$} (c);
+\draw[->] (c) edge node {$p$} (end) ;
+\end{tikzpicture}
+
+%%%%%%%%%% 上下文字
+$P(H_1|H_0)\mathop{=}\limits^{def}P_F$\\    %上下文字在\[... \]和$...$表现不一致
+\[P(H_1|H_0)\mathop{=}\limits^{def}P_F \]
+\[P(H_1|H_0)\mathop{=}^{def}P_F \]
+\begin{align*}
+P(H_1|H_0)\mathop{=}^{def}P_F
+\end{align*}
+
+\begin{enumerate}
+	\setcounter{enumi}{3} %设定起始编号 
+	\item aaa
+	\item bbb
+\end{enumerate}
+
+%%%%%%%%%%%
+\\
+~\\ %一行空白
+%%%%%%%%%%%%
+
+\bigskip  或\medskip
+
+%%%%%%%%%%%%%%%% 自动压缩，以显示全部内容
+\begin{frame}[shrink]
+\frametitle{标题} %需要页面标题时，这样设置，而不能\begin{frame}{标题}[shrink]
+\end{frame}
+
+%%%%%%%%%%%% 最后一列左对齐---&&， 单个&分割，则是右对齐
+\begin{align*}
+E[a(t)]&=\int_{-\infty}^{\infty}a(t)p(x)dx\\
+&=a(t)\int_{-\infty}^{\infty}p(x)dx &&\text{by $a(t)$是常数}\\
+&=a(t)\cdot 1 &&by \int_{-\infty}^{\infty}p(x)dx=1\\
+&=a(t)
+\end{align*}
+
+%%%%%%%%%%%%%%%%有色文本
+\textcolor{blue}{This text is in blue} 
+\colorbox{yellow}{This text is highlighted in yellow} 
+\colorbox{yellow}{ 
+	\textcolor{red}{ 
+		\textbf{ 
+			Bold text in red, highlighted in yellow 
+		} 
+	} 
+} 
+
+block 普通环境
+theorem 定理环境
+lemma 引理环境
+proof 证明环境
+corollary 推论环境
+example 示例环境
+alertblock 警示环境
+
+\begin{frame}{算法}
+\begin{columns}[T] % align columns
+	\begin{column}<0->{.5\textwidth}
+		\begin{algorithm}[H]  
+			\caption{algorithm caption} %算法的名字
+			\hspace*{0.02in} {\bf Input:} %算法的输入， \hspace*{0.02in}用来控制位置，同时利用 \\ 进行换行
+			input parameters A, B, C\\
+			\hspace*{0.02in} {\bf Output:} %算法的结果输出
+			output result 
+			\begin{algorithmic}[1] %每行显示行号  
+				\State some description % \State 后写一般语句
+				\For{condition} % For 语句，需要和EndFor对应
+				\State ...
+				\If{condition} % If 语句，需要和EndIf对应
+				\Else
+				\EndIf
+				\EndFor
+				\While{condition} % While语句，需要和EndWhile对应
+				\EndWhile
+				\State \Return result	
+			\end{algorithmic}  
+		\end{algorithm}
+	\end{column}%
+	\hfill%	
+	\begin{column}<0->{.40\textwidth}
+		
+	\end{column}%
+\end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{代码}
+\fontspec{Consolas}
+%不能用Tab键
+\begin{lstlisting}
+inline int gcd(int a, int b) { 
+return b==0?a:gcd(b,a%b)
+}
+inline int lcm(int a, int b) {
+return a/gcd(a,b)*b;
+}
+\end{lstlisting}
+\end{frame}
+
+\fi　　　%注释结束
