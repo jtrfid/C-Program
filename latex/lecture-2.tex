@@ -247,6 +247,32 @@ int main()                   // 主函数
 \end{lstlisting}
 \end{frame}
 
+\begin{frame}{常用格式描述符与数据类型的对应关系}
+\begin{tabular}{|c|c|c|}
+	\hline 
+	\textbf{格式符} & \textbf{对应的数据类型} &  \textbf{备注}\\ 
+	\hline 
+	\%d & int &  \\ 
+	\hline  
+	\%f & float &  \\
+	\hline  
+	\%lf & double & \\ 
+	\hline 
+	\%.2f & float & 保留两位小数, 四舍五入 \\ 
+	\hline 
+	\%.2lf & double & 保留两位小数, 四舍五入 \\ 
+	\hline
+	\hline   
+	\%x & int & 十六进制显示 \\ 
+	\hline 
+	\%ld & long int &  \\ 
+	\hline 
+\end{tabular}
+\newline
+\newline
+\textcolor{blue}{详见p73, 表3.6}
+\end{frame}
+
 \begin{frame}[fragile]{输出语句printf(``原样输出, \%格式符'', 对应变量值);}
 \begin{lstlisting}
 #include<stdio.h>            // standard input/output编译预处理指令
