@@ -183,7 +183,8 @@
 				\State float sum = 1.0; 
 				\While{(deno<=100)} % While语句，需要和EndWhile对应
 				\State sign = -1 * sign;
-				\State sum = sum + 1.0/deno;  
+				\State sum = sum + 1.0/deno; 
+				\State deno = deno + 1; 
 				\EndWhile
 				\State printf(``sum=\%f$\backslash$n", sum);	
 			\end{algorithmic}  
@@ -237,9 +238,9 @@
 \includegraphics[scale=0.5]{top-down}
 \end{frame}
 
-\section{初识C语言程序}
+\section{初识C语言程序(作业)}
 
-\begin{frame}[fragile]{求5!的C语言程序}
+\begin{frame}[fragile]{求5!的C语言程序。\small{[作业: 请抄写以下各页，并试着分析理解。]}}
 \begin{lstlisting}
 #include<stdio.h>            // standard input/output编译预处理指令
 int main()                   // 主函数
@@ -285,14 +286,14 @@ int main()                   // 主函数
 	\%d & int &  \\ 
 	\hline  
 	\%f & float &  \\
-	\hline  
+	\hline
 	\%c & char & \\ 
-	\hline  
+	\hline   
 	\%lf & double & \\ 
 	\hline 
-	\%.2f & float & 保留两位小数, 四舍五入 \\ 
+	\%.2f & float & 保留两位小数, 四舍五入。不适用于scanf()。 \\ 
 	\hline 
-	\%.2lf & double & 保留两位小数, 四舍五入 \\ 
+	\%.2lf & double & 保留两位小数, 四舍五入。不适用于scanf()。 \\ 
 	\hline
 	\hline   
 	\%x & int & 十六进制显示 \\ 
