@@ -15,12 +15,14 @@
 	\%d & int &  \\ 
 	\hline  
 	\%f & float &  \\
-	\hline  
+	\hline
+	\%c & char & \\ 
+	\hline   
 	\%lf & double & \\ 
 	\hline 
-	\%.2f & float & 保留两位小数, 四舍五入 \\ 
+	\%.2f & float & 保留两位小数, 四舍五入。不适用于scanf()。 \\ 
 	\hline 
-	\%.2lf & double & 保留两位小数, 四舍五入 \\ 
+	\%.2lf & double & 保留两位小数, 四舍五入。不适用于scanf()。 \\ 
 	\hline
 	\hline   
 	\%x & int & 十六进制显示 \\ 
@@ -45,7 +47,7 @@ int main()                   // 主函数
    f=10.2;
    d=20.356;
    c='A';
-   printf("a=%d,b=%d,c=%c,f=%f,d=%.2lf\n",a,b,c,f,d); // \%.2f, \%.2lf保留两位小数
+   printf("a=%d,b=%d,c=%c,f=%f,d=%.2lf\n",a,b,c,f,d); // %.2f, %.2lf保留两位小数
    return 0;                 // 函数执行完毕返回函数值0
 }                            // 函数结束标志
 \end{lstlisting}
@@ -60,9 +62,9 @@ int main()                   // 主函数
    float f=10.2;  // 定义变量f为单精度浮点数
    double d; // 定义变量d为双精度浮点数
    char c='A';   // 定义变量c为单个英文字母, 字符输入以后讲
-   printf("请输入整数a,b, 空格隔开:\n"); // 提示语句[可选]
-   scanf("%d%d",&a,&b);
-   printf("请输入浮点数f,d, 空格隔开:\n"); // 提示语句[可选]
+   printf("请输入整数和浮点数, 空格隔开:\n"); // 提示语句[可选]
+   scanf("%d%f",&a,&f);  // 尽量简单, 不要有其它字符和'\n'
+   printf("请输入两个浮点数, 空格隔开:\n"); // 提示语句[可选]
    scanf("%f%lf",&f,&d);
    printf("a=%d,b=%d,c=%c,f=%f,d=%lf\n",a,b,c,f,d); // \n为换行符
    return 0;                 // 函数执行完毕返回函数值0
@@ -145,7 +147,7 @@ printf("\na=%d,b=%d,c=%d,a=%c,b=%c,c=%c\n",a,b,c,a,b,c);
        char c1 = 'A', c2='\n'; // 字符常量
        char s[50] = "boy"; // 字符串常量      
        printf("回车换行\n");
-       printf("单引号\',双引号\"转移字符前缀\\,\n");  
+       printf("单引号\',双引号\"转移字符前缀\,\n");  
        return 0;           
     }                            
     \end{lstlisting}
@@ -158,7 +160,7 @@ printf("\na=%d,b=%d,c=%d,a=%c,b=%c,c=%c\n",a,b,c,a,b,c);
 #define PI 3.14  // 符号常量, 注意没有分号           
 int main()                   
 {                            
-   int r = 123; // 整型常量
+   int r = 123; // 整型变量
    const int a = 425; // 常变量
    r = 100; // 合法, 因为r是变量，可以随时更改它的值
    a = 100; // 不合法，因为a是常变量，不能更改
@@ -175,7 +177,7 @@ int main()
 #include<stdio.h>           
 int main()                   
 {                            
-    int r = 123; // 合法整型常量名
+    int r = 123; // 合法整型变量名
     int 3a; // 不合法的变量名
     int brake; // 不合法的变量名, 因为break是关键字, 被系统使用。
     int Radius; // 变量名最好有含义

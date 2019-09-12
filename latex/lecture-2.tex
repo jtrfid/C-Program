@@ -77,11 +77,13 @@
 \begin{columns}
 	\column{0.45\textwidth}
 	\begin{block}{数值运算算法}
+	   如求一个方程的根, 计算一个函数的定积分等。\\
 	   数值运算的目的是求数值解。\\
 	   由于数值运算往往有现成的模型，可以运用数值分析方法，因此对数值运算的算法的研究比较深入，算法比较成熟。	
 	\end{block}
 	\column{0.45\textwidth}
 	\begin{block}{非数值运算算法}
+		如图书检索, 人事管理等。\\
 		计算机在非数值运算方面的应用远超在数值运算方面的应用。
 		非数值运算的种类繁多，要求各异，需要使用者参考已有的类似算法，重新设计解决特定问题的专门算法。
 	\end{block}
@@ -149,8 +151,8 @@
 				\If{(year能被4整除,但是不能被100整除)} R=`Y'; % If 语句，需要和EndIf对应
 				\ElsIf {(year能被100整除, 并且能被400整除)} R=`Y';
 				\EndIf
-				\If{(R=='Y')} printf(``\%d是闰年",year); 
-				\Else \quad printf(``\%d不是闰年",year);
+				\If{(R=='Y')} printf(``\%d是闰年", year); 
+				\Else \quad printf(``\%d不是闰年", year);
 				\EndIf	
 				\State year = year + 1;
 				\EndWhile
@@ -181,7 +183,7 @@
 				\State float sum = 1.0; 
 				\While{(deno<=100)} % While语句，需要和EndWhile对应
 				\State sign = -1 * sign;
-				\State sum = sum + 1/deno;  
+				\State sum = sum + 1.0/deno;  
 				\EndWhile
 				\State printf(``sum=\%f$\backslash$n", sum);	
 			\end{algorithmic}  
@@ -205,7 +207,7 @@
 		\begin{algorithm}[H]  
 			\caption{例2.5(p20): 给出一个大于或等于3的正整数，判断它是不是一个素数.} %算法的名字
 			\begin{algorithmic}[1] %每行显示行号
-				\State int n, i=2, char R=`N';
+				\State int n, i=2;
 				\State scanf("\%d",\&n); $\backslash\backslash$输入n的值; 
 				\While{(i < n)} % While语句，需要和EndWhile对应
 				\If{(n能被i整除)} \{ printf(``\%d不是素数", n); return; \}
@@ -284,6 +286,8 @@ int main()                   // 主函数
 	\hline  
 	\%f & float &  \\
 	\hline  
+	\%c & char & \\ 
+	\hline  
 	\%lf & double & \\ 
 	\hline 
 	\%.2f & float & 保留两位小数, 四舍五入 \\ 
@@ -357,7 +361,7 @@ int main()                   // 主函数
 \end{lstlisting}
 \end{frame}
 
-\begin{frame}[fragile]{while(条件表达式)\{ 表达式为真(非0)时执行语句; \}}
+\begin{frame}[fragile]{while(条件表达式)\{ 表达式为真(非0)时执行的语句;\}}
 \begin{lstlisting}
 #include<stdio.h>            // standard input/output编译预处理指令
 int main()                   // 主函数
