@@ -5,7 +5,20 @@
   \tableofcontents[hideallsubsections]
 \end{frame}
 
-\section{初识C语言程序}
+\section{初识C语言程序(讲解作业)}
+
+\begin{frame}[fragile]{DevC++ 5.0以前的版本}
+\begin{lstlisting}
+#include<stdio.h>            // standard input/output编译预处理指令
+#include <stdlib.h>          // standard library function, eg. for system()函数 
+int main()                   // 主函数
+{                            // 函数开始标志
+   printf("%d\n",p);
+   system(“pause”);          // 窗口暂停，DevC++ 5.0以前的版本。[机试系统提交时，一定注释或删除该语句] 
+   return 0;                 // 函数执行完毕返回函数值0
+}                            // 函数结束标志
+\end{lstlisting}
+\end{frame}
 
 \begin{frame}[fragile]{求5!的C语言程序}
 \begin{lstlisting}

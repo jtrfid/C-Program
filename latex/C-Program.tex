@@ -147,12 +147,13 @@
 	columns=fullflexible,
 	breaklines=true,                 % automatic line breaking only at whitespace
 	captionpos=b,                    % sets the caption-position to bottom
+	%showtabs=false,                  % 不显示tab键，不作为
 	tabsize=4,
 	commentstyle=\color{mygreen},    % comment style
 	escapeinside={\%*}{*)},          % if you want to add LaTeX within your code
 	keywordstyle=\color{blue},       % keyword style
 	stringstyle=\color{mymauve}\ttfamily,     % string literal style
-	numbers=left, 
+	numbers=none, % 给代码添加行号，可取值none, left, right.	
 	%	frame=single,
 	rulesepcolor=\color{red!20!green!20!blue!20},
 	% identifierstyle=\color{red},
@@ -190,8 +191,9 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %\include{lecture-1}
-\include{lecture-2}
+%\include{lecture-2}
 %\include{lecture-3}
+\include{lecture-4}
 
 %%%%%%%%%%%%%%%%%%% last frame
 \begin{frame}[plain]{}
@@ -305,7 +307,7 @@
 %分栏实现图文混排
 \begin{frame}
 分栏前面的一些内容！！
-\begin{columns}%0.6 0.4表示相对比例
+\begin{columns}[t] %顶部垂直对齐
 \column{0.6\textwidth}%<1->
 分栏的左侧，文字叙述。
 \column{0.4\textwidth}%<1->
@@ -440,7 +442,7 @@ alertblock 警示环境
 \end{columns}
 \end{frame}
 
-\begin{frame}[fragile]{代码}
+\begin{frame}[shrink,fragile]{代码}
 \fontspec{Consolas}
 %不能用Tab键
 \begin{lstlisting}
@@ -451,6 +453,35 @@ inline int lcm(int a, int b) {
 return a/gcd(a,b)*b;
 }
 \end{lstlisting}
+\end{frame}
+
+\begin{frame}[shrink,fragile]{if(条件表达式)\{ 表达式为真(非0)时执行语句; \}}
+\begin{columns}[t]%有时用[T]更有效
+	\column{0.3\textwidth}
+	\begin{beamerboxesrounded}{形式1(无else)}
+		\begin{lstlisting}
+		// 形式1(无else)
+		if(条件表达式)
+		{
+		多条语句(复合语句);
+		}
+		\end{lstlisting}
+	\end{beamerboxesrounded}
+	\column{0.3\textwidth}
+	\begin{beamerboxesrounded}{形式2}
+		\begin{lstlisting}
+		// 形式2
+		if(条件表达式)
+		{
+		多条语句(复合语句);
+		}
+		else
+		{
+		多条语句(复合语句);
+		}
+		\end{lstlisting} 
+	\end{beamerboxesrounded}
+\end{columns}                        
 \end{frame}
 
 \fi　　　%注释结束
