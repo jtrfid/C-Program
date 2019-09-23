@@ -183,7 +183,7 @@
 				\State float sum = 1.0; 
 				\While{(deno<=100)} % While语句，需要和EndWhile对应
 				\State sign = -1 * sign;
-				\State sum = sum + 1.0/deno; 
+				\State sum = sum + sign*1.0/deno; 
 				\State deno = deno + 1; 
 				\EndWhile
 				\State printf(``sum=\%f$\backslash$n", sum);	
