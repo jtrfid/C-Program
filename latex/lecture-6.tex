@@ -186,7 +186,7 @@ if(a>=b+c)
 { ... }
 if(a==b+c)//a是否等于(b+c),与a=(b+c)不同
 { ... }
-if(a!=b+c) // a不能于(b+c)
+if(a!=b+c) // a不等于(b+c)
 { ... }
 \end{lstlisting}
 \column{0.5\textwidth}
@@ -320,7 +320,7 @@ else
 \begin{columns}[T]
 \column{0.5\textwidth}
 \begin{lstlisting}
-int a,b;
+int a,b,max;
 scanf("%d%d",&a,&b);
 if(a>b)
 { max = a; }
@@ -358,17 +358,20 @@ printf("ch=%c\n",ch);
 
 \begin{frame}[shrink,fragile]{数学表达式与C语言表达式的不同}
 \begin{lstlisting}
-int a = 10;
-if(20 <= a && a <= 30) // 表达式的值为假(0)
+int a = 100;
+if(20 <= a && a <= 30) // 表达式的值为假(0), 条件表达式与数学含义相同
 { ...  }
-if(20 <= a <= 30) // 表达式为真(1)
+if(20 <= a <= 30) // (20<=a)<=30, 表达式为真(1), 条件表达式与数学含义不同
 { ...  }
 // 类似的
-// if(a==20) 与 if(a=20)意义不同.
-if(a==20) //表达式的值是假(0)
+// if(a==20) 与 if(a=20)意义不同
+if(a==20) //表达式的值是假(0), a的值没有变化
 { ... }
-if(a=20) //表达式的值是10, 非0, 表示为真, 并且a被赋值为20
-{ ... }
+if(a=20) //表达式的值是10, 非0, 表示为真, 并且a被赋值为20(赋值语句)
+{
+    printf("%d\n",a); // 20 
+}
+printf("%d\n",a); // 20 
 \end{lstlisting}
 \end{frame}
 
@@ -377,11 +380,11 @@ if(a=20) //表达式的值是10, 非0, 表示为真, 并且a被赋值为20
 \begin{frame}[shrink,fragile]{用switch语句实现多分支选择结构}
 switch(int或char型表达式)
 \begin{columns}[T]
-\column{0.5\textwidth}
+\column{0.3\textwidth}
 \begin{lstlisting}
 int a;
 scanf("%d",&a)
-swach(a)
+switch(a)
 {
    case 10: 多条语句1; 
             break;
@@ -392,7 +395,10 @@ swach(a)
    default: 多条语句4;
 }
 \end{lstlisting}
-\column{0.5\textwidth}
+\column{0.2\textwidth}
+\vspace{3cm}
+$\implies$
+\column{0.3\textwidth}
 \begin{lstlisting}
 int a;
 scanf("%d",&a)
@@ -462,6 +468,7 @@ s<250 &&\text{没有折扣}\\
 int c,s; //c是分类整数, s是距离
 float p,w,d,f; //单价,重量,折扣,运费
 // 运费 f = p*w*s*(1-d%) 
+scanf("%f%f%d",&p,&w,&s);
 if(s>=3000) { c = 12; } else {c = s/250; }
 switch(c) {
    case 0: d=0; break;

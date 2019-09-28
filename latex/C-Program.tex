@@ -190,8 +190,9 @@
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\include{report} % 程序设计报告
 %\include{lecture-1}
-\include{lecture-2}
+%\include{lecture-2}
 %\include{lecture-3}
 %\include{lecture-4}
 %\include{lecture-5}
@@ -371,21 +372,6 @@ P(H_1|H_0)\mathop{=}^{def}P_F
 	\item bbb
 \end{enumerate}
 
-%%%%%%%%%%%
-\\
-~\\ %一行空白
-
-\newline
-\newline
-%%%%%%%%%%%%
-
-\bigskip  或\medskip
-
-%%%%%%%%%%%%%%%% 自动压缩，以显示全部内容
-\begin{frame}[shrink]
-\frametitle{标题} %需要页面标题时，这样设置，而不能\begin{frame}{标题}[shrink]
-\end{frame}
-
 %%%%%%%%%%%% 最后一列左对齐---&&， 单个&分割，则是右对齐
 \begin{align*}
 E[a(t)]&=\int_{-\infty}^{\infty}a(t)p(x)dx\\
@@ -484,5 +470,41 @@ return a/gcd(a,b)*b;
 	\end{beamerboxesrounded}
 \end{columns}                        
 \end{frame}
+
+%调整行间距
+%%%%%%%%%%%
+\\
+~\\ %一行空白
+
+\newline
+\newline
+%%%%%%%%%%%%
+
+\bigskip  或\medskip
+\usepackage{setspace}
+\setstretch{2.5}
+
+\begin{itemize} 
+	\setlength{\itemsep}{.5cm}
+	\item item1
+	\item item2
+\end{itemize}
+
+
+\begin{itemize}	
+	\item item1
+	\vspace{.5cm}
+	\item item2	
+\end{itemize}
+
+数学公式居中：可以在公式前后各加两个$$，就可以了
+一行对齐：左对齐\leftline{内容} 居中\centerline{内容} 右对齐\rightline{内容}
+
+数学公式居中：可以在公式前后各加两个$$，就可以了
+一行对齐：左对齐\leftline{内容} 居中\centerline{内容} 右对齐\rightline{内容}
+多行或者段落对齐：
+左对齐 \begin{flushleft}...\end{flushleft}
+居中 \begin{center}...\end{center}
+右对齐 \begin{flushright}...\end{flushright}
 
 \fi　　　%注释结束

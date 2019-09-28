@@ -7,16 +7,17 @@
 
 \section{数据类型}
 
-\begin{frame}[fragile]{常量}
+\begin{frame}[shrink,fragile]{常量}
     \begin{lstlisting}
     #include<stdio.h> 
     #define PI 3.14  // 符号常量, 注意没有分号           
     int main()                   
-    {                            
+    {                                  
        int a = 123; // 整型常量
        float f = 12.2, f1=123E-1; // 实型常量
        char c1 = 'A', c2='\n'; // 字符常量
-       char s[50] = "boy"; // 字符串常量      
+       char s[50] = "boy"; // 字符串常量
+       printf("半径为%d的圆周长是%f\n",a,2*PI*a);       
        printf("回车换行\n");
        printf("单引号\',双引号\"转义字符前缀\,\n");  
        return 0;           
@@ -81,7 +82,7 @@ int main()
 \textcolor{blue}{整型数据存储空间和值的范围见p45, 表3.2}
 \end{frame}
 
-\begin{frame}[fragile]{字符类型(ASCII字符表见附录A)}
+\begin{frame}[shrink,fragile]{字符类型(ASCII字符表见附录A)}
 \begin{lstlisting}
 #include<stdio.h>           
 int main()                   
@@ -95,6 +96,7 @@ int main()
     c1 = c1 + 32;  // 转换为小写字母
     printf("%c,0X%x,%d\n",c1,c1,c1); // b,0X62,98
     printf("%d\n",'9'-'0'); // 数字 = 编码值- '0'
+    printf("%c,%d,%c,%d\n",'A','A','a','a'); // 输出字符和相应的ASIII编码
     return 0;           
 }                            
 \end{lstlisting}
@@ -226,10 +228,10 @@ int main()
 \begin{enumerate}
 	\item 求$1-\frac{1}{2}+\frac{1}{3}-\frac{1}{4}+\dots+\frac{1}{99}-\frac{1}{100}$\\
 	\item 求$1\times 2\times 3\times 4\times 5$\\
-	\item 求$y=|x^3+\log_{10} x|$\\
-	\item 求$y=\frac{3ae}{cd}$\\
-	\item 求$y=\frac{ax+\frac{a+x}{4a}}{2}$\\
-	\item $m$是一个已知3位整数，从左到右用$a,b,c$表示各位数字，求数bac的值。
+	\item 自定义各变量类型和值, 求$y=|x^3+\log_{10} x|$\\
+	\item 自定义各变量类型和值, 求$y=\frac{3ae}{cd}$\\
+	\item 自定义各变量类型和值, 求$y=\frac{ax+\frac{a+x}{4a}}{2}$\\
+	\item $m$是一个已知3位整数, 从左到右用$a,b,c$表示各位数字，求数bac的值。
 \end{enumerate}
 \end{frame}
 
