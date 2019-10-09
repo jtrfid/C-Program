@@ -6,6 +6,8 @@
 \useoutertheme{infolines}
 \usetheme{Darmstadt}
 \setbeamercovered{transparent}
+%\setbeamercovered{dynamic}  % translucent when using \pause 或itemize等
+%\setbeamercovered{invisible} % 本页不显示\pause后的内容
 \setbeamertemplate{caption}[numbered]
 \setbeamertemplate{navigation symbols}{}
 \setbeamertemplate{blocks}[rounded][shadow=true]
@@ -190,13 +192,15 @@
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\include{report} % 程序设计报告
-%\include{lecture-1}
-%\include{lecture-2}
-%\include{lecture-3}
-%\include{lecture-4}
-%\include{lecture-5}
-%\include{lecture-6}
+%\include{report} % 程序设计报告
+%\include{lecture-1} % 课程介绍，导论简介， C语言程序设计
+%\include{lecture-2} % 开发工具，算法，初识C语言程序(作业)
+%\include{lecture-3} % 初识C语言程序(讲解作业), 数据的输入输出
+%\include{lecture-4} % 开发平台实例演示: 数据输入再讨论
+%\include{lecture-5} % 数据类型, 运算符和表达式, 数学库函数，顺序程序设计举例
+%\include{lecture-6} % ch4, 选择结构程序设计
+\include{lecture-7} % ch5, 循环结构程序设计
+%\include{lecture-8} % ch5, 循环结构程序设计举例
 %%%%%%%%%%%%%%%%%%% last frame
 \begin{frame}[plain]{}
   \begin{center}
@@ -506,5 +510,18 @@ return a/gcd(a,b)*b;
 左对齐 \begin{flushleft}...\end{flushleft}
 居中 \begin{center}...\end{center}
 右对齐 \begin{flushright}...\end{flushright}
+
+% 水平空格大小，\hfill 不计大小
+\hspace{1cm} 
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\columnseprule=1pt %插入分栏线
+\begin{multicols}{3}
+	aa\\
+	cd\\
+	dd
+\end{multicols}
+
+\rule{\textwidth}{1pt} %水平线
 
 \fi　　　%注释结束
