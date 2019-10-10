@@ -67,7 +67,7 @@ F_n=F_{n-1}+F_{n-2} & (n\ge 3)\\
 \end{frame}
 
 \begin{frame}[shrink,fragile]
-解法一: $F_1=F_2=1; F_3=F_1+F_2; F_1=F_2; F_2=F_3; $
+解法一: 利用递推(迭代)公式: $F_1=F_2=1; F_3=F_1+F_2; F_1=F_2; F_2=F_3; $
 \begin{columns}
 	\column{0.6\textwidth}
 	\begin{lstlisting}
@@ -94,7 +94,7 @@ F_n=F_{n-1}+F_{n-2} & (n\ge 3)\\
 \end{frame}
 
 \begin{frame}[shrink,fragile]
-解法二: $F_1=F_2=1; F_1=F_1+F_2; F_2=F_1+F_2; $
+解法二: 利用递推(迭代)公式: $F_1=F_2=1; F_1=F_1+F_2; F_2=F_1+F_2; $
 \begin{columns}
 	\column{0.5\textwidth}
 \begin{lstlisting}
@@ -103,10 +103,11 @@ int main()
 {
   int f1=1,f2=1;
   int i;
-  for(i=1; i<=38; i++)
+  for(i=1; i<=20; i++)
   {
     printf("%12d%12d",f1,f2);
-    if(i%2==0) printf("\n");
+    if(i%2==0) // 等效 if(!(i%2)) 
+       printf("\n");
     f1=f1+f2;
     f2=f2+f1;
   }
@@ -134,9 +135,9 @@ int main()
   scanf("%d",&n);
   for (i=2;i<n;i++)
     if(n%i==0) break;
-  if(i<n) 
+  if(i<n) // for提前结束
     printf("%d is not a prime number.\n",n);
-  else 
+  else // for正常结束
     printf("%d is a prime number.\n",n);
   return 0;
 }
@@ -149,8 +150,7 @@ int main()
 
 \begin{frame}[shrink,fragile]
 \small
-其实$n$不必被$2\sim (n-1)$范围内的各整数去除，只须将$n$被$2\sim\sqrt{n}$之间的整数除即可。\\
-因为n的每一对因子, 必然有一个小于n, 另一个大于n。
+\textbf{\textcolor{blue}{优化: }} $n$不必被$2\sim (n-1)$内的各整数去除，只须将$n$被$2\sim\sqrt{n}$之间的整数除即可。因为n的每一对因子, 必然有一个小于n, 另一个大于n。
 %\centering
 \begin{lstlisting}
 #include <stdio.h>
@@ -174,16 +174,16 @@ int main()
 
 \begin{frame}[shrink,fragile]
 \small
-使用标志变量, 判断循环结束条件。
+\textbf{\textcolor{blue}{使用标志变量, 判断循环结束条件。}}
 %\centering
 \begin{lstlisting}
 int n,i,k,flag=1; // flag: 标志变量
 k=sqrt(n); // 自动转换为整数(不会四舍五入), 相当于k=(int)sqrt(n);
 for (i=2;i<=k;i++)
    if(n%i==0) { flag=0; break; }
-if(!flag) 
+if(!flag) // for提前结束
    printf("%d is not a prime number.\n",n);
-else 
+else // for正常结束
    printf("%d is a prime number.\n",n);
 \end{lstlisting}
 \pause
@@ -203,7 +203,7 @@ else
 \begin{frame}[shrink,fragile]
 \small
 $[$例5.10$]$求$100\sim 200$间的全部素数。
-%\centering
+\pause
 \begin{lstlisting}
 #include <stdio.h>
 #include <math.h>
@@ -227,6 +227,7 @@ int main()
 \begin{frame}[shrink,fragile]
 \small
 $[$例5.11$]$译密码。为使电文保密，往往按一定规律将其转换成密码，收报人再按约定的规律将其译回原文。例如，可以按以下规律将电文变成密码:将字母A变成字母E，a变成e，即变成其后的第4个字母，W变成A，X变成B，Y变成C，Z变成D。
+\pause
 \begin{lstlisting}
 char c;
 c=getchar(); //输入一个字符给字符变量c
@@ -245,7 +246,7 @@ printf("\n");
 \end{frame}
 
 \begin{frame}[shrink,fragile]
-在循环条件中接收输入的字符是一种常见技巧。
+\textbf{\textcolor{blue}{在循环条件中接收输入的字符是一种常见技巧。}}
 \begin{lstlisting}
 char c;
 while((c=getchar())!='\n') //检查c的值是否为换行符'\n'  
@@ -268,7 +269,7 @@ printf("\n");
 \column{0.5\textwidth}
 \begin{lstlisting}
 int i,s,n,term = 0;
-for(i = 1,s=0; i<=n; i++) 
+for(i=1,s=0; i<=n; i++) // 初始化循环变量用逗号隔开
 {
    term = term*10 + a;
    s += term; 
@@ -287,10 +288,10 @@ for(i = 1,s=0; i<=n; i++)
 计算韩信至少有多少兵。 
 \pause
 \begin{columns}
-\column{0.7\textwidth}
+\column{0.8\textwidth}
 \begin{lstlisting}
 int x=1;
-for(;;x++)  
+for(;;x++)  // 循环体仅含if()结构，看作一条语句，'{}'可省略
     if(x%5==1 && x%6==5 && x%7==4 && x%11==10)
     { 
        printf("%d\n",x);  
@@ -339,14 +340,14 @@ for(m=100;m<=999;m++)
 \end{columns}
 ~\\
 \pause
-\textbf{\textcolor{blue}{思考: 输出共有多少个水仙数?}}
+\textcolor{blue}{思考: 输出共有多少个水仙数?}
 \end{frame}
 
 \begin{frame}[fragile]
 附加题3: 求整数区间$[a,b]$中水仙花数的个数。
 \pause
 \begin{columns}
-\column{0.6\textwidth}
+\column{0.8\textwidth}
 \begin{lstlisting}
 int n=0; //计数 
 int a,b; // a,b 区间
@@ -355,7 +356,7 @@ int sum; // i的各位立方和
 scanf("%d%d",&a,&b);
 for(i=a;i<=b;i++) // 考察i是否水仙数
 {  
-  sum = 0; t=i; // 临时变量记住i
+  sum = 0; t=i; // 临时变量记住i; 易遗漏每次内层循环前sum要归0
   while(t!=0) // 累加各位立方 
   { sum+=pow(t%10,3); t=t/10; }
   if(sum==i) n++; // i是水仙数 
@@ -367,21 +368,22 @@ printf("%d\n",n);
 
 \begin{frame}[fragile]
 附加题4: 百钱百鸡, 已知公鸡5个钱1只, 母鸡3个钱1只, 小鸡1个钱3只, 用100个钱买了100只鸡。问公鸡、母鸡、小鸡各几只? 
+\vspace{0.5cm}
 \pause
 \begin{columns}
-\column{0.8\textwidth}
+%\column{0.9\textwidth}
 \begin{lstlisting}
 int x,y,z; // 公鸡、母鸡、小鸡个数
 for(x=0;x<=100;x++) 
    for(y=0;y<=100;y++) 
      for(z=0;z<=100;z++) 
-       if(5*x+3*y+z/3 == 100 && x+y+z == 100 && z%3 == 0)  
+       if(5*x+3*y+z/3 == 100 && x+y+z == 100 && z%3 == 0) // 全部条件! 
           printf("%d,%d,%d\n",x,y,z);
 \end{lstlisting}
 \end{columns}
-~\\
+\vspace{0.5cm}
 \pause
-\textbf{\textcolor{blue}{如何考虑无解的情况?}}
+\textcolor{blue}{如何考虑无解的情况?}
 \end{frame}
 
 \begin{frame}{注意事项小结}
