@@ -45,8 +45,8 @@ gcd(a,1)=1
 int main()
 {
     int a,b,t,i;
-    scanf("%d%d",&a,&b);
-    if(a<b) { t=a; a=b; b=t; } // 交换a,b
+    scanf("%d%d",&a,&b); // 机试系统不要想当然给提示语句, 除非题目要求  
+    if(a<b) { t=a; a=b; b=t; } // 交换a,b,使a是较大者 
 	for(i=b;i>0;i--)
 	{
 	    if(a%i==0 && b%i==0)
