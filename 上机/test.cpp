@@ -19,5 +19,7 @@ for(j=1;j<=N-1;j++) //进行N-1次循环，实现N-1趟比较
 }
 printf("\n the sorted numbers :\n");
 for(i=0;i<N;i++) printf("%d ",a[i]);
+
+printf("%-5d,%5d,%d,%-10.2f\n",10,10,10,76.287); 
    return 0;           
 }                   
