@@ -15,8 +15,14 @@ int main()
 	//int m=2,n=2,p=3; // M,N,P实际大小
 	int c[M][N],a[M][P]={{5,2,4},{3,8,2},{6,0,4},{0,1,6}},b[P][N]={{2,4},{1,3},{3,2}}; // c={{24,34},{20,40},{24,32},{19,15}}
 	int m=4,n=2,p=3; // M,N,P实际大小
-	
 	int i,j,k; //i,j,k分别是m,n,p的循环变量 
+	
+	scanf("%d%d%d\n", &m,&n,&p);
+	for(i=0;i<m;i++)
+	  for(k=0;k<p;k++) scanf("%d",&a[i][k]);
+	for(k=0;k<p;k++)
+	  for(j=0;j<n;j++) scanf("%d",&b[i][k]);
+	  
 	for(i=0;i<m;i++) 
 	{
 	   for(j=0;j<n;j++)
