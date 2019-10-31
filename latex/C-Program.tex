@@ -149,8 +149,8 @@
 	columns=fullflexible,
 	breaklines=true,                 % automatic line breaking only at whitespace
 	captionpos=b,                    % sets the caption-position to bottom
-	%showtabs=false,                  % 不显示tab键，不作为
 	tabsize=4,
+	showtabs=false,                  % 不显示tab键，不作为
 	commentstyle=\color{mygreen},    % comment style
 	escapeinside={\%*}{*)},          % if you want to add LaTeX within your code
 	keywordstyle=\color{blue},       % keyword style
@@ -159,7 +159,12 @@
 	%	frame=single,
 	rulesepcolor=\color{red!20!green!20!blue!20},
 	% identifierstyle=\color{red},
-	language=c
+	language=c,
+	%%%%%%%%%%%%%%%%%%%%%%%
+	breaklines=true,  % automatic line breaking only at whitespace
+	extendedchars=false,  % 代码跨页问题
+	keepspaces=true,
+	showspaces=false,
 }
 
 \graphicspath{{figures/},} 
@@ -204,7 +209,10 @@
 %\include{lecture-9} % ch5, 循环结构程序设计举例(续)
 %\include{lecture-10} % ch6, 一维数组，冒泡排序
 %\include{lecture-11} % ch6, 二维数组和字符数组
-\include{lecture-12} % ch6, 字符串处理库函数及程序举例
+%\include{lecture-12} % ch6, 字符串处理库函数及程序举例
+%%%%%%%%%%%%第2次机试练习讲解
+%\include{lecture-13} % ch7, 函数，定义，声明，调用，值传递，地址传递，模块化设计
+\include{lecture-14} % ch7, 嵌套与递归 
 %%%%%%%%%%%%%%%%%%% last frame
 \begin{frame}[plain]{}
   \begin{center}
@@ -346,6 +354,12 @@ $\left\{ .....  \right\}$
 $\left[ .....  \right]$
 $\left( ..... \right)$
 $\left\{ .....  \right.$ %有左无右
+
+%右边大括号
+\begin{align*}
+\left.\sqrt{\frac{E_s}{N_0}(1-\rho)}\right|_{\rho=-0.21}=\sqrt{\frac{E_s^\prime}{N_0}}\\
+E_s^\prime=1.21E_s
+\end{align*}
 
 $\delta_{jk}=
 \begin{cases}
@@ -586,9 +600,9 @@ one\\
 \end{frame} 
 
 \begin{columns}
-	\column{0.65\textwidth}<1->
+	\column{0.65\textwidth}<2->
 	1234
-	\column{0.35\textwidth}<2->
+	\column{0.35\textwidth}<1->
 	abcd
 \end{columns}
 

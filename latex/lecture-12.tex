@@ -42,7 +42,7 @@ int main()
    puts(s1); // abcdef, 最后一个字符是'\0'
    puts(s2); // cdef, 保持不变, , 最后一个字符是'\0'
    // 把s2复制给s1, 因此s1数组也要足够大
-   strcpy(s1,s2);  // s2=s1; 是错误的, 因为s2是数组名，表示地址常量
+   strcpy(s1,s2);  // s1=s2; 是错误的, 因为数组名表示地址常量
    puts(s1); // cdef, 最后一个字符是'\0'
    puts(s2); // cdef, 保持不变, , 最后一个字符是'\0'
    strncpy(s1,"1234",2); // 复制s2的前n个字符给s1,覆盖s1相应位置的字符, n要小于s1的数组长度
@@ -235,7 +235,7 @@ for(i=0;i<m;i++)
    {
      c[i][j]=0;
      for(k=0;k<p;k++) 
-     c[i][j]+=a[i][k]*b[k][j]; // a的第i行各列(k)和b的第j列各行(k)的乘积累加 
+        c[i][j]+=a[i][k]*b[k][j]; // a的第i行各列(k)和b的第j列各行(k)的乘积累加 
      printf("c[%d][%d]=%d\n",i,j,c[i][j]); // 输出测试
    }
 }
@@ -262,7 +262,14 @@ for(k=0;k<p;k++)
   for(j=0;j<n;j++) scanf("%d",&b[k][j]);
 ...
 \end{lstlisting}
-\end{frame}                 
+\end{frame}  
+
+\begin{frame}[shrink]
+\frametitle{lecture-12 主要内容}
+\framesubtitle{字符串处理库函数及程序举例}
+%\tableofcontents[hideallsubsections]
+\tableofcontents
+\end{frame}               
 
 
 

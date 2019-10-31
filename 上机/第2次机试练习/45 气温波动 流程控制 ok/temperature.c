@@ -26,16 +26,14 @@ int main()
 {
 	int i, n, last ,temperature, undulation = 0;
 	scanf("%d",&n);
-	if (n >= 2 && n <= 30)
+	for(i = 0; i < n; i++)
 	{
-		for(i = 0; i < n; i++)
-		{
-			scanf("%d",&temperature);
-			if (i != 0 && fabs(temperature - last) > undulation) 
-				undulation = fabs(temperature - last);
-			last = temperature;
-		} 
-		printf("%d\n",undulation); 
-	}
+		scanf("%d",&temperature);
+		if (i != 0 && fabs(temperature - last) > undulation) 
+			undulation = fabs(temperature - last);
+		last = temperature;
+	} 
+	printf("%d\n",undulation); 
 	return 0;
 } 
+
