@@ -9,12 +9,12 @@ int main()
 	{
 		scanf("%d",&num[i]);
 	}
-	smallest=abs(num[0]-num[1]);
-	for(i=0;i<=n-3;i++)
+	smallest=(int)fabs(num[0]-num[1]);// abs()在低版本编译器中有问题 
+	for(i=0;i<=n-2;i++) 
 	{
 		for(j=i+1;j<n;j++)
 		{
-			temp=abs(num[i]-num[j]);
+			temp=(int)fabs(num[i]-num[j]);
 			if(smallest>temp) smallest=temp;
 		}
 	}

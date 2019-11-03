@@ -81,8 +81,6 @@ int main()
 	*************/
 	
     int F[M][M]; // 对应元素为1,则表示删除 
-	int countCol,countRow; // 计数
-	int current; // 当前检查的数 
 	
 	//scanf("%d%d",&n,&m);
 	
