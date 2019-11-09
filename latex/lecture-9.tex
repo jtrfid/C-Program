@@ -155,33 +155,43 @@ int main()
 \end{lstlisting}
 \end{frame}
 
-\begin{frame}[shrink,fragile]
-附加题5-2: 求整数$a,b$的最大公约数, 伪代码分析
+\begin{frame}[shrink,fragile]{求整数$a,b$的最大公约数, 欧几里得算法}
+\begin{columns}
+	\column{0.6\textwidth}
+	古希腊数学家欧几里德在其著作<<The Elements>>中最早描述了这种算法。\\
+	\textbf{定理：}两个整数的最大公约数等于其中较小的那个数和两数相除余数的最大公约数。
+	\column{0.3\textwidth}
+	\includegraphics[scale=0.3]{eou}
+\end{columns}
+~\\
+\textbf{伪代码分析}
 \begin{lstlisting}
-a,b的最大公约数，a=mb+r, m=a/b; r=a%b
+a,b的最大公约数，[则: a=mb+r, m=a/b; r=a%b]
+循环, b作被除数，分母是余数r, 
+[则: n=b/r; r=nb; a=mb+nb=(m+n)b; 如果一个整数能整除b, 必整除a]
+直到r=0, 本轮循环的a(上轮循环的b)就是最大公约数。 
 while(1)
 {
-  r = a%b; 
-  if(r==0) break; // b就是最大公约数
-  else if(b%r==0) break; // r就是最大公约数，因为: n=b/r; r=nb; a=mb+nb=(m+n)b;
-  a=b; b=r; // 准备下一轮迭代   
+   r = a%b; // 注意b为0时，不能计算余数，a就是最大公约数
+   if(r==0) { gcd=a; break; } // 本轮循环的a(上轮循环的b)就是最大公约数
+   a=b; b=r; // 准备下一轮迭代    
 }
 \end{lstlisting}
-\rule{\textwidth}{1pt} %水平线
-\pause
+\end{frame}
+
+\begin{frame}[shrink,fragile]{求整数$a,b$的最大公约数, 欧几里得算法}
 \begin{lstlisting}
 int a,b,r,t;
 scanf("%d%d",&a,&b); // 机试系统不要想当然给提示语句, 除非题目要求
 if(a<b) { t=a; a=b; b=t; } // 交换a,b,使a是较大者
 while(1)
 {
-   if(b==0) { t=a; break; }
+   if(b==0) { t=a; break; } // 分母为0时, a就是最大公约数
    r = a%b; 
-   if(r==0) {t=b; break;} // b就是最大公约数
-   else if(r==1) {t=1; break;} // a,b互质 
-   else if(b%r==0) {t=r; break;} // r就是最大公约数，因为: n=b/r; r=nb; a=mb+nb=(m+n)b;
+   if(r==0) {t=b; break;} // 本轮循环的a(上轮循环的b)就是最大公约数
    a=b; b=r; // 准备下一轮迭代   
 }
+printf("%d\n",t);// 输出最大公约数
 \end{lstlisting}
 \end{frame}
 

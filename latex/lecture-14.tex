@@ -74,6 +74,7 @@ int max4(int a,int b,int c,int d)
 }
 \end{lstlisting}
 \end{columns}
+~\\
 \end{frame}
 
 \section{函数的递归调用}
@@ -405,38 +406,47 @@ int main()
 \end{lstlisting}
 \end{frame}
 
-\begin{frame}[shrink,fragile]
-求整数$a,b$的最大公约数, 伪代码分析
+\begin{frame}[shrink,fragile]{求整数$a,b$的最大公约数, 欧几里得算法}
+\begin{columns}
+	\column{0.6\textwidth}
+	古希腊数学家欧几里德在其著作<<The Elements>>中最早描述了这种算法。\\
+	\textbf{定理：}两个整数的最大公约数等于其中较小的那个数和两数相除余数的最大公约数。
+	\column{0.3\textwidth}
+	\includegraphics[scale=0.3]{eou}
+\end{columns}
+~\\
+\textbf{伪代码分析}
 \begin{lstlisting}
-a,b的最大公约数，a=mb+r, m=a/b; r=a%b
+a,b的最大公约数，[则: a=mb+r, m=a/b; r=a%b]
+循环, b作被除数，分母是余数r, 
+[则: n=b/r; r=nb; a=mb+nb=(m+n)b; 如果一个整数能整除b, 必整除a]
+直到r=0, 本轮循环的a(上轮循环的b)就是最大公约数。 
 while(1)
 {
-  r = a%b; 
-  if(r==0) break; // b就是最大公约数
-  else if(b%r==0) break; // r就是最大公约数，因为: n=b/r; r=nb; a=mb+nb=(m+n)b;
-  a=b; b=r; // 准备下一轮迭代   
+  r = a%b; // 注意b为0时，不能计算余数，a就是最大公约数
+  if(r==0) { gcd=a; break; } // 本轮循环的a(上轮循环的b)就是最大公约数
+  a=b; b=r; // 准备下一轮迭代    
 }
-\end{lstlisting}
-\rule{\textwidth}{1pt} %水平线
-\pause
-\begin{lstlisting}
-  int a,b,r,t;
-  scanf("%d%d",&a,&b); // 机试系统不要想当然给提示语句, 除非题目要求
-  if(a<b) { t=a; a=b; b=t; } // 交换a,b,使a是较大者
-  while(1)
-  {
-    if(b==0) { t=a; break; }
-    r = a%b; 
-    if(r==0) {t=b; break;} // b就是最大公约数
-    else if(r==1) {t=1; break;} // a,b互质 
-    else if(b%r==0) {t=r; break;} // r就是最大公约数，因为: n=b/r; r=nb; a=mb+nb=(m+n)b;
-    a=b; b=r; // 准备下一轮迭代   
-  }
 \end{lstlisting}
 \end{frame}
 
-\begin{frame}[shrink,fragile]
-求整数$a,b$的最大公约数, 递归实现。
+\begin{frame}[shrink,fragile]{求整数$a,b$的最大公约数, 非递归实现}
+\begin{lstlisting}
+int a,b,r,t;
+scanf("%d%d",&a,&b); // 机试系统不要想当然给提示语句, 除非题目要求
+if(a<b) { t=a; a=b; b=t; } // 交换a,b,使a是较大者
+while(1)
+{
+   if(b==0) { t=a; break; } // 分母为0时, a就是最大公约数
+   r = a%b; 
+   if(r==0) {t=b; break;} // 本轮循环的a(上轮循环的b)就是最大公约数
+   a=b; b=r; // 准备下一轮迭代   
+}
+printf("%d\n",t);// 输出最大公约数
+\end{lstlisting}
+\end{frame}
+
+\begin{frame}[shrink,fragile]{求整数$a,b$的最大公约数, 递归实现}
 \begin{lstlisting}
 // 求a,b的最大公约数(约定a是分子,b是分母)
 int gcd(int a, int b) 
@@ -547,6 +557,395 @@ int bits1(int n)
 ~\\
 \end{frame}
 
+\begin{frame}[shrink,fragile]{例: 二进制输出(正序)}
+\begin{columns}[T]
+\column{0.6\textwidth}
+\begin{lstlisting}
+void to_binary(unsigned long n);
+int main()
+{
+  // 无符号长整型
+  unsigned long x=0XD2; //11010010
+  scanf("%x",&x); //十六进制输入 
+  to_binary(x);
+  putchar('\n'); 
+  return 0;
+}
+
+void to_binary(unsigned long n)
+{
+  int r;
+  r=n%2;//01001011
+  // push(先计算的二进制位r)
+  if(n>=2) to_binary(n/2); 
+  // pop(后进先出) 
+  putchar('0'+r);//11010010
+} 
+\end{lstlisting}
+\column{0.4\textwidth}
+以\lstinline|x=XD2|为例，分析递归过程。 \\
+\lstinline|r=n%2;|\\
+计算$2^0,2^1,\dots,2^7$
+\begin{tabular}{|c|c|c|c||c|c|c|c|}
+	\hline 
+	$2^0$& $2^1$ & $2^2$ & $2^3$ & $2^4$ & $2^5$ & $2^6$ & $2^7$  \\ 
+	\hline 
+	0 & 1 & 0 & 0 & 1 & 0 & 1 & 1 \\ 
+	\hline 
+\end{tabular}
+~\\
+\lstinline|to_binary(n/2);|\\
+push(先计算的r),栈顶(top,最左端), 栈底(bottom,最右端) 
+\begin{tabular}{|c|c|c|c||c|c|c|c|}
+	\hline 
+	$2^7$& $2^6$ & $2^5$ & $2^4$ & $2^3$ & $2^2$ & $2^1$ & $2^0$
+	\\ 
+	\hline 
+	1 & 1 & 0 & 1 & 0 & 0 & 1 & 0 \\ 
+	\hline 
+\end{tabular}  
+~\\
+\lstinline|putchar('0'+r);|\\
+pop(后进先出), 即栈顶元素先出,栈底元素最后出
+\begin{tabular}{|c|c|c|c||c|c|c|c|}
+	\hline 
+	$2^7$& $2^6$ & $2^5$ & $2^4$ & $2^3$ & $2^2$ & $2^1$ & $2^0$
+	\\ 
+	\hline 
+	1 & 1 & 0 & 1 & 0 & 0 & 1 & 0 \\ 
+	\hline 
+\end{tabular}  
+\end{columns}
+~\\
+\end{frame}
+
+\begin{frame}[shrink,fragile]{例: 二进制输出(倒序)}
+\begin{columns}[T]
+\column{0.6\textwidth}
+\begin{lstlisting}
+void to_binary(unsigned long n);
+int main()
+{
+  // 无符号长整型
+  unsigned long x=0XD2; //11010010
+  scanf("%x",&x); //十六进制输入 
+  to_binary(x);
+  putchar('\n'); 
+  return 0;
+}
+
+void to_binary(unsigned long n)
+{
+  int r;
+  r=n%2;//01001011
+  putchar('0'+r);//01001011
+  // push(先计算的二进制位r)
+  if(n>=2) to_binary(n/2); 
+} 
+\end{lstlisting}
+\column{0.4\textwidth}
+	以\lstinline|x=XD2|为例，分析递归过程。 \\
+	\lstinline|r=n%2;|\\
+	计算$2^0,2^1,\dots,2^7$
+	\begin{tabular}{|c|c|c|c||c|c|c|c|}
+		\hline 
+		$2^0$& $2^1$ & $2^2$ & $2^3$ & $2^4$ & $2^5$ & $2^6$ & $2^7$  \\ 
+		\hline 
+		0 & 1 & 0 & 0 & 1 & 0 & 1 & 1 \\ 
+		\hline 
+	\end{tabular}
+	~\\
+	\lstinline|to_binary(n/2);|\\
+	push(先计算的r),栈顶(top,最左端), 栈底(bottom,最右端) 
+	\begin{tabular}{|c|c|c|c||c|c|c|c|}
+		\hline 
+		$2^7$& $2^6$ & $2^5$ & $2^4$ & $2^3$ & $2^2$ & $2^1$ & $2^0$
+		\\ 
+		\hline 
+		1 & 1 & 0 & 1 & 0 & 0 & 1 & 0 \\ 
+		\hline 
+	\end{tabular}  
+	~\\
+	pop(后进先出), 即栈顶元素先出,栈底元素最后出
+	\begin{tabular}{|c|c|c|c||c|c|c|c|}
+		\hline 
+		$2^7$& $2^6$ & $2^5$ & $2^4$ & $2^3$ & $2^2$ & $2^1$ & $2^0$
+		\\ 
+		\hline 
+		1 & 1 & 0 & 1 & 0 & 0 & 1 & 0 \\ 
+		\hline 
+	\end{tabular}  
+\end{columns}
+~\\
+\end{frame}
+
+\begin{frame}{例: Hanoi(汉诺)塔问题}
+古代有一个梵塔，塔内有3个座A,B,C。开始时A座上有64个盘子，盘子大小不等，大的在下，小的在上。有一个老和尚想把这64个盘子从A座移到C座，但规定每次只允许移动一个盘，且在移动过程中在3个座上都始终保持大盘在下，小盘在上。在移动过程中可以利用B座。\\
+要求编程序输出移动盘子的步骤。\\
+~\\
+\includegraphics[scale=0.4]{Hanoi}
+\end{frame}
+
+\begin{frame}[shrink]{例: Hanoi(汉诺)塔问题---解题思路}
+\begin{itemize}
+	\item 老和尚想: 假如有第2个和尚将上面63个盘子从A座移到B座。我就能将64个盘子从A座移到C座。。
+	\begin{enumerate}
+		\item 命令第2个和尚将63个盘子从A座移到B座;
+		\item 自己将1个盘子(最底下的、最大的盘子)从A座移到C座;
+		\item 再命令第2个和尚将63个盘子从B座移到C座。
+	\end{enumerate}
+    \item 第2个和尚想: 假如有第3个和尚能将上面62个盘子从A座移到C座，我就能将63个盘子从A座移到B座。
+    \begin{enumerate}
+    	\item 命令第3个和尚将62个盘子从A座移到C座;
+    	\item 自己将1个盘子从A座移到B座;
+    	\item 再命令第3个和尚将62个盘子从C座移到B座。
+    \end{enumerate}
+    \item $\cdots$
+\end{itemize}
+\includegraphics[scale=0.25]{Hanoi}
+\includegraphics[scale=0.3]{Hanoi-1}
+\end{frame}
+
+\begin{frame}[shrink]{例: Hanoi(汉诺)塔问题---解题思路(3层)}
+\begin{columns}[T]
+	\column{0.6\textwidth}
+	\begin{itemize}
+		\item 将A座的3个盘子移到C座, 分3步:
+		\begin{enumerate}
+			\item 将A上2个盘子移到B\textbf{(借助C座)}。
+			\item 将A上1个盘子移到C\textbf{(直接实现)}。
+			\item 将B上2个盘子移到C\textbf{(借助A座)}。
+		\end{enumerate}
+	    \item 分解第1步: 将A上的2个盘子移到B:
+	    \begin{enumerate}
+	    	\item 将A上1个盘子移到C\textbf{(借助C座)}。
+	    	\item 将A上1个盘子移到B。
+	    	\item 将C上1个盘子移到B。
+	    \end{enumerate}
+        \item 分解第3步: 将B座的2个盘子移到C座:
+        \begin{enumerate}
+        	\item 将B上1个盘子移到A\textbf{(借助A座)}。
+        	\item 将B上1个盘子移到C。
+        	\item 将A上1个盘子移到C。
+        \end{enumerate}
+	\end{itemize}
+	\column{0.4\textwidth}
+	\includegraphics[scale=0.3]{Hanoi-2}
+\end{columns}
+~\\
+\end{frame}
+
+\begin{frame}[shrink,fragile]{例: Hanoi(汉诺)塔问题---解}
+\begin{columns}[T]
+\column{0.4\textwidth}
+\begin{lstlisting}
+void hanoi(int n,char one,char two,char three);
+void move(char one,char two);
+int main()
+{
+   int n=3;
+   scanf("%d",&n);
+   //n个盘由'A'移到'C',借助'B'
+   hanoi(n,'A','B','C');
+   return 0;
+}
+void move(char one,char two)
+{
+ printf("%c->%c\n",one,two);
+}
+\end{lstlisting}
+\column{0.6\textwidth}
+\begin{lstlisting}
+//将n个盘从one移到three,借助two
+void hanoi(int n,char one,char two,char three)
+{
+   if(n==1) move(one,three); 
+   else
+   {
+      //n-1盘从one移到two,借three
+      hanoi(n-1,one,three,two); 
+      //将1个盘从one移到three
+      move(one,three); 
+      //n-1盘从two移到three,借one
+      hanoi(n-1,two,one,three); 
+   }
+}
+\end{lstlisting}
+\end{columns}
+~\\
+\end{frame}
+
+\begin{frame}[shrink, fragile]%{例: Hanoi(汉诺)塔问题---分析代码(3层)}
+\begin{columns}[T]
+\column{0.4\textwidth}
+	\begin{itemize}
+		\small
+		\item 将A座的3个盘子移到C座, 分3步:
+		\begin{enumerate}
+			\scriptsize
+			\item 将A上2个盘子移到B\textbf{(借C)}。
+			\item 将A上1个盘子移到C\textbf{(直接)}。
+			\item 将B上2个盘子移到C\textbf{(借A)}。
+		\end{enumerate}
+		\item 分解第1步: 将A上的2个盘子移到B:
+		\begin{enumerate}\scriptsize
+			\item 将A上1个盘子移到C\textbf{(借C)}。
+			\item 将A上1个盘子移到B。
+			\item 将C上1个盘子移到B。
+		\end{enumerate}
+		\item 分解第3步: 将B座的2个盘子移到C座:
+		\begin{enumerate}\scriptsize
+			\item 将B上1个盘子移到A\textbf{(借A)}。
+			\item 将B上1个盘子移到C。
+			\item 将A上1个盘子移到C。
+		\end{enumerate}
+	\end{itemize}
+\column{0.6\textwidth}
+\begin{lstlisting}
+//将n个盘从one移到three,借助two
+void hanoi(int n,char one,char two,char three)
+{
+  if(n==1) move(one,three); // 递归终止条件, 出栈pop(2,...,n-1,n), 回归，回溯
+  else
+  { // 压栈push(n,n-1,n-2,...2)
+    //n-1盘从one移到two,借three
+    hanoi(n-1,one,three,two); 
+    //将1个盘从one移到three
+    move(one,three); 
+    //n-1盘从two移到three,借one
+    hanoi(n-1,two,one,three);
+  }
+}
+\end{lstlisting}
+\end{columns}
+\textcolor{blue}{$A\to C,A\to B,C\to B,A\to C,B\to A,B\to C,A\to C$}\\
+\end{frame}
+
+\begin{frame}[shrink,fragile]{递归小结}
+\begin{itemize}
+	\item 递归函数必须满足两个条:
+	\begin{enumerate}
+		\item 在每一次调用自己时，必须是(在某种意义上)更接近于解;
+		\item 必须有一个终止处理或计算的准则。
+	\end{enumerate}
+    \item 递归能够解决的问题:
+    \begin{enumerate}
+    	\item 数据的定义是按递归定义的。如Fibonacci函数。
+    	\item 问题解法按递归算法实现。如Hanoi问题。
+    	\item 数据的结构形式是按递归定义的。如二叉树、广义表等。
+    \end{enumerate}
+	\item 使用递归的关键在于将问题分解为小部分，递归不能永远进行下去，因为它总是以最小可能性问题结束，
+	\item 递归函数的优点是定义简单，逻辑清晰。
+	\item 理论上，所有的递归函数都可以写成循环的方式，但循环的逻辑不如递归清晰。
+	\item 层次越深, 调用栈(内存)越大, 效率越低, 并且可能会溢出, 。因此, 能用循环解决的问题, 尽量不要用递归.
+	
+\end{itemize}
+\end{frame}
+
+\section{局部变量和全局变量}
+
+\begin{frame}[shrink,fragile]{局部变量及其作用域}
+定义在函数内部或复合语句中的变量称为\textbf{局部变量}。\\
+局部变量的\textbf{作用域}是从定义语句开始至函数或复合语句结束，不会影响作用域以外的同类型的同名变量值。 
+\begin{columns}[T]
+\column{0.5\textwidth}
+\begin{lstlisting}
+// 各函数中的局部变量, 不会相互影响。
+float f1(folat a) 
+{
+   float c; // 本函数局部变量
+   ....;
+}
+float f2(float a)
+{ 
+   float c; // 本函数局部变量
+   ....;
+}
+int main()
+{
+   float c=10,d; // 本函数局部变量
+   d=f1(c);
+   d=f2(d);
+}
+\end{lstlisting}
+\column{0.5\textwidth}
+\begin{lstlisting}
+// 各复合语句中的局部量, 不会相互影响。
+float f1(folat a) 
+{
+   float c; // 本函数局部变量
+   for(i=0;i<10;i++) 
+   {
+     int t; // 复合语句中的局部变量 
+     ....
+   }
+   if(c>10)
+   {
+     int t; // 复合语句中的局部变量 
+     ....
+   }
+   ...
+}
+\end{lstlisting}
+\end{columns}
+~\\
+\end{frame}
+
+\begin{frame}[shrink,fragile]{形式参数被当作本函数的局部变量}
+形式参数被当作本函数的局部变量，因此它不会影响实际参数的值。
+\begin{columns}[T]
+\column{0.5\textwidth}
+\begin{lstlisting}
+float f1(folat a) 
+{
+  float c; // 本函数内部的局部变量不得与形式参数同名
+  a=30; // 改变形式参数的值不会影响实际参数的值
+  ....;
+}
+int main()
+{
+   float c=10,d; // 本函数局部变量
+   d=f1(c); // f1函数对形参的改变不会影响实参c的值
+   float x[2]={0.1,0.2}; // 函数内部可以改变数组元素的值
+   printf("%f,%f,%f\n",c,x[0],x[1]); // 10,10.1,10.2  
+}
+\end{lstlisting}
+\column{0.5\textwidth}
+\begin{lstlisting}
+// 函数内部可以改变数组元素的值,但是对地址的改变不会影响实参的地址
+float f2(folat a[]) 
+{
+  a[0]=10.1; // 对数组元素的改变，就是对实参数组元素的改变
+  a[1]=10.2;
+  a=a+1; // 对数组名(地址)的改变, 不会影响实参的地址。
+  ...
+}
+\end{lstlisting}
+\end{columns}
+~\\
+\end{frame}
+
+\begin{frame}[shrink,fragile]{全局变量及其作用域}
+定义在函数外部的变量称为\textbf{全局变量}。与模块化函数封装思想冲突，不推荐使用。全局变量的作用域是从定义语句开始至该文件结束，会影响作用域内的同类型的同名变量值。 
+\begin{lstlisting}
+int g=0; // 全局变量
+float f1(folat a) 
+{
+  g=10; // 改变全局变量的值
+  ....;
+}
+float f2(float a)
+{ 
+  g=20; // 改变全局变量的值
+  ....;
+}
+int main()
+{
+   g=30; // 改变全局变量的值
+   ....;
+}
+\end{lstlisting}
+\end{frame}
 
 
 

@@ -42,14 +42,11 @@ gcd(a,1)=1
 1
  ****************************************/
 /****************************************
- a,b的最大公约数，a=mb+r, m=a/b; r=a%b
- while(1)
- {
-	 r = a%b; 
-	 if(r==0) break; // b就是最大公约数
-	 else if(b%r==0) break; // r就是最大公约数，因为: n=b/r; r=nb; a=mb+nb=(m+n)b;
-	 a=b; b=r; // 准备下一轮迭代   
- }
+定理：两个整数的最大公约数等于其中较小的那个数和两数相除余数的最大公约数。
+a,b的最大公约数，[则: a=mb+r, m=a/b; r=a%b]
+循环, b作被除数，分母是余数r, 
+[则: n=b/r; r=nb; a=mb+nb=(m+n)b; 如果一个整数能整除b, 必整除a]
+直到r=0, 本轮循环的a(上轮循环的b)就是最大公约数 
  ****************************************/ 
 #include <stdio.h>
 int main()
@@ -59,11 +56,12 @@ int main()
     if(a<b) { t=a; a=b; b=t; } // 交换a,b,使a是较大者
 	while(1)
     {
-	   if(b==0) { t=a; break; }
+	   if(b==0) { t=a; break; }  // 分母为0时, a就是最大公约数 
 	   r = a%b; 
-	   if(r==0) {t=b; break;} // b就是最大公约数
-	   else if(r==1) {t=1; break;} // a,b互质 
-	   else if(b%r==0) {t=r; break;} // r就是最大公约数，因为: n=b/r; r=nb; a=mb+nb=(m+n)b;
+	   if(r==0) {t=b; break;} // 本轮循环的a(上轮循环的b)就是最大公约数
+	   // 不必，以下语句 
+	   //else if(r==1) {t=1; break;} // a,b互质, 已经包含在上一句 
+	   //else if(b%r==0) {t=r; break;} // r就是最大公约数，因为: n=b/r; r=nb; a=mb+nb=(m+n)b;
 	   a=b; b=r; // 准备下一轮迭代   
     }
 	

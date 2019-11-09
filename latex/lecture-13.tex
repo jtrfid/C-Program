@@ -97,7 +97,7 @@ int strlen(char s[])
 #include<stdio.h>
 #include<math.h>
 int add(int a,int b); // 函数原型声明
-double output(double a);
+void output(double a);
 int main() // 主函数
 {
   int a=10,b=20,c;
@@ -117,7 +117,7 @@ int add(int a,int b)
 // 通过参数a的值, 进行相关计算, 不需要返回数据
 void output(double a)
 {  
-   printf("%ld\n", sqrt(a)); // 函数中可调用别的函数
+   printf("%lf\n", sqrt(a)); // 函数中可调用别的函数
 }
 \end{lstlisting}
 \end{beamerboxesrounded}
@@ -145,7 +145,7 @@ void output(double a)
 #include<stdio.h> // 库函数原型声明
 // 函数原型声明, 使编译器认识这个函数，如果函数定义在调用之前，可省略声明
 int add(int a,int b); 
-double output(double a);
+void output(double a);
 int main() // 主函数
 {
    int a=10,b=20,c;
@@ -166,7 +166,7 @@ int add(int a,int b)
 // 通过参数a的值, 进行相关计算, 不需要返回数据
 void output(double a)
 {  
-   printf("%ld\n", sqrt(a)); // 函数中可调用别的函数
+   printf("%lf\n", sqrt(a)); // 函数中可调用别的函数
 }
 \end{lstlisting}
 \end{beamerboxesrounded}
