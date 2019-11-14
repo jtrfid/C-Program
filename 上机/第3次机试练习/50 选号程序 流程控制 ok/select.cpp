@@ -11,7 +11,7 @@ int main()
 	{
 		scanf("%d",&No[i][0]);
 		tmp=No[i][0];
-		sum=0;
+		sum=0;  // 一定初始化 
 		while(tmp)
 		{
 			sum+=tmp%10;

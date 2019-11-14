@@ -22,21 +22,18 @@ int main()
 {
 	int i = 0, n, bit, max = 0, min = 0;
 	scanf("%d",&n);
-	if (n >= 0 && n <= 100000000)
+	while(n) 
 	{
-		while(n) 
+		bit = n%10;
+		if(i == 0) max = min = bit; 
+		else
 		{
-			bit = n%10;
-			if(i == 0) max = min = bit; 
-			else
-			{
-				if(bit > max) max = bit;
-			    if(bit < min) min = bit;
-			}
-			n /= 10; 
-			i++;
-		} 
-		printf("%d %d %d\n",(i == 0 ? 1 : i),max,min); // 考虑原始n==0的情况 
-	}
+			if(bit > max) max = bit;
+		    if(bit < min) min = bit;
+		}
+		n /= 10; 
+		i++;
+	} 
+	printf("%d %d %d\n",(i == 0 ? 1 : i),max,min); // 考虑原始n==0的情况 
 	return 0;
 } 
