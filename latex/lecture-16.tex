@@ -1,0 +1,251 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%% lecture-14
+\begin{frame}[shrink]
+  \frametitle{lecture-15 主要内容}
+  \framesubtitle{指针应用题, 期中考试总结}
+  %\tableofcontents[hideallsubsections]
+  \tableofcontents
+\end{frame}
+
+\section{指针应用题}
+
+\begin{frame}[shrink,fragile]{例: 表达式求值}
+表达式由两个非负整数x，y和一个运算符op构成，求表达式的值。\\
+这两个整数和运算符的顺序是随机的，可能是``x op y", ``op x y"或者``x y op",例如，``25 + 3"表示25加3，``5 30 *" 表示5乘以30, ``/ 600 15"表示600除以15。\\
+输入说明\\	
+输入为一个表达式, 表达式由两个非负整数x, y和一个运算符op构成, x,y和op之间以空格分隔, 但顺序不确定。
+x和y均不大于10000000, op可以是+, -, *, /, \%中的任意一种，分表表示加法，减法，乘法，除法和求余。
+除法按整数除法求值，输入数据保证除法和求余运算的y值不为0。\\
+输出说明\\	
+输出表达式的值。\\
+\medskip
+\begin{columns}
+	\column{0.3\textwidth}
+	输入样例\\	
+	样例1输入\\
+	5 20 *\\
+	样例2输入\\
+	4 + 8\\
+	样例3输入\\
+	/ 8 4
+	\column{0.3\textwidth}
+	输出样例\\	
+	样例1输出\\
+	100\\
+	样例2输出\\
+	12\\
+	样例3输出\\
+	2
+\end{columns}
+\medskip
+\end{frame}
+
+\begin{frame}[shrink,fragile]{例: 表达式求值---解题思路}
+\begin{itemize}
+	\item \lstinline|gets|函数读取字符串，遍历字符串，根据op字符是"非数字字符"的特点，判断表达式的三种形式。\\
+	注意: 因为字符串中含有空格, 不能使用\lstinline|scanf("%s",-);|读取字符串。
+	\item 编写计算函数, 根据op,x,y计算表达式的值。
+	\item 编写独立函数, 提取[*p1,*p2]之间的数字字符串，并返回对应的整数值(x或y)。
+	\item 主程序，解析字符串, 调用上述函数。
+\end{itemize}
+\end{frame}
+
+\begin{frame}[shrink,fragile]{例: 表达式求值---计算函数}
+\begin{lstlisting}
+// 根据参数，计算表达式的值 
+int compute(char op,int x,int y)
+{
+   int result = -1;
+   switch(op)
+   {
+     case '+': result = x+y; break;
+     case '-': result = x-y; break;
+     case '*': result = x*y; break;
+     case '/': if(y != 0) result = x/y; break;
+     case '%': if(y != 0) result = x%y; break;
+   }
+   return result;
+}
+\end{lstlisting}
+\end{frame}
+
+\begin{frame}[shrink,fragile]{例: 表达式求值---提取字符串中的数字}
+\begin{lstlisting}
+// 提取[*p1,*p2]之间的数字字符串，并返回对应的整数值(xy)。  
+int xy(char *p1,char *p2)
+{
+  int result = 0;
+  // 删除前后缀空格 
+  while(*p1 == ' ') p1++; // 使p1,p2指向非空格
+  while(*p2 == ' ') p2--; 
+  for(; p1 <= p2; p1++)
+  {
+     result += *p1 -'0'; // 1 = '1' - '0'
+     if(p1 != p2) result *= 10; // 非最后一个字符，左移一位十进制数 
+   }
+   return result;
+}
+\end{lstlisting}
+\end{frame}
+
+\begin{frame}[shrink,fragile]{例: 表达式求值---主程序}
+\begin{lstlisting}
+#include <stdio.h>
+// 估计字符串最大长度，存储有效字符(N-1)个，预留最后一个字符'\0' 
+#define N 20 
+// 根据参数，计算表达式的值 
+int compute(char op,int x,int y); // 函数声明
+// 提取[*p1,*p2]之间的数字字符串，并返回对应的整数值(xy)。  
+int xy(char *p1,char *p2);
+int main()
+{
+   char s[N],*p1,*p2,op; // 借助p1,p2指针变量，扫描字符串 
+   int x,y;
+   gets(s); // 不能使用scanf("%s",s); 空格将会终止
+   p1 = s; // p1指向字符串首地址 
+   while(*p1 == ' ') p1++; // 使p1指向非空格
+   if (*p1 < '0' || *p1 > '9') // 首先判断第一个字符是运算符, op x y
+   { 续1 }
+   else // x y op 或 x op y 
+   { 续2,续3}
+   printf("%d\n",compute(op,x,y)); 
+   return 0;
+}
+\end{lstlisting}
+\end{frame}
+
+\begin{frame}[shrink,fragile]{例: 表达式求值---主程序(续1)}
+\begin{lstlisting}
+// 首先判断第一个字符是运算符, op x y
+if (*p1 < '0' || *p1 > '9')
+{
+  op = *p1;
+  p1++; // 掠过op 
+  while(*p1 == ' ') p1++; // 使p1指向非空格
+  p2 = p1; 
+  while(*p2 != ' ') p2++; // x空格
+  x = xy(p1,p2);
+  p1 = p2;
+  while(*p2 != '\0') p2++; // p2指向'\0' 
+  y = xy(p1,p2 - 1); // p2 - 1是最后一个有效字符 
+} 
+\end{lstlisting}
+\end{frame}
+
+\begin{frame}[shrink,fragile]{例: 表达式求值---主程序(续2)}
+\begin{lstlisting}
+else // x y op 或 x op y 
+{
+   p2 = s; // p2指向字符串首地址 
+   while(*p2 != '\0') p2++; // p2指向'\0'
+   p2--;
+   while(*p2 == ' ') p2--; // p2指向非空格
+   if (*p2 < '0' || *p2 > '9') // x y op 
+   {
+     op = *p2;
+     p2--; // 掠过op
+     while(*p2 == ' ') p2--; // p2指向非空格
+     p1 = p2;
+     while(*p1 != ' ') p1--; // 空格y
+     y = xy(p1,p2);
+     x = xy(s,p1);
+   }
+   else // x op y 
+   { 续3 }
+}
+\end{lstlisting}
+\end{frame}
+
+\begin{frame}[shrink,fragile]{例: 表达式求值---主程序(续3)}
+\begin{lstlisting}
+else // x op y 
+{
+  p1 = s;
+  while(*p1 == ' ') p1++; // 使p1指向非空格
+  p2 = p1;
+  while(*p2 != ' ') p2++; // x空格
+  x = xy(p1,p2);
+  while(*p2 == ' ') p2++; // op
+  op = *p2;
+  p1 = p2 + 1; // 掠过op
+  p2 = p1;
+  while(*p2 != '\0') p2++; // p2指向'\0'
+  y = xy(p1,p2 - 1); // p2 - 1是最后一个有效字符 	
+} 
+\end{lstlisting}
+\end{frame}
+
+\section{期中考试总结}
+
+\begin{frame}[shrink,fragile]{期中考试总结}
+\begin{enumerate}
+	\item 评分规则
+	\begin{itemize}
+		\item 将5个题的得分按从高到低排序, 记为S1, S2, S3, S4, S5
+		\item 总分=S1*0.30+S2*0.25+S3*0.20+S4*0.15+S5*0.1
+	\end{itemize}
+	\item 第1题: 自由落体, 基本计算, 仅有1人没得满分。
+	\item 第2题: 运费: 5人未得满分, 3人0分\\ 
+	与lecture-6.pdf中的例题基本一致。考查switch语句或if else选择语句。
+	\item 第3题: 二进制字符转换, 考查一重循环, 本题平均成绩最低44。\\
+	lecture-8.pdf p15-16, 循环语句中接收字符的常见技巧。\\
+	lecture-5.pdf 数位=ASCII编码值-'0'\\
+	lecture-14.pdf 以递归形式输出一个整数的二进制位。\\
+	课件及上机练习中涉及各种数字分解程序设计技巧。
+	\item 第4题, 考查一重循环, 平均成绩86。\\
+	lecture-9.pdf p24 原题, 迭代计算是基本编程要领, 必须掌握。
+	\item 质数求和, 考查二重循环, 平均成绩51。\\
+	lecture-8.pdf p8,p17 100$\sim$200间的素数。
+	\item 本班题目简单, 其他班有类似机试练习中选QQ号题。期末考试会复杂些。
+\end{enumerate}
+\end{frame}
+
+\begin{frame}[fragile]{第3题---二进制字符转换, 简单实现}
+10101d $\implies$ 21\\
+101,1  $\implies$ 5
+\begin{lstlisting}
+char ch;
+int sum=0;
+while(1)
+{
+    ch=getchar(); //或 scanf("%c",&ch);
+    if(ch!='0' && ch !='1') break;
+    sum=sum*2+ch-'0';
+} 
+printf("%d\n",sum);
+\end{lstlisting}
+\end{frame}
+
+\begin{frame}[fragile]{第3题---二进制字符转换, 字符串数组实现}
+\begin{lstlisting}
+#define N 31 // 估计最大数组大小, 预留'\0'
+char ch[N];
+int sum=0,i;
+gets(ch);
+for(i=0;;i++)
+{
+   if(ch[i]!='0' && ch[i] !='1') break;
+   sum=sum*2+ch[i]-'0';
+} 
+printf("%d\n",sum);
+\end{lstlisting}
+\end{frame}
+
+\begin{frame}[fragile]{第3题---二进制字符转换, 指针实现}
+\begin{lstlisting}
+#define N 31 // 估计最大数组大小, 预留'\0'
+char ch[N], *p=ch;
+int sum=0;
+gets(ch);
+for(;;)
+{
+  if(*p != '0' && *p !='1') break;
+  sum=sum*2+ (*p - '0');
+  p++; // 指向下一个字符
+} 
+printf("%d\n",sum);
+\end{lstlisting}
+\end{frame}
+
+
+
+
