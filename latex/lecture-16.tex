@@ -1,12 +1,12 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%% lecture-14
 \begin{frame}[shrink]
-  \frametitle{lecture-15 主要内容}
-  \framesubtitle{指针应用题, 期中考试总结}
+  \frametitle{lecture-16 主要内容}
+  \framesubtitle{指针综合应用举例, 期中考试总结}
   %\tableofcontents[hideallsubsections]
   \tableofcontents
 \end{frame}
 
-\section{指针应用题}
+\section{指针综合应用举例}
 
 \begin{frame}[shrink,fragile]{例: 表达式求值}
 表达式由两个非负整数x，y和一个运算符op构成，求表达式的值。\\
@@ -42,11 +42,15 @@ x和y均不大于10000000, op可以是+, -, *, /, \%中的任意一种，分表�
 \begin{frame}[shrink,fragile]{例: 表达式求值---解题思路}
 \begin{itemize}
 	\item \lstinline|gets|函数读取字符串，遍历字符串，根据op字符是"非数字字符"的特点，判断表达式的三种形式。\\
-	注意: 因为字符串中含有空格, 不能使用\lstinline|scanf("%s",-);|读取字符串。
-	\item 编写计算函数, 根据op,x,y计算表达式的值。
-	\item 编写独立函数, 提取[*p1,*p2]之间的数字字符串，并返回对应的整数值(x或y)。
-	\item 主程序，解析字符串, 调用上述函数。
+	\item 设计各个子函数, 进行模块化程序设计。
+	\item 编写函数parse, 解析输入字符串, 生成3个子串, 分别代表op,x,y
+	\item 编写函数strToInt, 将数字字符串转为整数。
+	\item 编写函数compute, 根据op,x,y计算表达式的值。
+	\item 编写其它辅助函数。
+	\item 主函数, 调用上述函数, 完成程序功能。
 \end{itemize}
+\textbf{\textcolor{blue}{注:}}\\
+	 \lstinline|int s1[81],s2[81],s3[81]; scanf("%s%s%s",s1,s2,s3);// 遇空格结束特点(忽略前缀后缀空格), 自动获取3个子串, 无需分解。|
 \end{frame}
 
 \begin{frame}[shrink,fragile]{例: 表达式求值---计算函数}
@@ -68,109 +72,162 @@ int compute(char op,int x,int y)
 \end{lstlisting}
 \end{frame}
 
-\begin{frame}[shrink,fragile]{例: 表达式求值---提取字符串中的数字}
+\begin{frame}[shrink,fragile]{例: 表达式求值---将数字字符串转为整数函数}
 \begin{lstlisting}
-// 提取[*p1,*p2]之间的数字字符串，并返回对应的整数值(xy)。  
-int xy(char *p1,char *p2)
+// 数字字符串s转为int, 要求s以'\0'结尾 
+int strToInt(char *s) //等效: int toInt(char s[]) 
 {
-  int result = 0;
-  // 删除前后缀空格 
-  while(*p1 == ' ') p1++; // 使p1,p2指向非空格
-  while(*p2 == ' ') p2--; 
-  for(; p1 <= p2; p1++)
+  int result=0;
+  while(*s) //等效 *s != '\0'
   {
-     result += *p1 -'0'; // 1 = '1' - '0'
-     if(p1 != p2) result *= 10; // 非最后一个字符，左移一位十进制数 
-   }
-   return result;
+     result = result*10 + (*s-'0');
+     s++; //移至下一字符 
+  }
+  return result;
+} 
+\end{lstlisting}
+\textbf{\textcolor{blue}{注: 简单修改此函数, 可将由01组成的二进制字符串转为整数。}}
+\end{frame}
+
+\begin{frame}[shrink,fragile]{例: 表达式求值---提取子串函数}
+\begin{lstlisting}
+/******************************************************
+ 提取子串函数, 忽略s中空格前缀，复制s中的字符串到subs中，遇空格或'\0'结束
+ 返回subs不含空格。 返回复制后s指针当前指向(地址), 要求s和subs以'\0'结尾。
+*******************************************************/ 
+char* getSubs(char *s, char *subs) 
+{
+  int start=0; // 是否开始提取标志
+  while(*s)
+  {
+    if(*s==' ') 
+    {
+      if(start==0) s++; // 未开始复制, 忽略s的前缀空格 
+      else break; // 是有效字符串后的一个空格 
+    }
+    else
+    {
+      start=1; // 标记开始复制 
+      *subs=*s;  s++;  subs++;
+    }
+  }
+  *subs='\0'; // 不要忘记结尾符 
+  return s; // 返回复制后s指针当前指向(地址)
 }
 \end{lstlisting}
+\textbf{\textcolor{blue}{注: 简单修改此函数, 可以任何分隔符提取子串函数}}
+\end{frame}
+
+\begin{frame}[shrink,fragile]{例: 表达式求值---解析字符串函数}
+\begin{lstlisting}
+// 解析s, 以空格为分隔符, 分解s为3个字符串, 通过参数result返回
+void parse(char *s,char result[][N])
+{
+  char *p;
+  p=getSubs(s,result[0]);
+  p=getSubs(p,result[1]);
+  getSubs(p,result[2]);
+} 
+\end{lstlisting}
+\textbf{\textcolor{blue}{注: 通过此函数, 学习字符串数组的使用技巧。}}
+\end{frame}
+
+\begin{frame}[shrink,fragile]{例: 表达式求值---是否运算符函数}
+\begin{lstlisting}
+// 如果s是操作符，返回1, 参数op返回该操作符
+// 否则, 返回0 
+int isOp(char *s, char *op)
+{
+  if(*s >= '0' && *s <= '9') 
+    return 0;
+  else
+  {
+    *op=*s;
+    return 1;
+  }
+} 
+\end{lstlisting}
+\textbf{\textcolor{blue}{注: 通过此函数, 学习地址传递技巧。}}
+\end{frame}
+
+\begin{frame}[shrink,fragile]{例: 表达式求值---测试主函数}
+\begin{lstlisting}
+int main1() // 测试主函数, 使能改为main(), 原main()改名
+{
+   char *s="123";
+   printf("%d\n",strToInt(s)); // 123
+   char s1[N]="    abcd   456  +", s2[50], *s3;
+   s3= getSubs(s1,s2);
+   printf("%s,%d\n",s2,*s3); // abcd,32(空格的ASCII码) 
+   s3= getSubs(s3,s2);
+   printf("%s,%d\n",s2,*s3); // 456,32(空格的ASCII码) 
+   s3= getSubs(s3,s2);  
+   printf("%s,%d\n",s2,*s3); // +,0('\0'的ASCII码)
+   char result[3][N];
+   parse(s1,result);
+   puts(result[0]); // abcd
+   puts(result[1]); // 456
+   puts(result[2]); // +
+   return 0;
+}
+\end{lstlisting}
+\textbf{\textcolor{blue}{注: main()和main1()相互换名, 调试程序。是实用调试程序技巧。}}
 \end{frame}
 
 \begin{frame}[shrink,fragile]{例: 表达式求值---主程序}
 \begin{lstlisting}
 #include <stdio.h>
-// 估计字符串最大长度，存储有效字符(N-1)个，预留最后一个字符'\0' 
-#define N 20 
-// 根据参数，计算表达式的值 
-int compute(char op,int x,int y); // 函数声明
-// 提取[*p1,*p2]之间的数字字符串，并返回对应的整数值(xy)。  
-int xy(char *p1,char *p2);
+// 自定义函数在调用之前定义，略去函数声明。 
+#define N 81 // 估计字符串最大长度，存储有效字符(N-1)个，预留最后一个字符'\0'
 int main()
 {
-   char s[N],*p1,*p2,op; // 借助p1,p2指针变量，扫描字符串 
-   int x,y;
-   gets(s); // 不能使用scanf("%s",s); 空格将会终止
-   p1 = s; // p1指向字符串首地址 
-   while(*p1 == ' ') p1++; // 使p1指向非空格
-   if (*p1 < '0' || *p1 > '9') // 首先判断第一个字符是运算符, op x y
-   { 续1 }
-   else // x y op 或 x op y 
-   { 续2,续3}
-   printf("%d\n",compute(op,x,y)); 
-   return 0;
+  char s[N], op, char s3[3][N];   
+  int x,y;
+  gets(s); // 不能使用scanf("%s",s); 空格将会终止
+  parse(s,s3); // s被分解为3个字符串 
+  if(isOp(s3[0],&op)) // op x y
+  {
+    x=strToInt(s3[1]);  y=strToInt(s3[2]);
+  }
+  else if(isOp(s3[1],&op)) // x op y
+  {
+     x=strToInt(s3[0]); y=strToInt(s3[2]);
+  }
+  else if(isOp(s3[2],&op)) // x y op
+  {
+    x=strToInt(s3[0]); y=strToInt(s3[1]);
+  }
+  printf("%d\n",compute(op,x,y)); 
+  return 0;
 }
 \end{lstlisting}
 \end{frame}
 
-\begin{frame}[shrink,fragile]{例: 表达式求值---主程序(续1)}
+\begin{frame}[shrink,fragile]{例: 表达式求值---主程序(另解)}
 \begin{lstlisting}
-// 首先判断第一个字符是运算符, op x y
-if (*p1 < '0' || *p1 > '9')
+#include <stdio.h>
+// 自定义函数在调用之前定义，略去函数声明。
+#define N 81 // 估计字符串最大长度，存储有效字符(N-1)个，预留最后一个字符'\0' 
+int main()
 {
-  op = *p1;
-  p1++; // 掠过op 
-  while(*p1 == ' ') p1++; // 使p1指向非空格
-  p2 = p1; 
-  while(*p2 != ' ') p2++; // x空格
-  x = xy(p1,p2);
-  p1 = p2;
-  while(*p2 != '\0') p2++; // p2指向'\0' 
-  y = xy(p1,p2 - 1); // p2 - 1是最后一个有效字符 
-} 
-\end{lstlisting}
-\end{frame}
-
-\begin{frame}[shrink,fragile]{例: 表达式求值---主程序(续2)}
-\begin{lstlisting}
-else // x y op 或 x op y 
-{
-   p2 = s; // p2指向字符串首地址 
-   while(*p2 != '\0') p2++; // p2指向'\0'
-   p2--;
-   while(*p2 == ' ') p2--; // p2指向非空格
-   if (*p2 < '0' || *p2 > '9') // x y op 
-   {
-     op = *p2;
-     p2--; // 掠过op
-     while(*p2 == ' ') p2--; // p2指向非空格
-     p1 = p2;
-     while(*p1 != ' ') p1--; // 空格y
-     y = xy(p1,p2);
-     x = xy(s,p1);
-   }
-   else // x op y 
-   { 续3 }
+  char s[N], op, char s3[3][N];   
+  int x,y;
+  scanf("%s%s%s",s3[0],s3[1],s3[2]); // 利用"%s"读字符串遇空格结束特点，直接读取3个字符串。
+  if(isOp(s3[0],&op)) // op x y
+  {
+    x=strToInt(s3[1]);  y=strToInt(s3[2]);
+  }
+  else if(isOp(s3[1],&op)) // x op y
+  {
+    x=strToInt(s3[0]); y=strToInt(s3[2]);
+  }
+  else if(isOp(s3[2],&op)) // x y op
+  {
+    x=strToInt(s3[0]); y=strToInt(s3[1]);
+  }
+  printf("%d\n",compute(op,x,y)); 
+  return 0;
 }
-\end{lstlisting}
-\end{frame}
-
-\begin{frame}[shrink,fragile]{例: 表达式求值---主程序(续3)}
-\begin{lstlisting}
-else // x op y 
-{
-  p1 = s;
-  while(*p1 == ' ') p1++; // 使p1指向非空格
-  p2 = p1;
-  while(*p2 != ' ') p2++; // x空格
-  x = xy(p1,p2);
-  while(*p2 == ' ') p2++; // op
-  op = *p2;
-  p1 = p2 + 1; // 掠过op
-  p2 = p1;
-  while(*p2 != '\0') p2++; // p2指向'\0'
-  y = xy(p1,p2 - 1); // p2 - 1是最后一个有效字符 	
-} 
 \end{lstlisting}
 \end{frame}
 
@@ -188,30 +245,34 @@ else // x op y
 	与lecture-6.pdf中的例题基本一致。考查switch语句或if else选择语句。
 	\item 第3题: 二进制字符转换, 考查一重循环, 本题平均成绩最低44。\\
 	lecture-8.pdf p15-16, 循环语句中接收字符的常见技巧。\\
-	lecture-5.pdf 数位=ASCII编码值-'0'\\
-	lecture-14.pdf 以递归形式输出一个整数的二进制位。\\
-	课件及上机练习中涉及各种数字分解程序设计技巧。
+	lecture-5.pdf p8, 数字=ASCII编码值-'0'\\
+	lecture-14.pdf p20, 以递归形式输出一个整数的二进制位。\\
+	课件及上机练习中(如ISBN)涉及各种数字分解程序设计技巧。
 	\item 第4题, 考查一重循环, 平均成绩86。\\
-	lecture-9.pdf p24 原题, 迭代计算是基本编程要领, 必须掌握。
+	lecture-9.pdf p3 原题, 迭代计算是基本编程要领, 必须掌握。
 	\item 质数求和, 考查二重循环, 平均成绩51。\\
-	lecture-8.pdf p8,p17 100$\sim$200间的素数。
+	lecture-8.pdf p8---p11, 100$\sim$200间的素数。
 	\item 本班题目简单, 其他班有类似机试练习中选QQ号题。期末考试会复杂些。
 \end{enumerate}
 \end{frame}
 
-\begin{frame}[fragile]{第3题---二进制字符转换, 简单实现}
-10101d $\implies$ 21\\
-101,1  $\implies$ 5
+\begin{frame}[shrink,fragile]{第3题---二进制字符转换, 简单实现}
+10101d $\implies$ 21\qquad 101,1  $\implies$ 5
 \begin{lstlisting}
-char ch;
-int sum=0;
-while(1)
+#include<stdio.h>
+int main()
 {
-    ch=getchar(); //或 scanf("%c",&ch);
-    if(ch!='0' && ch !='1') break;
-    sum=sum*2+ch-'0';
-} 
-printf("%d\n",sum);
+   char ch;
+   int sum=0;
+   while(1)
+   {
+       ch=getchar(); //或 scanf("%c",&ch);
+       if(ch!='0' && ch !='1') break;
+       sum=sum*2+ch-'0';
+   } 
+   printf("%d\n",sum);
+   return 0;
+}
 \end{lstlisting}
 \end{frame}
 
@@ -243,6 +304,53 @@ for(;;)
   p++; // 指向下一个字符
 } 
 printf("%d\n",sum);
+\end{lstlisting}
+\end{frame}
+
+\section{整数pow函数问题}
+
+\begin{frame}[shrink,fragile]{整数pow函数问题}
+\lstinline|double pow(double x,double y);| 数学库函数真对双精度浮点数设计。用它计算整数$x^y$会有复杂的精度问题, 因此整数运算尽量不要用此函数。 
+\begin{lstlisting}
+#include<stdio.h>
+#include<math.h>   // 数学库函数
+int main()
+{
+  int x=2,y=3;
+  
+  // 有些编译器会输出99,124, 因为转换前是99.999, 124.999 
+  printf("%d,%d\n",(int)pow(10,x),(int)pow(5,y)); 
+  
+  // 奇怪的是下列调用输出结果与上面有可能会输出不一致的结果 
+  printf("%d,%d\n",(int)pow(10,2),(int)pow(5,3)); 
+
+  return 0;
+}
+\end{lstlisting}
+\end{frame}
+
+\begin{frame}[shrink,fragile]{自定义整数pow函数}
+\begin{lstlisting}
+#include<stdio.h>
+// 自定义整数pow函数
+int intpow(int x, int y)
+{
+  int i,p=1;
+  if(x==0) return 0; 
+  for(i=0;i<y;i++) p=p*x;
+  return p;
+} 
+
+int main()
+{
+  int x=2,y=3;
+
+  printf("%d,%d\n",intpow(10,x),intpow(5,y)); // 100,125
+  printf("%d,%d\n",intpow(10,2),intpow(5,3)); // 100,125
+  printf("%d,%d\n",intpow(0,2),intpow(0,0)); // 0,1 
+  
+  return 0;
+}
 \end{lstlisting}
 \end{frame}
 
