@@ -6,7 +6,8 @@
 问题描述	
 问题描述
 考研初试成绩公布后需要对m个学生的成绩进行排序，筛选出可以进入复试的前n名学生。
-排序规则为首先按照总分排序，总分相同则按英语单科成绩排序。现给出这m个学生的考研初试成绩，请筛选出可以进入复试的n名学生并按照排名从高到低的顺序依次输出。
+排序规则为首先按照总分排序，总分相同则按英语单科成绩排序。现给出这m个学生的考研初试成绩，
+请筛选出可以进入复试的n名学生并按照排名从高到低的顺序依次输出。
 输入说明
 输入为m+1行，第一行为两个整数m和n，分别表示总人数和可以进入复试人数，m和n之间用空格分隔，0<n<m<200。接下来为m行数据，每行包括三项信息，分别表示一个学生的考号（字符串）、总成绩（整数）和英语单科成绩（整数），这三项之间用空格分隔。
 输出说明
@@ -27,6 +28,8 @@ XD20160002 330 70
  // 思路：定义结构体类型和结构体数组，对结构体数组进行排序。 
  
  #include <stdio.h>
+ #include <string.h>
+  
  // 估计结构体数组最大长度 
  #define N 200
  
@@ -36,6 +39,24 @@ XD20160002 330 70
 	int  total;    // 总成绩 
 	int  english;  // 英语成绩  
  };
+ 
+ // 输入m个考生信息
+void input(struct Student *stus, int m)
+{
+  int i;
+  for(i=0;i<m;i++) 
+    scanf("%s%d%d",
+      stus[i].no,&stus[i].total,&stus[i].english); 
+}
+
+// 输入n个考生信息
+void print(struct Student *stus, int n)
+{
+  int i;
+  for(i=0;i<n;i++) 
+    printf("%s %d %d\n",
+      stus[i].no,stus[i].total,stus[i].english); 
+}
  
  // 交换两个结构体对象 
  void swap(struct Student *p1, struct Student *p2)
@@ -57,7 +78,8 @@ XD20160002 330 70
 		for (j = i+1; j < n; j++)
 		{
 			// 条件判断语句：善用&&、||运算，简化if else结构 
-			if (a[j].total > a[k].total || (a[j].total == a[k].total &&  a[j].english > a[k].english ))  
+			if (a[j].total>a[k].total || (a[j].total==a[k].total &&  a[j].english>a[k].english)
+			    || (a[j].total==a[k].total &&  a[j].english==a[k].english && strcmp(a[j].no,a[k].no)<0))  
 				k = j;
 		}
 		if (k != i) swap(&a[i],&a[k]);
@@ -69,11 +91,8 @@ XD20160002 330 70
  	struct Student stus[N]; 
 	int m,n,i;
  	scanf("%d%d",&m,&n);
- 	for(i = 0; i < m; i++)
-		scanf("%s%d%d",stus[i].no,&stus[i].total,&stus[i].english);
+ 	input(stus,m); 
  	sorts(stus,m);
- 	for(i = 0; i < n; i++)
- 		printf("%s %d %d\n",stus[i].no,stus[i].total,stus[i].english);
- 		
+ 	print(stus,n);
  	return 0;
  }

@@ -25,6 +25,7 @@
 	提示信息
  ***********************************************************/
 #define N 100
+//定义矩形结构体 
 struct Rec
 {
 	int leftBottomX;
@@ -55,9 +56,7 @@ void grid1(struct Rec rec, int grid[][N])
 	for(i=rec.leftBottomY;i<rec.rightTopY;i++)
 	{
 		for(j=rec.leftBottomX;j<rec.rightTopX;j++)
-		{
 			grid[i][j]=1;
-		}
 	} 
 }
 
@@ -68,9 +67,7 @@ void grid0(struct Rec largest, int grid[][N])
 	for(i=largest.leftBottomY;i<largest.rightTopY;i++)
 	{
 		for(j=largest.leftBottomX;j<largest.rightTopX;j++)
-		{
 			grid[i][j]=0;
-		}
 	} 
 }
 
@@ -81,16 +78,25 @@ int gridNum(struct Rec largest, int grid[][N])
 	for(i=largest.leftBottomY;i<largest.rightTopY;i++)
 	{
 		for(j=largest.leftBottomX;j<largest.rightTopX;j++)
-		{
 			if(grid[i][j]) num++;
-		}
 	} 
 	return num;
 }
 
-void print(struct Rec rec)
+void input(struct Rec *recs, int n)
 {
-	printf("%d,%d,%d,%d\n",rec.leftBottomX,rec.leftBottomY,rec.rightTopX,rec.rightTopY);
+	int i;
+    for(i=0;i<n;i++) 
+      scanf("%d%d%d%d",&recs[i].leftBottomX,&recs[i].leftBottomY,
+                       &recs[i].rightTopX,&recs[i].rightTopY);
+} 
+
+void print(struct Rec *recs, int n)
+{
+	int i;
+    for(i=0;i<n;i++) 
+      printf("%d,%d,%d,%d\n",recs[i].leftBottomX,recs[i].leftBottomY,
+                             recs[i].rightTopX,recs[i].rightTopY);
 } 
  
 int main()
@@ -98,12 +104,10 @@ int main()
 	int grid[N][N],n,i,num;
 	struct Rec recs[N],largest;
 	scanf("%d",&n);
-	for(i=0;i<n;i++)
-	{
-		scanf("%d%d%d%d",&recs[i].leftBottomX,&recs[i].leftBottomY,&recs[i].rightTopX,&recs[i].rightTopY);
-	}
-	largest=Largest(recs,n); 
-	//print(largest);
+	input(recs,n);
+	// print(recs,n); // 检查输入 
+	largest=Largest(recs,n); // 计算最大矩形 
+	// print(&largest,1); // 查看最大矩形是否正确 
 	grid0(largest,grid); // 初始化 
 	for(i=0;i<n;i++)
 	{
