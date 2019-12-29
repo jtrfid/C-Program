@@ -1,6 +1,6 @@
 #include <stdio.h>
 #include <math.h>
-#define N 10000
+#define N 10000 // 估计数组最大长度 
 int main()
 {
 	int i,j,n,num[N],smallest,temp;
@@ -9,7 +9,7 @@ int main()
 	{
 		scanf("%d",&num[i]);
 	}
-	smallest=(int)fabs(num[0]-num[1]);// abs()在低版本编译器中有问题 
+	smallest=(int)fabs(num[0]-num[1]); // abs()在低版本编译器中有问题 
 	for(i=0;i<=n-2;i++) 
 	{
 		for(j=i+1;j<n;j++)

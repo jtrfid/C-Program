@@ -1,0 +1,143 @@
+%%%%%%%%%%%%%%%%%%%% book.tex %%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+% sample root file for the chapters of your "monograph"
+%
+% Use this file as a template for your own input.
+%
+%%%%%%%%%%%%%%%% Springer-Verlag %%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+% RECOMMENDED %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\documentclass[graybox,envcountchap,sectrefs]{svmono}
+
+% choose options for [] as required from the list
+% in the Reference Guide
+
+\usepackage{mathptmx}
+\usepackage{helvet}
+\usepackage{courier}
+\usepackage{amsmath}
+
+\usepackage{amssymb}
+\usepackage{mathrsfs}
+\usepackage{amsfonts}
+%
+\usepackage{type1cm}
+
+\usepackage{makeidx}         % allows index generation
+\usepackage{graphicx}        % standard LaTeX graphics tool
+                             % when including figure files
+\usepackage{multicol}        % used for the two-column index
+\usepackage[bottom]{footmisc}% places footnotes at page bottom
+
+\usepackage{wrapfig}
+\usepackage{picins}
+%xxx\usepackage{custom}
+\usepackage{tikz}
+\usetikzlibrary{shapes,backgrounds}
+\usetikzlibrary{arrows, decorations.pathmorphing, backgrounds, positioning, fit, petri, automata} %自动机
+
+\usetikzlibrary{matrix,arrows}
+
+\usepackage[justification=centering]{caption}
+\usepackage{array}
+\usepackage{multirow} 
+
+\usepackage{verbatim} % comment
+
+%中文包
+\usepackage[UTF8]{ctex}
+
+% subfigure
+\usepackage{subfigure}
+
+% figure目录
+\graphicspath{{fig/},} 
+
+
+%%%% 插入程序代码
+\definecolor{mygreen}{rgb}{0,0.6,0}
+\usepackage{listings}
+\usepackage{xcolor}
+\lstset{
+	language=C++,
+	%numbers=left, 
+	%numberstyle= \tiny, 
+	keywordstyle= \color{ blue!70},
+	%commentstyle= \color{red!50!green!50!blue!50}, 
+	commentstyle=\color{mygreen},    % comment style
+	frame=shadowbox, % 阴影效果
+	rulesepcolor= \color{ red!20!green!20!blue!20} ,
+	escapeinside=``, % 英文分号中可写入中文
+	xleftmargin=1em,xrightmargin=1em, aboveskip=1em,
+	framexleftmargin=1em,
+	breaklines=true,  % automatic line breaking only at whitespace
+	extendedchars=false,  % 代码跨页问题
+	keepspaces=true,
+	showspaces=false,
+	tabsize=4,
+	showtabs=false,                  % 不显示tab键，不作为
+} 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\usepackage[top=2cm, bottom=2cm, left=2cm, right=2cm]{geometry}  
+\usepackage{algorithm}  
+\usepackage{algorithmicx}  
+\usepackage{algpseudocode} 
+%\floatname{algorithm}{算法}  
+%\renewcommand{\algorithmicrequire}{\textbf{输入:}}  
+%\renewcommand{\algorithmicensure}{\textbf{输出:}}  
+\renewcommand{\algorithmicrequire}{\textbf{Input:}}  
+\renewcommand{\algorithmicensure}{\textbf{Output:}}  
+
+%自定义列表编号
+\usepackage{enumerate} %\begin{enumerate}[(i)]
+
+%书签
+\usepackage[breaklinks,colorlinks,linkcolor=black,citecolor=black,urlcolor=black]{hyperref}
+
+\newtheorem{convention}{Convention} 
+
+%\renewcommand{\thefootnote}{}  % footnote不编号
+
+% see the list of further useful packages
+% in the Reference Guide
+
+\usepackage{tabulary} %tabulary tries to balance the column widths so that each column has at least its natural width, without exceeding the maximum length. 
+
+\usepackage{array}
+
+\graphicspath{{../figures/},} 
+
+%%%%%%x%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{document}
+
+\author{段江涛}
+\title{ 计算机导论与程序设计[CS006001-60]}
+\subtitle{机试练习参考程序代码 }
+
+%\includegraphics[height=1cm]{xd.jpg}
+
+
+\date{\zhtoday}
+
+\maketitle  % 生成书名
+
+%\frontmatter
+
+% \include{dedic}    %dedication 赠言
+\include{foreword} %foreword 前言
+
+\tableofcontents   %生成目录
+
+%%表示文章的正文部分，在生成目录后将从第一页开始
+
+\include{chapter-1}   % 第1次机试(课外)练习
+\include{chapter-2}   % 第2次机试练习
+\include{chapter-3}   % 第3次机试练习
+\include{chapter-4}   % 第4次机试练习
+\include{chapter-5-6}   % 第5,6次机试练习
+\include{chapter-7}   % 第7次机试练习
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\end{document}

@@ -1,8 +1,6 @@
 
 #include <stdio.h>
-#include <math.h>
 
-#define N 100
 int main()
 {
 	int S,T,A;

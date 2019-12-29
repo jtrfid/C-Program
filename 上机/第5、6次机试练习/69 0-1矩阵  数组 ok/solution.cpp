@@ -16,7 +16,7 @@ int main()
  		{
  			if(a[i][j]==1) // 1开始 
  			{
- 				if (tmpStart==-1) tmpStart=j; // 开始 
+ 				if (tmpStart==-1) tmpStart=j; // 开始记录 
 				tmpLen++;
 			}
 			else // 遇0结算 

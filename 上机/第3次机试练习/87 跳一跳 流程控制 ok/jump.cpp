@@ -1,8 +1,4 @@
-
 #include <stdio.h>
-#include <math.h>
-
-#define N 100
 int main()
 {
 	int score=0, a, i, last=0, num=0;
