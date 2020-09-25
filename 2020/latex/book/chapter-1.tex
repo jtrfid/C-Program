@@ -1,0 +1,723 @@
+%%%%%%%%%%%%%%%%%%%%% chapter.tex %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+% sample chapter
+%
+% Use this file as a template for your own input.
+%
+%%%%%%%%%%%%%%%%%%%%%%%% Springer-Verlag %%%%%%%%%%%%%%%%%%%%%%%%%%
+%\motto{Use the template \emph{chapter.tex} to style the various elements of your chapter content.}
+\chapter{第1次机试(课外)练习}
+
+\section{计算球体重量}
+已知铁的比重是7.86(克/立方厘米)，金的比重是19.3(克/立方厘米)。写一个程序，分别计算出给定直径的铁球与金球的质量，假定PI=3.1415926
+
+输入说明：\\
+输入两个整数，分别表示铁球与金球的直径（单位为毫米）
+
+输出说明：\\
+输出两个浮点数，分别表示铁球与金球的质量（单位为克），小数点后保留3位小数，两个浮点数之间用空格分隔
+
+输入样例：\\
+100 100
+
+输出样例：\\
+4115.486  10105.456
+
+提示: \\
+用\lstinline|scanf|输入，用\lstinline|printf|输出，保留3位小数的格式控制字符为\lstinline|%.3f|
+
+\begin{lstlisting}
+#include<stdio.h>
+#include<math.h>   // 数学库函数 
+#define PI 3.1415926       
+int main()                   
+{  
+	int a,b;
+	scanf("%d%d",&a,&b);
+	float v1= 4.0/3.0*pow(a/2.0/10,3)*PI;
+	float v2= 4.0/3.0*pow(b/2.0/10,3)*PI;
+	printf("%.3f %.3f\n",7.86*v1,19.3*v2); 
+	return 0;           
+}                   
+\end{lstlisting}
+
+\begin{note}[要点]
+	\begin{enumerate}
+		\item 整数除以整数, 结果为整数。\\
+		4.0/3.0结果是浮点数，4/3结果是整数
+		\item pow函数原型: \lstinline|double pow(double x,double y)|\\
+		当形参数整数整数时, 由于精度问题，推荐不使用此函数计算$x^y$. 使用循环语句, 易计算$x^y$。 如果必要, 可自定义函数: \lstinline|int mypow(int x,int y)|。 见课件。
+	\end{enumerate}
+\end{note}
+
+\section{温度转化}
+已知华氏温度到摄氏温度的转换公式为：摄氏温度= (华氏温度- 32)×5/9，写程序将给定的华氏温度转换为摄氏温度输出。
+
+输入说明：\\
+只有一个整数，表示输入的华氏温度
+
+输出说明：\\
+输出一个表示摄氏温度的实数，小数点后保留2位有效数字，多余部分四舍五入
+
+输入样例：\\
+50
+
+输出样例：\\
+10.00
+
+提示：\\
+用scanf输入，用printf输出，保留2位小数的格式控制字符为%.2f
+
+\begin{lstlisting}
+#include <stdio.h>
+
+int main()
+{
+	int f;
+	float c;
+	scanf("%d",&f);
+	c = (f-32)*5.0/9;     // (1)
+	//c = (f-32)*5/9;     // (2)
+	printf("%.2f\n",c);
+	return 0;
+} 
+\end{lstlisting}
+
+\begin{note}[思考]
+	为何语句(1),(2)计算结果不一致, 哪一条语句正确？
+\end{note}
+
+
+\section{整数简单运算}
+编写程序，计算用户输入的两个整数的和、差、乘积（*）和商（/）。
+
+输入格式：输入两个整数，整数之间用空格分隔。
+
+输出格式：输出四个整数结果，分别表示和、差、积和商，每输出一个结果换行。
+
+输入样例：\\
+3 4
+
+输出样例：\\
+7  \\
+-1 \\
+12 \\
+0
+
+\begin{lstlisting}
+#include<stdio.h>
+int main()                   
+{  
+	int a,b;
+	scanf("%d%d",&a,&b);
+	printf("%d\n%d\n%d\n%d\n",a+b,a-b,a*b,a/b); 
+	return 0;           
+}             
+\end{lstlisting}
+
+\begin{note}[思考]
+	b=0时如何处理?
+\end{note}
+
+\section{A+B+C}
+通过键盘输入三个整数a，b，c，求3个整数之和。
+
+输入说明：
+
+三整形数据通过键盘输入，输入的数据介于-100000和100000之间，整数之间以空格、跳格或换行分隔。 
+
+输出说明：
+
+输出3个数的和。
+
+输入样例：
+
+-6  0  39
+
+输出样例：
+
+33
+
+\begin{lstlisting}
+#include<stdio.h>  
+int main()                   
+{  
+	int a,b,c;
+	scanf("%d%d%d",&a,&b,&c);
+	printf("%d\n",a+b+c); 
+	return 0;           
+}           
+\end{lstlisting}
+
+\section{字符输入输出}
+通过键盘输入5个大写字母，输出其对应的小写字母，并在末尾加上“！”。
+
+输入说明：
+
+5个大写字母通过键盘输入，字母之间以竖线“|”分隔。
+
+输出说明：
+
+输出5个大写字母对应的小写字母，之间无分隔，并在末尾加上‘！’。
+
+输入样例：
+
+H|E|L|L|O
+
+输出样例：
+
+hello!
+
+\begin{lstlisting}
+#include<stdio.h>     
+int main()                   
+{  
+	char c1,c2,c3,c4,c5;
+	scanf("%c|%c|%c|%c|%c",&c1,&c2,&c3,&c4,&c5);
+	c1+=32; c2+=32; c3+=32; c4+=32; c5+=32;
+	printf("%c%c%c%c%c!",c1,c2,c3,c4,c5); 
+	return 0;           
+}           
+\end{lstlisting}
+
+\begin{note}[要点]
+	\lstinline|scanf("原样输入",...);|
+\end{note}
+
+\begin{note}(大小写字符转化关系)
+	小写字符ASCII码=大写字符ASCII码+32
+\end{note}
+
+\section{数字字符}
+通过键盘输入1个整数\lstinline|a(0<=a<=4)|,1个数字字符\lstinline|b('0'<=b<='5')|求a+b。
+
+输入说明：
+
+整形数据、数字字符通过键盘输入，输入的整形数据介于0和4之间，输入的数字字符介于`0'和`5'之间，二个输入数之间用``,"分隔。
+
+输出说明：
+
+分别以整数形式及字符形式输出a+b，输出的二个数之间用``,"分隔。
+
+输入样例：
+
+3,5
+
+输出样例：
+
+56,8
+
+\begin{lstlisting}
+#include<stdio.h>    
+int main()                   
+{  
+	int a;
+	char b;
+	scanf("%d,%c",&a,&b);
+	printf("%d,%c",a+b,a+b); 
+	return 0;           
+}             
+\end{lstlisting}
+
+\begin{note}(scanf函数)
+	\lstinline|scanf("原样输入",...);|
+\end{note}
+
+\section{实数运算}
+通过键盘输入长方体的长、宽、高，求长方体的体积V(单精度)。
+
+输入说明：
+
+十进制形式输入长、宽、高，输入数据间用空格分隔。
+
+输出说明：
+
+单精度形式输出长方体体积V，保留小数点后3位，左对齐。
+
+输入样例：
+
+15  8.12  6.66
+
+输出样例：
+
+811.188
+
+
+\begin{lstlisting}
+#include<stdio.h>   
+int main()                   
+{  
+	float a,b,c;
+	scanf("%f%f%f",&a,&b,&c);
+	printf("%.3f",a*b*c); 
+	return 0;           
+}                  
+\end{lstlisting}
+
+\section{四则运算}
+输入两个整数和一个四则运算符，根据运算符计算并输出其运算结果（和、差、积、商、余之一）。注意做整除及求余运算时，除数不能为零。
+
+输入说明：
+
+使用scanf()函数输入两个整数和一个运算符，格式见输入样例。
+
+输出说明：
+
+输出使用printf()函数，格式见输出样例。
+
+输入样例：
+
+\lstinline|5%2|
+
+输出样例：
+
+\lstinline|5%2=1|
+
+\begin{lstlisting}
+#include<stdio.h>    
+int main()                   
+{  
+	int a,b;
+	char op;
+	scanf("%d%c%d",&a,&op,&b);
+	switch(op)
+	{
+		case '+': printf("%d%c%d=%d\n",a,op,b,a+b); break;
+		case '-': printf("%d%c%d=%d\n",a,op,b,a-b); break;
+		case '*': printf("%d%c%d=%d\n",a,op,b,a*b); break;
+		case '/': printf("%d%c%d=%d\n",a,op,b,a/b); break;
+		case '%': printf("%d%c%d=%d\n",a,op,b,a%b); break;
+	}
+	return 0;           
+}                 
+\end{lstlisting}
+
+\section{数位输出}
+输入一个5位整数，求出其各数位数值，并按照从高位到低位的顺序输出，如：输入12345，输出为1 2 3 4 5。
+
+输入说明：
+
+输入一个五位正整数。
+
+输出说明：
+
+按数位从高到低依次输出，各数位之间以一个空格相分隔。
+
+输入样例：
+
+96237
+
+输出样例：
+
+9 6 2 3 7
+
+\begin{lstlisting}
+#include<stdio.h>      
+int main()                   
+{  
+	int a,b=10000,i=5;
+	scanf("%d",&a);
+	while(i>=1)
+	{
+		if (i==1)printf("%d\n",a/b);
+		else printf("%d ",a/b);
+		a = a-a/b*b;
+		b/=10;
+		i--;
+	} 
+	return 0;           
+}               
+\end{lstlisting}
+
+\section{阶梯电价计费}
+电价分三个档次，[0,110]度电，每度电0.5元；(110,210]度电，超出110部分每度电0.55元，超过210度电，超出210部分每度电0.70元，给出一个家庭一月用电量，请计算出应缴的电费(四舍五入，保留小数点后两位小数)。
+
+输入说明：
+
+输入数据为一个正实数，表示一月用电量
+
+输出说明：
+
+输出应缴电费，四舍五入保留2位小数。
+
+输入样例：
+
+输入样例1
+
+100
+
+输入样例2
+
+200
+
+输入样例3
+
+329.75
+
+输出样例：
+
+输出样例1
+
+50.00
+
+输出样例2
+
+104.50
+
+输出样例3
+
+193.83
+
+\begin{lstlisting}
+#include <stdio.h>
+int main()
+{
+	float sum,u1=0.5,u2=0.55,u3=0.70; // 用电量,每度电单价
+	float fee = 0; // 应缴电费
+	
+	scanf("%f",&sum);
+	
+	if (sum > 210) 
+	{
+		fee = (sum-210)*u3;
+		sum = 210;
+	}
+	if (sum > 110)
+	{
+		fee += (sum-110)*u2;
+		sum = 110;
+	}
+	fee += sum*u1;
+	
+	printf("%.2f\n",fee);
+	return 0;
+} 
+
+int main2()  // 另解
+{
+	float sum,u1=0.5,u2=0.55,u3=0.70; // 用电量,每度电单价
+	float fee = 0; // 应缴电费 
+	scanf("%f",&sum);
+	
+	if (sum >= 210)
+		fee = 110*u1 + (210-110)*u2 + (sum-210)*u3;
+	else if (sum >= 110)
+		fee = 110*u1 + (sum-110)*u2;
+	else 
+		fee = sum*u1; 
+
+	printf("%.2f\n",fee);
+	return 0;
+} 
+
+int main3() // 另解
+{
+	float sum,u1=0.5,u2=0.55,u3=0.70; // 用电量,每度电单价
+	float fee = 0; // 应缴电费 
+	
+	scanf("%f",&sum);
+	
+	if (sum <= 110) fee = sum*u1;
+	else if (sum <= 210)
+	{
+		fee = 110*u1;
+		sum -= 110; 
+		fee += sum*u2;
+	}
+	else // sum > 210
+	{
+		fee = 110*u1; 
+		fee += (210-110)*u2;
+		sum -= 210;
+		fee += sum*u3;
+	}
+	
+	printf("%.2f\n",fee);
+	return 0;
+} 
+\end{lstlisting}
+
+\begin{note}[四舍五入问题]
+	不同的编译系统，处理结果可能不一致，\lstinline|printf("%.2f\n",fee);|默认输出即可。
+\end{note}
+
+\section{计算某月天数}
+每年的1，3，5，7，8，10，12月有31天，4，6，9，11月有30天，闰年2月29天，其他年份2月28天，给定年份和月份求该月的天数
+
+输入说明：
+
+输入由两个正整数a和b构成，a表示年份，b表示月份，a和b之间用空格分隔
+
+输出说明：
+
+根据年份和月份计算该月天数并输出
+
+输入样例	
+
+输入样例1
+
+2000 3
+
+输入样例2
+
+2001 2
+
+输出样例
+	
+输出样例1
+
+31
+
+输出样例2
+
+28
+
+\begin{lstlisting}
+#include <stdio.h>
+int main()
+{
+	int a,b,t = 0;
+	scanf("%d%d",&a,&b);
+	if((a%4 == 0 && a%100 !=0) || (a%100 == 0 && a%400 == 0))
+	{
+		if(b == 2) t = 29;
+	}
+	else if (b == 2) t = 28;
+	
+	if(b == 1 || b == 3 || b == 5 || b == 7 || b == 8 || b == 10 || b == 12) t = 31;
+	else if(b == 4 || b == 6 || b == 9 || b == 11) t = 30; 
+	
+	printf("%d\n",t);
+	return 0;	
+}
+\end{lstlisting}
+
+\begin{note}(逻辑运算符)
+	\&\&, ||, !
+\end{note}
+
+\section{计算整数各位数字之和}
+假设n是一个由最多9位数字（d9,\dots, d1）组成的正整数。编写一个程序计算n的每一位数字之和。
+
+输入说明:
+	
+输入数据为一个正整数n
+
+输出说明:
+	
+对整数n输出它的各位数字之和后换行
+
+输入样例:	
+
+3704
+
+输出样例:	
+
+14
+
+\begin{lstlisting}
+#include <stdio.h>
+int main()
+{
+	int n,sum = 0; // 注意初始化sum
+	scanf("%d",&n);
+	while(n)
+	{
+		sum += n%10;
+		n /= 10;
+	}
+	printf("%d",sum);
+	return 0;	
+}
+\end{lstlisting}
+
+\begin{note}(计算整数各位数字)
+	循环语句: 除10, 取余, 是基本技巧。
+\end{note}
+
+\section{完数}
+请写一个程序，给出指定整数范围[a，b]内的所有完数，0 < a < b < 10000。
+一个数如果恰好等于除它本身外的所有因子之和，这个数就称为``完数"。
+例如6是完数，因为6=1+2+3
+
+输入说明	
+
+输入为两个整数a和b，a和b之间用空格分隔
+
+输出说明	
+
+输出[a，b]内的所有完数，每个数字占一行
+
+输入样例	
+
+1 10
+
+输出样例	
+
+6
+
+\begin{lstlisting}
+#include <stdio.h>
+int main()
+{
+	int i,j,n1,n2,sum = 0;
+	scanf("%d%d",&n1,&n2);
+	for(i = n1; i <= n2; i++)
+	{
+		if(i == 1) continue; // 避免输出1，1不是完数 
+		sum = 1; // 注意必须在此处初始化sum
+		for(j = 2; j < i; j++)
+		{
+			if(i%j == 0) sum += j; 
+		}
+		if(sum == i) printf("%d\n",i);
+	} 
+
+	return 0;	
+}
+\end{lstlisting}
+
+\begin{note}[特别注意]
+	且记：进入内层循环前, 相关变量的初始化问题。	
+\end{note}
+
+\section{最大公约数}	
+最大公约数(GCD)指某几个整数共有因子中最大的一个，最大公约数具有如下性质，
+
+gcd(a,0)=a
+
+gcd(a,1)=1
+
+因此当两个数中有一个为0时，gcd是不为0的那个整数，当两个整数互质时最大公约数为1。
+
+输入两个整数a和b，求最大公约数
+
+输入说明：
+
+输入为两个正整数a和b（0<=a,b<10000），a和b之间用空格分隔，
+
+输出说明：
+
+输出其最大公约数
+
+输入样例：
+
+样例1输入
+	
+2 4
+
+样例2输入：
+
+12 6
+
+样例3输入：
+
+3 5
+
+输出样例：
+
+样例1输出
+	
+2
+
+样例2输出
+
+6
+
+样例3输出
+
+1
+
+\begin{lstlisting}
+#include <stdio.h>
+// 递归函数
+int gcd(int a,int b)
+{
+	if(b==0) return a;
+	if(a%b==0) return b;
+	return gcd(b,a%b);
+}
+
+int main() // 调用递归函数
+{
+	int a,b,t;
+	scanf("%d%d",&a,&b);
+	if(a<b) { t=a; a=b; b=t; } // 交换a,b 
+	printf("%d\n",gcd(a,b));
+	return 0;	
+}
+
+int main1() // 另解(循环语句)
+{
+	int a,b,r,t;
+	scanf("%d%d",&a,&b); // 机试系统不要想当然给提示语句, 除非题目要求
+	if(a<b) { t=a; a=b; b=t; } // 交换a,b,使a是较大者
+	while(1)
+	{
+		if(b==0) { t=a; break; }  // 分母为0时, a就是最大公约数 
+		r = a%b; 
+		if(r==0) {t=b; break;}    // 本轮循环的a(上轮循环的b)就是最大公约数
+		
+		a=b; b=r; // 准备下一轮迭代   
+	}
+	printf("%d\n",t);
+	return 0;	
+}
+\end{lstlisting}
+
+\begin{note}(欧几里得定理)
+	见课件。
+\end{note}
+
+\section{角谷定理}
+角谷定理定义如下：
+对于一个大于1的整数n，如果n是偶数，则n = n / 2。如果n是奇数，则n = 3 * n +1，反复操作后，n一定为1。
+
+例如输入22的变化过程： 22 ->11 -> 34 -> 17 -> 52 -> 26 -> 13 -> 40 -> 20 -> 10 -> 5 -> 16 -> 8 -> 4 -> 2 -> 1，数据变化次数为15。
+
+输入一个大于1的整数，求经过多少次变化可得到自然数1。
+
+输入说明	
+
+输入为一个整数n，1<n<100000。
+
+输出说明	
+
+输出变为1需要的次数
+
+输入样例
+	
+样例1输入
+
+22
+
+样例2输入
+
+33
+
+输出样例
+
+样例1输出
+	
+15
+
+样例2输出
+
+26
+
+\begin{lstlisting}
+#include <stdio.h>
+int main()
+{
+	int n,i=0;
+	scanf("%d",&n);
+	while(n!=1)
+	{
+		if(n%2==0) n=n/2;
+		else n=3*n+1;
+		i++;
+	} 
+	printf("%d\n",i);
+	return 0;	
+}
+\end{lstlisting}

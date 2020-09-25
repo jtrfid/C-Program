@@ -1,0 +1,705 @@
+% !Mode::"TeX:UTF-8"
+% !Mode:: "TeX:UTF-8"
+\documentclass[xcolor=svgnames,serif,table,10pt]{beamer}
+\mode<presentation>{
+% Setup appearance:
+\useoutertheme{infolines}
+\usetheme{Darmstadt}
+\setbeamercovered{transparent}
+%\setbeamercovered{dynamic}  % translucent when using \pause 或itemize等
+%\setbeamercovered{invisible} % 本页不显示\pause后的内容
+\setbeamertemplate{caption}[numbered]
+\setbeamertemplate{navigation symbols}{}
+\setbeamertemplate{blocks}[rounded][shadow=true]
+\setbeamertemplate{enumerate items}[circle]
+
+% 修改样式
+\setbeamercolor{box}{bg=black!20!orange,fg=white}
+\setbeamercolor{block title}{use=sidebar,fg=sidebar.fg!10!white,bg=orange!70!black}
+\setbeamercolor{block title example}{use=sidebar,fg=sidebar.fg!10!white,bg=black!60!green}
+\setbeamercolor{block title alerted}{use=sidebar,fg=sidebar.fg!10!white,bg=black!50!red}
+
+\setbeamertemplate{headline}
+{%
+  \begin{beamercolorbox}[shadow=true]{section in head/foot}
+  \vskip2pt\insertnavigation{\paperwidth}\vskip2pt
+  \end{beamercolorbox}%
+}
+}
+\usepackage{url}
+\usepackage{animate}
+\usepackage[english]{babel}
+\usepackage{times}
+\usepackage[T1]{fontenc}
+\usepackage{multirow,multicol,longtable}
+\usepackage{graphics}
+\usepackage{xcolor}
+\usepackage[no-math]{fontspec}%-------------------------------------------------- 提供字体选择命令
+\usepackage{xunicode}%----------------------------------------------------------- 提供Unicode字符宏
+\usepackage{xltxtra}%------------------------------------------------------------ 提供了针对XeTeX的改进并且加入了XeTeX的LOGO
+\usepackage[BoldFont,SlantFont,CJKchecksingle]{xeCJK}%--------------------------- 使用xeCJK宏包
+
+
+%================================== 设置中文字体 ================================%
+%\setCJKmainfont{Adobe Heiti Std}%------------------------------------------------设置正文为黑体
+%\setCJKmonofont{Adobe Song Std}%-------------------------------------------------设置等距字体
+%\setCJKsansfont{Adobe Kaiti Std}%------------------------------------------------设置无衬线字体
+% \setCJKfamilyfont{zxzt}{FZShouJinShu-S10S}
+% \setCJKfamilyfont{FZDH}{FZDaHei-B02S}
+\setCJKmainfont[BoldFont=SimHei]{KaiTi}    % 楷体
+%\setCJKmainfont[BoldFont=SimHei]{FangSong}  % 仿宋
+%================================== 设置中文字体 ================================%
+
+%================================== 设置英文字体 ================================%
+\setmainfont[Mapping=tex-text]{Times New Roman}%--------------------------------英文衬线字体
+\setsansfont[Mapping=tex-text]{Arial}%------------------------------------英文无衬线字体
+\setmonofont[Mapping=tex-text]{Courier New}%-------------------------------------英文等宽字体
+\newfontfamily\Arial{Arial}
+%================================== 设置英文字体 ================================%
+
+%================================== 设置数学字体 ================================%
+%\setmathsfont(Digits,Latin,Greek)[Numbers={Lining,Proportional}]{Minion Pro}
+%================================== 设置数学字体 ================================%
+\punctstyle{kaiming}%------------------------------------------------------------ 开明式标点格式
+\usepackage{graphicx}
+\usepackage{tikz}
+\usetikzlibrary{positioning,backgrounds}
+\usetikzlibrary{fadings}
+\usetikzlibrary{patterns}
+\usetikzlibrary{calc}
+\usetikzlibrary{shadings}
+\pgfdeclarelayer{background}
+\pgfdeclarelayer{foreground}
+\pgfsetlayers{background,main,foreground}
+\usepackage{xifthen}
+\usepackage{colortbl,dcolumn}
+\usepackage{enumerate}
+\usepackage{pifont}
+\usepackage{tabularx}
+\usepackage{booktabs}
+\usepackage{hyperref}
+\hypersetup{
+	colorlinks=true,
+	%linkcolor=cyan,
+	linkcolor=blue,
+	filecolor=blue,      
+	urlcolor=red,
+	citecolor=green,
+}
+
+\usepackage{bm} % 字体加粗的方法
+\usetikzlibrary{arrows,automata,matrix,arrows}
+
+\usepackage{eucal} % \mathcal{ABCC}
+
+\usepackage{setspace} %行间距
+
+\usepackage{xlop} % 竖式公式
+
+%=================================== 数学符号 =================================%
+\newcommand{\rtn}{\mathrm{\mathbf{R}}}
+\newcommand{\N}{\mathrm{\mathbf{N}}}
+\newcommand{\As}{\mathrm{a.s.}}
+\newcommand{\Ae}{\mathrm{a.e.}}
+\newcommand*{\PR}{\mathrm{\mathbf{P}}}
+\newcommand*{\EX}{\mathrm{\mathbf{E}}}
+\newcommand{\EXlr}[1]{\mathrm{\mathbf{E}}\left[#1\right]}
+\newcommand*{\dif}{\,\mathrm{d}}
+\newcommand*{\F}{\mathcal{F}}
+\newcommand*{\h}{\mathcal{H}}
+\newcommand*{\vp}{\varepsilon}
+\newcommand*{\prs}{\dif\PR-\As}
+\newcommand*{\dte}{\dif t-\Ae}
+\newcommand*{\pts}{\dif\PR\times\dif t-\Ae}
+\newcommand{\Ito}{It\^{o}}
+\newcommand{\tT}[1][0]{[#1,T]}
+\newcommand{\intT}[2][T]{\int^{#1}_{#2}}
+\newcommand{\intTe}[1][t]{\intT[t+\varepsilon]{#1}}
+\newcommand{\s}{\mathcal{S}}
+\newcommand{\me}{\mathrm{e}}
+\newcommand{\one}[1]{{\bf 1}_{#1}}
+\renewcommand{\M}{{\rm M}}
+\newcommand{\Me}[1][t]{M^{\varepsilon}_{#1}}
+\newcommand{\Ne}[1][t]{N^{\varepsilon}_{#1}}
+\newcommand{\Pe}[1][t]{P^{\varepsilon}_{#1}}
+\DeclareMathOperator*{\sgn}{sgn}
+% =================================== 数学符号 =================================%
+
+% 定义罗马数字
+\makeatletter
+\newcommand{\rmnum}[1]{\romannumeral #1}
+\newcommand{\Rmnum}[1]{\expandafter\@slowromancap\romannumeral #1@}
+\makeatother
+
+% 定义破折号
+\newcommand{\pozhehao}{\kern0.3ex\rule[0.8ex]{2em}{0.1ex}\kern0.3ex}
+% 中文日期
+\def\CJK@today{\the\year 年 \the\month 月}
+\newcommand\zhtoday{\CJK@today}
+
+% 中文图表
+\renewcommand\figurename{图}
+\renewcommand\tablename{表}
+
+\usepackage{verbatim} % \begin{comment} xxxx \end{comment}
+
+\usetheme{Berlin} %主题
+%\usecolortheme{sustech} %主题颜色
+
+\usepackage[absolute,overlay]{textpos}
+%\begin{textblock*}{15cm}(8.5cm,5cm)
+%\includegraphics[scale=0.25]{leap}
+%\end{textblock*}
+
+\usepackage{algorithm}  
+\usepackage{algorithmicx}  
+\usepackage{algpseudocode}
+\floatname{algorithm}{算法}
+\renewcommand{\algorithmicrequire}{\textbf{输入:}} 
+\renewcommand{\algorithmicensure}{\textbf{输出:}}  
+
+\algrenewcommand{\algorithmiccomment}[1]{ $//$ #1}
+
+\definecolor{mygreen}{rgb}{0,0.6,0}
+\definecolor{mygray}{rgb}{0.5,0.5,0.5}
+\definecolor{mymauve}{rgb}{0.58,0,0.82}
+\usepackage{listings}
+\lstset{ %
+	backgroundcolor=\color{white},   % choose the background color
+	basicstyle=\footnotesize\ttfamily,     % size of fonts used for the code
+	columns=fullflexible,
+	breaklines=true,                 % automatic line breaking only at whitespace
+	captionpos=b,                    % sets the caption-position to bottom
+	tabsize=4,
+	showtabs=false,                  % 不显示tab键，不作为
+	commentstyle=\color{mygreen},    % comment style
+	escapeinside={\%*}{*)},          % if you want to add LaTeX within your code
+	keywordstyle=\color{blue},       % keyword style
+	stringstyle=\color{mymauve}\ttfamily,     % string literal style
+	numbers=none, % 给代码添加行号，可取值none, left, right.	
+	%	frame=single,
+	rulesepcolor=\color{red!20!green!20!blue!20},
+	% identifierstyle=\color{red},
+	language=c,
+	%%%%%%%%%%%%%%%%%%%%%%%
+	breaklines=true,  % automatic line breaking only at whitespace
+	extendedchars=false,  % 代码跨页问题
+	keepspaces=true,
+	showspaces=false,
+}
+
+\graphicspath{{figures/},} 
+
+%%%%%%%%%%%%%%%% \note
+\setbeamertemplate{note page}[plain]
+
+%\setbeameroption{show notes}
+
+
+
+% Author, Title, etc.
+
+\title{计算机导论与程序设计[CS006001]}
+
+%% \subtitle{Foreground-constrained Eulerian Video Motion Magnification}
+
+\author[段江涛]{段江涛
+\\机电工程学院}
+
+\institute[]{\includegraphics[height=1cm]{xd.jpg}}
+
+\date{\zhtoday}
+
+\setlength{\baselineskip}{22pt}
+\renewcommand{\baselinestretch}{1.4}
+
+% The main document
+
+\begin{document}
+\setlength{\abovedisplayskip}{1ex}%------------------------------------------ 公式前的距离
+\setlength{\belowdisplayskip}{1ex}%------------------------------------------ 公式后的距离
+
+\begin{frame}
+  \titlepage
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%\include{report} % 程序设计报告
+%\include{lecture-1} % 课程介绍，导论简介， C语言程序设计, 第1次课讲到ACSII编码表
+%\include{lecture-2} % 开发工具，算法，初识C语言程序(作业), 第2次课讲到算法特性之前
+\include{lecture-3} % 初识C语言程序(讲解作业), 数据的输入输出, 第3次课平台演示讲解
+%\include{lecture-4} % 留白, 以下均为课堂演示讲解
+%\include{lecture-5} % 数据类型, 运算符和表达式, 数学库函数，顺序程序设计举例
+%\include{lecture-6} % ch4, 选择结构程序设计
+%\include{lecture-7} % ch5, 循环结构程序设计
+%\include{lecture-8} % ch5, 循环结构程序设计举例
+%\include{lecture-9} % ch5, 循环结构程序设计举例(续)
+%\include{lecture-10} % ch6, 一维数组，冒泡排序
+%\include{lecture-11} % ch6, 二维数组和字符数组
+%\include{lecture-12} % ch6, 字符串处理库函数及程序举例
+%%%%%%%%%%%%第13次课: 第2次机试练习讲解
+%\include{lecture-13} % ch7, 函数，定义，声明，调用，值传递，地址传递，模块化设计
+%%%%%%%%%%% lecture-13: 第14次课基本概念, 第15次课，实例分析，第2次机试练习ISBN讲解
+%\include{lecture-14} % 第16次课, ch7, 嵌套与递归, 第17次课, 汉诺塔,全局变量与局部变量
+%\include{lecture-15} % 第18次课, ch9, 讲到指针表示字符串常量
+%\include{lecture-16} % 第19次课, 指针回顾, lecture-15剩余部分, 指针编程举例。
+% lecture-16 期中考试总结, pow函数问题，移到第22次课讲
+%\include{lecture-17} % 第20次课, 结构体
+%\include{lecture-18} % 第21次课, 结构体编程举例续 
+%%%%%%%%%%%%%%%%%%% last frame
+\begin{frame}[plain]{}
+  \begin{center}
+    \begin{tikzpicture}
+      \node[above,xscale=1.2,yscale=1.2]{\Huge 欢迎批评指正！};
+    \end{tikzpicture}
+  \end{center}
+\end{frame}
+
+\end{document}
+
+
+%%%%下面的内容不参与文档的编译。使用者在想用某个东西时直接可通过查阅，并复制黏贴和修改使用。
+
+\iffalse　　%注释开始
+
+\section{第一部分}
+
+%垂直居中
+\begin{frame}
+  \begin{center}
+  需要居中的内容！
+  \end{center}
+\end{frame}
+或者
+\begin{frame}
+  \centering
+  一些内容
+\end{frame}
+
+%幻灯片标题的使用
+\begin{frame}
+\frametitle{第一部分第一张幻灯}
+  一些内容
+\end{frame}
+
+%项目编号的使用
+\begin{frame}
+  \frametitle{条目}
+  \begin{itemize}
+  \item 项目1
+  \item 项目2
+  \item 项目3
+  \item 项目4
+    \begin{itemize}
+    \item 二级项目1
+    \item 二级项目2
+    \end{itemize}
+  \end{itemize}
+\end{frame}
+
+%表格的使用
+\begin{frame}
+  \frametitle{表格}
+  \begin{table}[htbp!]
+  	\small %\tiny,\scriptsize,\footnotesize,\small,\normalsize,\large,\LARGE,\huge,\Huge
+    \centering
+    \caption{主流机器学习框架}
+    \begin{tabular}{c|c|c|c|c}
+      \toprule[1pt]
+      机器学习库	& 机构 & 支持语言  & 平台 & Tensor \\
+      \toprule[1pt]
+      TensorFlow	& Google & C++，Python &跨平台 & Good \\
+ 	  \hline
+      Pytorch	&  Facebook& Python & 跨平台 & Good \\
+ 	  \bottomrule[1pt]
+    \end{tabular}
+  \end{table}
+\end{frame}
+
+%区块的使用
+\begin{frame}
+  \frametitle{分析}
+  \begin{block}{XXX 算法}
+	\begin{itemize}
+		\item 步骤1
+	 	\item 步骤2
+	 	\item 步骤3
+	 \end{itemize}
+  \end{block}
+\end{frame}
+
+%使用区块来强调内容
+\begin{frame}
+  \frametitle{强调}
+  \begin{itemize}
+  \item 这是内容
+  \end{itemize}
+  \only<1>\begin{block}{}
+    这里蹦出来一个强调！
+  \end{block}
+\end{frame}
+
+%section中目录的使用
+\begin{frame}
+  \frametitle{技术影响力}
+    \tableofcontents[currentsection,hideallsubsections]
+\end{frame}
+
+%插入图片
+\begin{frame}
+\begin{figure}[!h]
+  \centering
+  % Requires \usepackage{graphicx}
+  \includegraphics[width=2cm]{pics/logo.jpg}\\
+  \caption{logo图片样例}\label{pic6}
+\end{figure}
+\end{frame}
+
+%分栏实现图文混排
+\begin{frame}
+分栏前面的一些内容！！
+\begin{columns}[t] %顶部垂直对齐
+\column{0.6\textwidth}%<1->
+分栏的左侧，文字叙述。
+\column{0.4\textwidth}%<1->
+分栏的右侧插入了图片。
+ \begin{figure}[!h]
+  \centering
+  % Requires \usepackage{graphicx}
+  \includegraphics[width=4cm]{pics/logo.jpg}\\
+  \caption{logo图片样例}\label{pic6}
+\end{figure}
+\end{columns}
+分栏后面的一些内容！！
+\end{frame}
+
+%% last frame
+\begin{frame}[plain]{}
+\begin{center}
+	\begin{tikzpicture}
+	\node[above,xscale=1.2,yscale=1.2]{\Huge 欢迎批评指正！};
+	\end{tikzpicture}
+\end{center}
+\end{frame}
+
+% 大括号
+$\left\{ .....  \right\}$
+$\left[ .....  \right]$
+$\left( ..... \right)$
+$\left\{ .....  \right.$ %有左无右
+
+%右边大括号
+\begin{align*}
+\left.\sqrt{\frac{E_s}{N_0}(1-\rho)}\right|_{\rho=-0.21}=\sqrt{\frac{E_s^\prime}{N_0}}\\
+E_s^\prime=1.21E_s
+\end{align*}
+
+$\delta_{jk}=
+\begin{cases}
+1, & (i=k)\\
+0, & (i\ne k)
+\end{cases}
+$
+
+\tikzstyle{int}=[draw, fill=blue!20, minimum size=2em]
+\tikzstyle{init} = [pin edge={to-,thin,black}]
+\begin{tikzpicture}[node distance=2.5cm,auto,>=latex']
+\node [int, pin={[init]above:$v_0$}] (a) {$\frac{1}{s}$};
+\node (b) [left of=a,node distance=2cm, coordinate] {a};
+\node [int, pin={[init]above:$p_0$}] (c) [right of=a] {$\frac{1}{s}$};
+\node [coordinate] (end) [right of=c, node distance=2cm]{};
+\path[->] (b) edge node {$a$} (a);
+\path[->] (a) edge node {$v$} (c);
+\draw[->] (c) edge node {$p$} (end) ;
+\end{tikzpicture}
+
+%%%%%%%%%% 上下文字
+$P(H_1|H_0)\mathop{=}\limits^{def}P_F$\\    %上下文字在\[... \]和$...$表现不一致
+\[P(H_1|H_0)\mathop{=}\limits^{def}P_F \]
+\[P(H_1|H_0)\mathop{=}^{def}P_F \]
+\begin{align*}
+P(H_1|H_0)\mathop{=}^{def}P_F
+\end{align*}
+
+$\mathop{A}\limits^{B}$\\
+$\sum\limits_{\substack{0<i<n \\ 0<j<n}} A_{ij}$\\
+$\underset{A}{B}$\\
+$a \overset{?}=b$\\
+$A\dot\cup B$\\
+$\underrightarrow{\text{你的文字}}$\\
+$A \xleftarrow{n=0} B \xrightarrow[T]{n>0} C$\\
+$\mapsto$\\
+$\widehat{abcd},\hat{a}$\\
+$\widetilde{abcd}$\\
+$\overline{abcd}$\\
+$\underbrace{a + \overbrace{b+\cdots}^{{}=t}+z}_{\text{total}}$
+
+\begin{enumerate}
+	\setcounter{enumi}{3} %设定起始编号 
+	\item aaa
+	\item bbb
+\end{enumerate}
+
+%%%%%%%%%%%% 最后一列左对齐---&&， 单个&分割，则是右对齐
+\begin{align*}
+E[a(t)]&=\int_{-\infty}^{\infty}a(t)p(x)dx\\
+&=a(t)\int_{-\infty}^{\infty}p(x)dx &&\text{by $a(t)$是常数}\\
+&=a(t)\cdot 1 &&by \int_{-\infty}^{\infty}p(x)dx=1\\
+&=a(t)
+\end{align*}
+
+%%%%%%%%%%%%%%%%有色文本
+\textcolor{blue}{This text is in blue} 
+\colorbox{yellow}{This text is highlighted in yellow} 
+\colorbox{yellow}{ 
+	\textcolor{red}{ 
+		\textbf{ 
+			Bold text in red, highlighted in yellow 
+		} 
+	} 
+} 
+
+block 普通环境
+theorem 定理环境
+lemma 引理环境
+proof 证明环境
+corollary 推论环境
+example 示例环境
+alertblock 警示环境
+
+\begin{frame}{算法}
+\begin{columns}[T] % align columns
+	\begin{column}<0->{.5\textwidth}
+		\begin{algorithm}[H]  
+			\caption{algorithm caption} %算法的名字
+			\hspace*{0.02in} {\bf Input:} %算法的输入， \hspace*{0.02in}用来控制位置，同时利用 \\ 进行换行
+			input parameters A, B, C\\
+			\hspace*{0.02in} {\bf Output:} %算法的结果输出
+			output result 
+			\begin{algorithmic}[1] %每行显示行号  
+				\State some description % \State 后写一般语句
+				\For{condition} % For 语句，需要和EndFor对应
+				\State ...
+				\If{condition} % If 语句，需要和EndIf对应
+				\Else
+				\EndIf
+				\EndFor
+				\While{condition} % While语句，需要和EndWhile对应
+				\EndWhile
+				\State \Return result	
+			\end{algorithmic}  
+		\end{algorithm}
+	\end{column}%
+	\hfill%	
+	\begin{column}<0->{.40\textwidth}
+		
+	\end{column}%
+\end{columns}
+\end{frame}
+
+\begin{frame}[shrink,fragile]{代码}
+\fontspec{Consolas}
+%不能用Tab键
+\begin{lstlisting}
+inline int gcd(int a, int b) { 
+return b==0?a:gcd(b,a%b)
+}
+inline int lcm(int a, int b) {
+return a/gcd(a,b)*b;
+}
+\end{lstlisting}
+\end{frame}
+
+\begin{frame}[shrink,fragile]{if(条件表达式)\{ 表达式为真(非0)时执行语句; \}}
+\begin{columns}[t]%有时用[T]更有效
+	\column{0.3\textwidth}
+	\begin{beamerboxesrounded}{形式1(无else)}
+		\begin{lstlisting}
+		// 形式1(无else)
+		if(条件表达式)
+		{
+		多条语句(复合语句);
+		}
+		\end{lstlisting}
+	\end{beamerboxesrounded}
+	\column{0.3\textwidth}
+	\begin{beamerboxesrounded}{形式2}
+		\begin{lstlisting}
+		// 形式2
+		if(条件表达式)
+		{
+		多条语句(复合语句);
+		}
+		else
+		{
+		多条语句(复合语句);
+		}
+		\end{lstlisting} 
+	\end{beamerboxesrounded}
+\end{columns}                        
+\end{frame}
+
+%调整行间距
+%%%%%%%%%%%
+\\
+~\\ %一行空白
+
+\newline
+\newline
+%%%%%%%%%%%%
+
+\begin{spacing}{2.0}
+	abc\\
+	ss
+\end{spacing}
+
+\bigskip  或\medskip
+\usepackage{setspace}
+\setstretch{2.5}
+
+\begin{itemize} 
+	\setlength{\itemsep}{.5cm}
+	\item item1
+	\item item2
+\end{itemize}
+
+
+\begin{itemize}	
+	\item item1
+	\vspace{.5cm}
+	\item item2	
+\end{itemize}
+
+数学公式居中：可以在公式前后各加两个$$，就可以了
+一行对齐：左对齐\leftline{内容} 居中\centerline{内容} 右对齐\rightline{内容}
+
+数学公式居中：可以在公式前后各加两个$$，就可以了
+一行对齐：左对齐\leftline{内容} 居中\centerline{内容} 右对齐\rightline{内容}
+多行或者段落对齐：
+左对齐 \begin{flushleft}...\end{flushleft}
+居中 \begin{center}...\end{center}
+右对齐 \begin{flushright}...\end{flushright}
+
+% 水平空格大小，\hfill 不计大小
+\hspace{1cm} 
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\columnseprule=1pt %插入分栏线
+\begin{multicols}{3}
+	aa\\
+	cd\\
+	dd
+\end{multicols}
+
+\rule{\textwidth}{1pt} %水平线
+
+%设置表格行颜色
+\begin{tabular}{r|r|r}
+	\rowcolor{green}直角边 $a$ & 直角边 $b$ & 斜边 $c$\\
+	3 & 4 & 5 \\
+	5 & 12 & 13 \\
+	7 & 24 & 25 \\
+	8 & 15 & 17 \\
+\end{tabular}
+
+%%%%%%%%%%%%动画
+%\onslide{},可以指定内容在一帧中的第几步显示，使用\onslide时不显示的内容还占用它原来的位置。
+%\only{}命令在不显示的步骤没有额外的占位，可以得带内容替代的效果。
+\begin{frame}{动画效果展示}
+\onslide<1>{只有第一部}
+\onslide<2->{第二部之后}
+\onslide<1,3>{第1,3两步}
+\only{abcd}
+\end{frame}
+
+\begin{frame}{动画显示}
+\begin{itemize}
+\item<1->显示列表一	
+\item<2->显示列表二
+\item<3->显示列表三
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+\begin{itemize}[<+->]
+\item 开始显示
+\item 其次显示
+\item 最后显示
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+\only<1>{\begin{itemize}
+		\item item1
+		\item item2
+\end{itemize}}
+
+\only<2>{\begin{itemize}
+		\item item3
+		\item item4
+\end{itemize}}
+\end{frame}
+
+%图片第2页显示图片
+\begin{frame}
+one\\
+\pause
+第二页
+\pause
+第三页
+\includegraphics<3->[scale=0.35]{ex6-8}
+\end{frame} 
+
+\begin{columns}
+	\column{0.65\textwidth}<2->
+	1234
+	\column{0.35\textwidth}<1->
+	abcd
+\end{columns}
+
+%%%%%%%%%%公式缩小
+\begin{small}
+	\begin{align*}
+	equation*
+	\end{align*}
+\end{small}
+
+%%%表格过宽越界
+\resizebox{\textwidth}{!}
+{
+	\begin{tabular}{|c|l|}
+		\hline
+		G & $\Sigma=\{\alpha,\beta \}$\\
+		\hline
+	\end{tabular} 
+}
+
+% 公式颜色、粗体、正体
+\textcolor{blue}{$\bm{\mathrm{|SIMSUP| \ll |SUP|}}$}
+
+\textcolor{blue}{$\mathbf{|SIMSUP| \ll |SUP|}$}
+
+% 合并行
+\begin{tabular}{lcc}
+	\textbf{States}  &  &\textbf{MACH}= $(Q,\Sigma,\delta,q_0,Q_m)$ \\
+	& &  
+	\multirow{6}{*}{\includegraphics[scale=0.2]{coffee}} \\
+	\textbf{Idle}    & 0 & \\ 
+	\textbf{Brewing} & 1 & \\ 
+	\textbf{Broken}  & 2 & \\ 
+	\textbf{Sold}    & 3 & \\ 
+	&&\\
+\end{tabular} \\
+
+% 合并列
+\begin{tabular}{|c|c|c|c|c|c|c|c|}
+	\hline 
+	num & name & sex & age & \multicolumn{3}{c|}{birthday} & addr \\ 
+	\hline 
+	10010 & Li Fang & M & 18 & month & day & year & Xian \\ 
+	\hline 
+\end{tabular} 
+
+
+\fi　　　%注释结束
