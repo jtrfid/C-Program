@@ -1,222 +1,122 @@
-%%%%%%%%%%%%%%%%%%%%%%%%%% lecture-8
+%%%%%%%%%%%%%%%%%%%%%%%%%% lecture-7
 \begin{frame}[shrink]
-  \frametitle{lecture-8 主要内容}
-  \framesubtitle{循环结构程序设计举例}
+  \frametitle{lecture-10 主要内容}
+  \framesubtitle{利用数组处理批量数据}
   \tableofcontents[hideallsubsections]
 \end{frame}
 
-\section{循环结构程序设计举例}
-
-\begin{frame}[shrink,fragile]
-$[$例5.7$]$用公式$\frac{\pi}{4}\approx 1-\frac{1}{3}+\frac{1}{5}-\frac{1}{7}+\cdots$求$\pi$的近似值, 直到发现某一项的绝对值小于$10^{-6}$为止(该项不累加)。\\
-~\\
-\begin{columns}
-\column{0.7\textwidth}
-解题思路:  找规律
-\begin{enumerate}
-	\item 每项的分子都是1。
-	\item 后一项的分母是前一项的分母加2。
-	\item 第1项的符号为正，从第2项起，每一项的符号与前一项的符号相反。
-	在每求出一项后，检查它的绝对值是否大于或等于10-6。
-\end{enumerate}
-\column{0.3\textwidth}
-\includegraphics[scale=0.3]{pi}
-\end{columns}
-\end{frame}
-
-\begin{frame}[shrink,fragile]
+\begin{frame}[shrink,fragile]{为什么需要数组}
+\begin{itemize}
+	\item 要向计算机输入全班50个学生的成绩一门课的成绩; 
+	\item 用50个float型简单变量表示学生的成绩
+	\begin{itemize}
+		\item[-] \textbf{烦琐}，如果有1000名学生怎么办呢?
+		\item[-] 没有反映出这些\textbf{数据间的内在联系}，实际上这些数据是同一个班级、同一门课程的成绩，它们具有相同的属性。
+	\end{itemize}
+\end{itemize}
 \begin{lstlisting}
-#include <stdio.h>
-#include <math.h> //程序中用到数学函数fabs，应包含头文件math.h
-int main()
-{
-  int sign=1; //sign用来表示数值的符号
-  double pi=0.0,n=1.0,term=1.0; //pi开始代表多项式的值，最后代表π的值, n代表分母，term代表当前项的值
-  while(fabs(term)>=1e-6) //检查当前项term的绝对值是否大于或等于10-6
-  {
-    pi=pi+term; //把当前项term累加到pi中
-    n=n+2;      //n+2是下一项的分母 
-    sign=-sign; //sign代表符号，下一项的符号与上一项符号相反
-    term=sign/n; //求出下一项的值term
-  }
-  pi=pi*4; //多项式的和pi乘以4，才是π的近似值
-  printf("pi=%10.8f\n",pi);  //输出π的近似值  
-  return 0;
-}
+float s0,s1,s2,...,s49; // 50名学生一门课的成绩
 \end{lstlisting}
+\pause
+\begin{lstlisting}
+float s[50]; // 50名学生一门课的成绩
+int i; // 表示数组下标
+for(i=0;i<50;i++) scanf("%f",&s[i]);
+\end{lstlisting}
+\begin{block}{数组}
+	\begin{enumerate}
+		\item 数组是一组有序数据的集合。数组中各数据的排列是有一定规律的，下标代表数据在数组中的序号。
+		\item 用数组名和下标即可唯一地确定数组中的元素。
+		\item 数组中的每一个元素都属于同一个数据类型。
+	\end{enumerate}
+\end{block}
+\end{frame}
+
+\section{定义数组: int a[10];}
+
+\begin{frame}[shrink,fragile]{定义数组: int a[10];}
+定义一维数组: \\
+\textcolor{blue}{元素类型\quad 数组名[常量表达式(表示元素个数---数组的长度)]}
+\begin{lstlisting}
+#define NUM 100
+float s[50]; // 50名学生一门课的成绩
+int a[10]; // 10个元素的整型数组
+double b[NUM]; // 常量NUM个元素的double数组
+char c[50]; // 50个元素的char型数组
+\end{lstlisting}
+\begin{block}{Notes}
+	数组元素的下标从0开始，int a[10]; 10个整型元素，则最大下标值为9，不存在数组元素a[10]
+\end{block}
+\begin{tabular}{|c|c|c|c|c|c|c|c|c|c|}
+	\hline 
+	a[0] & a[1] & a[2] & a[3] & a[4] & a[5] & a[6] & a[7] & a[8] & a[9] \\ 
+	\hline 
+\end{tabular} 
+\end{frame}
+
+\section{引用数组: int i=0; a[i]}
+
+\begin{frame}[shrink,fragile]{引用数组: int i=0; a[i]}
+\begin{lstlisting}
+int a[10]; // 10个元素的整型数组
+int i;
+a[0]=10; // 给a数组的第一个元素赋值
+a[9]=10; // 给a数组的最后一个元素赋值
+printf("%d,%d",a[0],a[9]);
+for(i=0;i<10;i++) a[i] = i+1; // 给数组的第i个元素赋值
+for(i=0;i<10;i++) printf("%d\t",a[i]); // 输出数组a的10个元素
+for(i=0;i<10;i++) scanf("%d",&a[i]); // 输入10个整数, 存入数组a中。注意'&'
+\end{lstlisting}
+\begin{block}{Notes}
+	数组元素的下标从0开始，int a[10]; 10个整型元素，则最大下标值为9，不存在数组元素a[10]
+\end{block}
 \end{frame}
 
 \begin{frame}[shrink,fragile]
-\small
-$[$例5.8$]$求Fibonacci(斐波那契)数列的前40个数。这个数列有如下特点: 第1, 2两个数为1, 1。从第3个数开始，该数是其前面两个数之和。即该数列为1,1,2,3,5,8,13,\dots,用数学方式表示为:
-\[
-\begin{cases}
-F_1=1 & (n=1)\\
-F_2=1 & (n=2)\\
-F_n=F_{n-1}+F_{n-2} & (n\ge 3)\\
-\end{cases}
-\]
-\begin{columns}
-	\column{0.4\textwidth}
-	这是一个有趣的古典数学问题: 有一对兔子，从出生后第3个月起每个月都生一对兔子。小兔子长到第3个月后每个月又生一对兔子。假设所有兔子都不死，问每个月的兔子总数为多少？
-	\column{0.6\textwidth}
-	\includegraphics[scale=0.45]{Fn}
-	\scriptsize
-	不满1个月的为小兔子,满1个月不满2个月的为中兔子,满2个月以上的为老兔子。
-\end{columns}
-\end{frame}
-
-\begin{frame}[shrink,fragile]
-解法一: 利用递推(迭代)公式: $F_1=F_2=1; F_3=F_1+F_2; F_1=F_2; F_2=F_3; $
-\begin{columns}
-	\column{0.6\textwidth}
-	\begin{lstlisting}
-    #include <stdio.h>
-    int main()
-    {
-        int f1=1,f2=1,f3;
-        int i;
-        printf("%12d\n%12d\n",f1,f2);
-        for(i=1; i<=38; i++)
-        {
-            f3=f1+f2;
-            printf("%12d\n",f3);
-            f1=f2;
-            f2=f3;
-        }
-        return 0;
-    }
-    \end{lstlisting}
-	\column{0.3\textwidth}
-	\includegraphics[scale=0.6]{Fn1}\\
-	\includegraphics[scale=0.6]{Fno1}
-\end{columns}
-\end{frame}
-
-\begin{frame}[shrink,fragile]
-解法二: 利用递推(迭代)公式: $F_1=F_2=1; F_1=F_1+F_2; F_2=F_1+F_2; $
-\begin{columns}
-	\column{0.5\textwidth}
+$[$例6.1$]$对10个字符型数组元素依次赋值为'a','b',$\cdots$。要求按逆序输出。
+\pause
 \begin{lstlisting}
 #include <stdio.h>
+#define N 10
 int main()
 {
-  int f1=1,f2=1;
+  char c[N];
   int i;
-  for(i=1; i<=20; i++)
-  {
-    printf("%12d%12d",f1,f2);
-    if(i%2==0) // 等效 if(!(i%2)) 
-       printf("\n");
-    f1=f1+f2;
-    f2=f2+f1;
-  }
+  for(i=0;i<N;i++) c[i]='a'+i; 
+  for(i=N-1;i>=0;i--) printf("%c ", c[i]);
+  printf("\n");
   return 0;
 }
 \end{lstlisting}
-	\column{0.4\textwidth}
-	\includegraphics[scale=0.6]{Fn2}\\
-	\includegraphics[scale=0.6]{Fno2}
-\end{columns}
+\end{frame}
+
+\section{初始化数组: int a[5]=\{1,2,3,4,5\};}
+
+\begin{frame}[shrink,fragile]{初始化数组: int a[5]=\{1,2,3,4,5\};}
+为了使程序简洁，常在定义数组的同时给各数组元素赋值，这称为数组的初始化。
+\begin{lstlisting}
+int a[10]={1,2,3,4,5,6,7,8,9,10}; // 在定义数组时对全部数组元素赋予初值。
+char c[10]={'a','b'}; // 可以只给数组中的一部分元素赋值。其他元素的值不确定
+double d[]={10.0,10.2,10.3}; // 等效于 double d[3]={10.0,10.2,10.3}
+d[2] = 20.2; // 修改第3个元素
+\end{lstlisting}
 \end{frame}
 
 \begin{frame}[shrink,fragile]
-\small
-$[$例5.9$]$输入一个大于3的整数n，判定它是否为素数(prime，又称质数)。
-\centering
-\begin{columns}
-	\column{0.65\textwidth}
+$[$例6.2$]$用数组来处理求Fibonacci数列问题。
 \begin{lstlisting}
 #include <stdio.h>
+#define N 20
 int main()
 {
-  int n,i;
-  printf("please enter a integer number,n=?");
-  scanf("%d",&n);
-  for (i=2;i<n;i++)
-    if(n%i==0) break;
-  if(i<n) // for提前结束
-    printf("%d is not a prime number.\n",n);
-  else // for正常结束
-    printf("%d is a prime number.\n",n);
-  return 0;
-}
-\end{lstlisting}
-	\column{0.3\textwidth}
-	\includegraphics[scale=0.5]{prime}
-\end{columns}
-\textbf{\textcolor{blue}{只要在循环结束后检查循环变量i的值，就能判定循环是提前结束还是正常结束的。从而判定n是否为素数。这种判断循环结束的方法以后会常用到。}}
-\end{frame}
-
-\begin{frame}[shrink,fragile]
-\small
-\textbf{\textcolor{blue}{优化: }} $n$不必被$2\sim (n-1)$内的各整数去除，只须将$n$被$2\sim\sqrt{n}$之间的整数除即可。因为n的每一对因子, 必然有一个小于n, 另一个大于n。
-%\centering
-\begin{lstlisting}
-#include <stdio.h>
-#include <math.h>
-int main()
-{
-   int n,i,k;
-   printf("please enter a integer number,n=?");
-   scanf("%d",&n);
-   k=sqrt(n); // 自动转换为整数(不会四舍五入), 相当于k=(int)sqrt(n);
-   for (i=2;i<=k;i++)
-     if(n%i==0) break;
-   if(i<=k) 
-      printf("%d is not a prime number.\n",n);
-   else 
-      printf("%d is a prime number.\n",n);
-   return 0;
-}
-\end{lstlisting}
-\end{frame}
-
-\begin{frame}[shrink,fragile]
-\small
-\textbf{\textcolor{blue}{使用标志变量, 判断循环结束条件。}}
-%\centering
-\begin{lstlisting}
-int n,i,k,flag=1; // flag: 标志变量
-k=sqrt(n); // 自动转换为整数(不会四舍五入), 相当于k=(int)sqrt(n);
-for (i=2;i<=k;i++)
-   if(n%i==0) { flag=0; break; }
-if(!flag) // for提前结束
-   printf("%d is not a prime number.\n",n);
-else // for正常结束
-   printf("%d is a prime number.\n",n);
-\end{lstlisting}
-\pause
-\rule{\textwidth}{1pt} %水平线
-\begin{lstlisting}
-int n,i,k,flag=1; // flag: 标志变量
-k=sqrt(n); // 自动转换为整数(不会四舍五入), 相当于k=(int)sqrt(n);
-for (i=2;i<=k && flag;i++)
-   if(n%i==0) { flag=0; }
-if(!flag) 
-   printf("%d is not a prime number.\n",n);
-else 
-   printf("%d is a prime number.\n",n);
-\end{lstlisting}
-\end{frame}
-
-\begin{frame}[shrink,fragile]
-\small
-$[$例5.10$]$求$100\sim 200$间的全部素数。
-\pause
-\begin{lstlisting}
-#include <stdio.h>
-#include <math.h>
-int main()
-{
-  int n,i,k;
-  for (n=101;i<=200;n+=2) //n从101变化到200, 对每个奇数n进行判定
+  int i;
+  int f[N]={1,1};  //对最前面两个元素f[0]和f[1]赋初值1
+  for(i=2;i<N;i++)
+     f[i]=f[i-2]+f[i-1]; //先后求出f[2]~f[19]的值
+  for(i=0;i<N;i++)
   {
-     k=sqrt(n); // 自动转换为整数(不会四舍五入), 相当于k=(int)sqrt(n);
-     for(i=2;i<=k;i++)
-        if(n%i==0) break;
-     if(i>k) 
-        printf("%d ",n);
+     if(i%5==0) printf("\n"); //控制每输出5个数后换行
+     printf("%12d",f[i]); //输出一个数
   }
   printf("\n");
   return 0;
@@ -224,40 +124,221 @@ int main()
 \end{lstlisting}
 \end{frame}
 
-\begin{frame}[shrink,fragile]
-\small
-$[$例5.11$]$译密码。为使电文保密，往往按一定规律将其转换成密码，收报人再按约定的规律将其译回原文。例如，可以按以下规律将电文变成密码:将字母A变成字母E，a变成e，即变成其后的第4个字母，W变成A，X变成B，Y变成C，Z变成D。
-\pause
+\section{冒泡排序}
+
+\begin{frame}[shrink,fragile]{冒泡排序(第1趟比较)}
+int a[4]=\{9,8,5,0\}; // N=4个元素, 要求从小到大顺序排列
+\begin{columns}[T]
+	\column{0.3\textwidth}
+	\begin{tabular}{|c|}
+		\hline 
+		9 \\ 
+		\hline 
+		8 \\ 
+		\hline 
+		5 \\ 
+		\hline
+		0 \\
+	    \hline 
+	\end{tabular}\\ 
+    第1趟原始数据
+	\column{0.2\textwidth}
+	\pause
+	\begin{tabular}{|c|}
+		\hline 
+		\colorbox{green}{8} \\ 
+		\hline 
+		\colorbox{green}{9} \\ 
+		\hline 
+		5 \\ 
+		\hline
+		0 \\
+		\hline  
+	\end{tabular}\\ 
+    第1趟第1次相邻两数比较
+    \column{0.2\textwidth}
+    \pause
+    \begin{tabular}{|c|}
+    	\hline 
+    	\colorbox{green}{8} \\ 
+    	\hline 
+    	\colorbox{green}{5} \\ 
+    	\hline 
+    	\colorbox{green}{9} \\ 
+    	\hline 
+    	0 \\
+    	\hline 
+    \end{tabular}\\ 
+    第1趟第2次相邻两数比较
+    \column{0.2\textwidth}
+    \pause
+    \begin{tabular}{|c|}
+    	\hline 
+    	\colorbox{green}{8} \\ 
+    	\hline 
+    	\colorbox{green}{5} \\ 
+    	\hline 
+    	\colorbox{green}{0} \\ 
+    	\hline 
+    	\colorbox{yellow}{9} \\
+    	\hline 
+    \end{tabular}\\ 
+    第1趟第3次相邻两数比较(第1个大数沉底)
+\end{columns}
+~\\
+\textcolor{blue}{第j=1趟比较,N-j=3次相邻两数比较}
+\end{frame}
+
+\begin{frame}[shrink,fragile]{冒泡排序(第2趟比较)}
+int a[4]=\{9,8,5,0\}; // N=4个元素, 要求从小到大顺序排列
+\begin{columns}[T]
+	\column{0.3\textwidth}
+	\begin{tabular}{|c|}
+		\hline 
+		8 \\ 
+		\hline 
+		5 \\ 
+		\hline 
+		0 \\ 
+		\hline
+		\colorbox{yellow}{9} \\
+		\hline 
+	\end{tabular}\\ 
+	第2趟原始数据
+	\column{0.2\textwidth}
+	\pause
+	\begin{tabular}{|c|}
+		\hline 
+		\colorbox{green}{5} \\ 
+		\hline 
+		\colorbox{green}{8} \\ 
+		\hline 
+		0 \\ 
+		\hline
+		\colorbox{yellow}{9} \\
+		\hline  
+	\end{tabular}\\ 
+	第2趟第1次相邻两数比较
+	\column{0.2\textwidth}
+	\pause
+	\begin{tabular}{|c|}
+		\hline 
+		\colorbox{green}{5} \\ 
+		\hline 
+		\colorbox{green}{0} \\ 
+		\hline 
+		\colorbox{yellow}{8} \\ 
+		\hline 
+		\colorbox{yellow}{9} \\
+		\hline 
+	\end{tabular}\\ 
+	第2趟第2次相邻两数比较(第2大沉底)
+\end{columns}
+~\\
+\textcolor{blue}{第j=2趟比较,N-j=2次相邻两数比较}
+\end{frame}
+
+\begin{frame}[shrink,fragile]{冒泡排序(第3趟比较)}
+int a[4]=\{9,8,5,0\}; // N=4个元素, 要求从小到大顺序排列
+\begin{columns}[T]
+	\column{0.3\textwidth}
+	\begin{tabular}{|c|}
+		\hline 
+		5 \\ 
+		\hline 
+		0 \\ 
+		\hline 
+		\colorbox{yellow}{8} \\ 
+		\hline
+		\colorbox{yellow}{9} \\
+		\hline 
+	\end{tabular}\\ 
+	第3趟原始数据
+	\column{0.2\textwidth}
+	\pause
+	\begin{tabular}{|c|}
+		\hline 
+		0 \\ 
+		\hline 
+		\colorbox{yellow}{5} \\ 
+		\hline 
+		\colorbox{yellow}{8} \\ 
+		\hline
+		\colorbox{yellow}{9} \\
+		\hline  
+	\end{tabular}\\ 
+	第3趟第1次相邻两数比较(第3大沉底)
+\end{columns}
+~\\
+\textcolor{blue}{第j=3趟比较,N-j=1次相邻两数比较}
+\end{frame}
+
+\begin{frame}[shrink,fragile]{冒泡排序(总结)}
+\begin{itemize}
+	\setlength{\itemsep}{.5cm}
+	\item \#define N 10 // 数组长度
+	\item $(N-1)$趟外层循环, $(j=1,2,\cdots,N-1)$, 表示第$j$趟比较。
+	\item $(N-j)$次内层循环, $(i=0,1,\cdots, N-1-j)$相邻元素两两比较, 必要时交换。
+	\item 注意检查数组边界条件, 不要越界。分别进行N=1, 2, 3, 4个数排序演练。
+\end{itemize}
+\end{frame}
+
+\begin{frame}[shrink,fragile]{冒泡排序(核心程序)}
 \begin{lstlisting}
-char c;
-c=getchar(); //输入一个字符给字符变量c
-while(c!='\n') //检查c的值是否为换行符'\n'  
+#define N 10 // 数组长度
+int a[N]={9,8,7,6,5,4,3,2,1,0},i,j,t;
+for(j=1;j<=N-1;j++) //进行N-1次循环，实现N-1趟比较
 {
-  if((c>='a' && c<='z') || (c>='A' && c<='Z')) //c如果是字母
+  for(i=0;i<=N-1-j;i++) //在每一趟中进行N-j次比较相邻元素两两比较
   {
-     if((c>='W' && c<='Z') || (c>='w' && c<='z')) c = c-22; //如果是26个字母中最后4个字母之一就使c-22
-     else  c =c + 4;   //如果是前面22个字母之一，就使c + 4
+    if(a[i]>a[i+1]) //相邻两个数比较, 注意检查数组不要越界 
+       { t=a[i]; a[i]=a[i+1]; a[i+1]=t; } // 交换
   }
-  printf("%c",c); //输出已改变的字符
-  c=getchar();    //再输入下一个字符给字符变量c
 }
-printf("\n");
+printf("\n the sorted numbers :\n");
+for(i=0;i<N;i++)
+   printf("%d ",a[i]);
 \end{lstlisting}
 \end{frame}
 
-\begin{frame}[shrink,fragile]
-\textbf{\textcolor{blue}{在循环条件中接收输入的字符是一种常见技巧。}}
+\begin{frame}[shrink,fragile]{冒泡排序(优化)}
+\textbf{\textcolor{blue}{优化：第$j$趟排序中, 没有进行相邻元素的交换，表示数据已经排序好, 没有必要进行此后的$(N-j)$趟排序。}}
 \begin{lstlisting}
-char c;
-while((c=getchar())!='\n') //检查c的值是否为换行符'\n'  
+#define N 10 // 数组长度
+int a[N]={7,8,7,6,5,6,7,8,9,10},i,j,t,flag;
+for(j=1;j<=N-1;j++) //进行N-1次循环，实现N-1趟比较
 {
-   if((c>='a' && c<='z') || (c>='A' && c<='Z')) //c如果是字母
+   flag = 0; // 每趟排序，初始化flag，表示未进行交换
+   for(i=0;i<=N-1-j;i++) //在每一趟中进行N-j次相邻元素两两比较
    {
-      if((c>='W' && c<='Z') || (c>='w' && c<='z')) c = c-22; //如果是26个字母中最后4个字母之一就使c-22
-      else  c =c + 4;   //如果是前面22个字母之一，就使c + 4
+     if(a[i]>a[i+1]) //相邻两个数比较, 注意检查数组不要越界 
+       { t=a[i]; a[i]=a[i+1]; a[i+1]=t; flag=1; } // 交换, 设置标志变量
    }
-   printf("%c",c); //输出已改变的字符
+   if(!flag) break; // 表示第j趟未交换，排序好了!
 }
-printf("\n");
+printf("\n the sorted numbers :\n");
+for(i=0;i<N;i++) printf("%d ",a[i]);
+\end{lstlisting}
+\end{frame}
+
+\begin{frame}[shrink,fragile]{冒泡排序(输出每趟排序的结果)}
+\textbf{\textcolor{blue}{优化：第$j$趟排序中, 没有进行相邻元素的交换，表示数据已经排序好, 没有必要进行此后的$(n-j)$趟排序。}}
+\begin{lstlisting}
+#define N 10 // 数组长度
+int a[N]={7,8,7,6,5,6,7,8,9,10},i,j,t,flag;
+for(j=1;j<=N-1;j++) //进行N-1次循环，实现N-1趟比较
+{
+   flag = 0; // 每趟排序，初始化flag，表示未进行交换
+   for(i=0;i<=N-1-j;i++) //在每一趟中进行N-j次相邻元素两两比较
+   {
+      if(a[i]>a[i+1]) //相邻两个数比较, 注意检查数组不要越界 
+       { t=a[i]; a[i]=a[i+1]; a[i+1]=t; flag=1; } // 交换, 设置标志变量
+   }
+   printf("\n 第%d趟排序: \n", j);
+   for(t=0;t<N;t++) printf("%d ",a[t]); // 临时变量t的复用
+   if(!flag) break; // 表示第j趟未交换，排序好了!
+}
+printf("\n the sorted numbers :\n");
+for(i=0;i<N;i++) printf("%d ",a[i]);
 \end{lstlisting}
 \end{frame}

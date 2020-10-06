@@ -1,7 +1,7 @@
-%%%%%%%%%%%%%%%%%%%%%%%%%% lecture-17
+%%%%%%%%%%%%%%%%%%%%%%%%%% lecture-18
 \begin{frame}[shrink]
-\frametitle{lecture-17 主要内容}
-\framesubtitle{建立自己的数据类型}
+\frametitle{lecture-18 主要内容}
+\framesubtitle{结构体编程举例续}
 %\tableofcontents[hideallsubsections]
 \tableofcontents
 \medskip
@@ -14,505 +14,81 @@
 \end{itemize}
 \end{frame}
 
+\section{结构体编程举例续}
 
-\section{定义结构体数据类型:  struct\, 结构体类型名\{...\};}
-
-\begin{frame}[shrink,fragile]{定义结构体数据类型:  struct 结构体类型名\{...\};}
-\begin{columns}
-\column{0.3\textwidth}<1->
-定义结构体数据类型
-\begin{lstlisting}
-struct 结构体类型名
-{
-   数据类型 成员名1;
-   数据类型 成员名2;
-   ... // 定义其它成员
-};
-\end{lstlisting}
-\column{0.7\textwidth}<2->
-例: 定义结构体数据类型, 描述如下信息
-\begin{tabular}{|c|c|c|c|c|c|}
-\hline 
-num & name & sex & age & score & addr \\ 
-\hline 
-10010 & Li Fang & M & 18 & 87.5 & Xian \\ 
-\hline 
-\end{tabular} 
-\begin{lstlisting}
-struct Student // 定义结构体数据类型struct Student
-{
-   int num;        // 学号为整型 
-   char name[20];  // 姓名为字符串 
-   char sex;       // 性别为字符型 
-   int age;        // 年龄为整型
-   float score;    // 成绩为实型 
-   char addr[30];  // 地址为字符串 
-};                 // 注意最后有一个分号 
-\end{lstlisting}
-\end{columns}
-\end{frame}
-
-\begin{frame}[shrink,fragile]{\small 嵌套定义结构体: 结构体的成员, 也可以是另外一个结构体变量。}
-\begin{lstlisting}
-struct Date // 定义结构体类型 struct Date 
-{
-   int month; // 月
-   int day;   // 日
-   int year;  // 年
-}; 
-struct Student // 定义结构体类型 struct Student
-{ 
-   int num;
-   char name[20];
-   char sex;
-   int age;
-   struct Date birthday; //成员birthday是struct Date类型变量
-   char addr[30]; 
-};
-\end{lstlisting}
-\begin{tabular}{|c|c|c|c|c|c|c|c|}
-	\hline 
-	num & name & sex & age & \multicolumn{3}{c|}{birthday} & addr \\ 
-	\hline 
-	10010 & Li Fang & M & 18 & month & day & year & Xian \\ 
-	\hline 
-\end{tabular} 
-\medskip
-\end{frame}
-
-\section{定义结构体类型变量: struct\, 结构体类型名\, 变量名;}
-
-\begin{frame}[shrink,fragile]{定义结构体类型变量: struct\, 结构体类型名\, 变量名;}
-定义结构体类型后, 可以当作内置类型(如, int)一样进行变量定义和使用。
-\begin{columns}[T]
-\column{0.5\textwidth}<1->
-\begin{lstlisting}
-#include<stdio.h>
-....
-// 定义结构体数据类型struct Student
-struct Student 
-{
-   int num;
-   char name[20]; 
-   char sex; 
-   int age; 
-   float score; 
-   char addr[30]; 
-};         
-\end{lstlisting}
-\column{0.5\textwidth}<2->
-\begin{lstlisting}
-void fun1()
-{
-   // 定义结构体类型变量
-   struct Student stu1, stu2; 
-   .... 
-}
-
-// 结构体类型变量可作为函数的形式参数
-void fun2(struct Student stu)
-{
-   ....
-}
-\end{lstlisting}
-\end{columns}
-\end{frame}
-
-\begin{frame}[shrink,fragile]{结构体类型变量的初始化}
-\begin{columns}[T]
-\column{0.5\textwidth}
-\begin{lstlisting}
-#include<stdio.h>
-....
-// 定义结构体数据类型struct Student
-struct Student 
-{
-   int num;
-   char name[20]; 
-   char sex; 
-   int age; 
-   float score; 
-   char addr[30]; 
-};         
-\end{lstlisting}
-\column{0.5\textwidth}
-\begin{lstlisting}
-void fun()
-{
-   // 定义结构体变量时, 初始化各成员变量
-   struct Student stu1={10101,"LiLin",'M',18,90,"Xidian"},stu2; 
-   .... 
-}
-\end{lstlisting}
-\end{columns}
-\end{frame}
-
-\section{引用结构体变量的数据成员: 结构体变量名.成员名}
-
-\begin{frame}[shrink,fragile]{引用结构体变量的数据成员: 结构体变量名.成员名}
-定义结构体类型和结构体变量后, 通过\textcolor{blue}{``."成员运算符},引用其数据成员。
-\begin{columns}[T]
-\column{0.5\textwidth}
-\begin{lstlisting}
-#include<stdio.h>
-....
-// 定义结构体数据类型struct Student
-struct Student 
-{
-  int num;
-  char name[20]; 
-  char sex; 
-  int age; 
-  float score; 
-  char addr[30]; 
-};         
-\end{lstlisting}
-\column{0.5\textwidth}
-\begin{lstlisting}
-void fun()
-{
-  // 定义结构体变量时, 初始化各成员变量
-  struct Student stu1={10101,"LiLin",'M',18,90,"Xidian"},stu2; 
-  printf("%d,%s,%c,%d,%.2f,%s",stu1.num,stu1.name,stu1.sex,stu1.age,stu1.score,stu1.addr);
-  stu2.num=10102;
-  // 注: 字符串用数组表示, 不能直接赋值。
-  strcpy(stu2.name,"Wanghong");   
-}
-\end{lstlisting}
-\end{columns}
-\end{frame}
-
-\begin{frame}[shrink,fragile]{\small 对结构体变量的成员可以像普通变量一样进行各种运算}
+\begin{frame}[shrink,fragile]{例5: 上机题, 复试赛选}
+考研初试成绩公布后需要对m个学生的成绩进行排序，筛选出可以进入复试的前n名学生。
+排序规则为首先按照总分排序，总分相同则按英语单科成绩排序，总分和英语成绩也相同时考号小者排在前面。\\
+现给出这m个学生的考研初试成绩，请筛选出可以进入复试的n名学生并按照排名从高到低的顺序依次输出。\\
+输入说明	
+输入为m+1行，第一行为两个整数m和n，分别表示总人数和可以进入复试人数，m和n之间用空格分隔，0<n<m<200。接下来为m行数据，每行包括三项信息，分别表示一个学生的考号(长度不超过20的字符串)、总成绩（小于500的整数）和英语单科成绩（小于100的整数），这三项之间用空格分隔。\\
+输出说明\\	
+按排名从高到低的顺序输出进入复试的这n名学生的信息。\\
 \begin{columns}[T]
 \column{0.4\textwidth}
-\begin{lstlisting}
-struct Date  
-{
-  int month; 
-  int day;   
-  int year;  
-}; 
-struct Student 
-{ 
-  int num;
-  char name[20];
-  char sex;
-  int age;
-  struct Date birthday;
-  char addr[30]; 
-};
-\end{lstlisting}
-\column{0.6\textwidth}
-\begin{lstlisting}
-struct Student stu1,stu2;
-stu1.num=10010;
-stu1.sex='F';
-stu1.birthday.month=6;// 逐级引用
-stu1.age=18;
-stu2.age=stu1.age+1;
-stu2.age++;
-stu2=stu1; // stu1中的各数据成员赋值给stu2
-scanf("%d",&stu2.num);
-gets(stu2.name); // 接受键盘输入的字符串
-stu2.sex=stu1.sex; // 同性别
-\end{lstlisting}
-\textbf{\textcolor{blue}{``."成员运算符在所有运算符中优先级最高}}, stu2.num可以当作一个整体看待。
+输入样例\\	
+5 3\\
+XD20160001 330 65\\
+XD20160002 330 70\\
+XD20160003 340 60\\
+XD20160004 310 80\\
+XD20160005 360 75
+\column{0.4\textwidth}
+输出样例\\	
+XD20160005 360 75\\
+XD20160003 340 60\\
+XD20160002 330 70
 \end{columns}
 \medskip
 \end{frame}
 
-\section{结构体指针变量和结构体数组}
-
-\begin{frame}[shrink,fragile]{结构体指针变量}
+\begin{frame}[shrink,fragile]{例5: 复试赛选, 定义结构体}
 \begin{columns}[T]
+\column{0.5\textwidth}
+\textbf{\textcolor{blue}{思路:}}
+\begin{enumerate}
+	\item 定义考生结构体, 各考生组成结构体数组;
+	\item 按要求对结构体数组进行排序。
+\end{enumerate}
 \column{0.4\textwidth}
 \begin{lstlisting}
+#include<stdio.h>
+// 字符串比较函数strcmp(s1,s2);
+#include<string.h> 
+#define N 100 // 估计的考生数
 // 定义结构体
 struct Student 
 { 
-  int num;
-  char name[20];
-  char sex;
-  int age;
-  char addr[30]; 
+   char no[20]; // 考号
+   int  total;  // 总成绩
+   int  english;// 英语成绩
 };
-\end{lstlisting}
-\column{0.5\textwidth}
-\begin{lstlisting}
-// stu2是结构体指针变量
-struct Student stu1,*stu2;
-stu1.num=10010;
-stu1.sex='F';
-// 引用结构体指针变量指向的数据成员
-(*stu2).num=10011; // 一定要有括号
-stu2->num=10011; // 或
-scanf("%d",&(*stu2).num));
-scanf("%d",&(stu2->num)); // 或
-gets((*stu2).name); 
-gets(stu2->name); // 或
-(*stu2).sex=stu1.sex; 
-stu2->sex=stu1.sex; // 或
 \end{lstlisting}
 \end{columns}
-\medskip
 \end{frame}
 
-\begin{frame}[shrink,fragile]{结构体数组}
-\begin{columns}[T]
-\column{0.4\textwidth}
+\begin{frame}[shrink,fragile]{例5: 复试赛选(结构体数组), 输入输出}
 \begin{lstlisting}
-// 定义结构体
-struct Student 
-{ 
-  int num;
-  char name[20];
-  char sex;
-  int age;
-  char addr[30]; 
-};
-\end{lstlisting}
-\column{0.5\textwidth}
-\begin{lstlisting}
-// 结构体数组
-struct Student stu[100];
-scanf("%d",&stu[0].num);
-gets(stu[0].name);
-scanf("%c",&stu[0].sex);
-stu[0].sex=getchar(); // 或
-strcpy(stu[0].addr,"Xian");
-\end{lstlisting}
-\end{columns}
-\medskip
-\end{frame}
-
-\begin{frame}[shrink,fragile]{例1: 输入学生信息并输出统计数据}
-\begin{columns}[T]
-\column{0.4\textwidth}
-\begin{lstlisting}
-struct Student 
-{ 
-   int num;
-   char name[20];
-   // 5门课成绩
-   float score[5];
-};
-
-\end{lstlisting}
-\column{0.5\textwidth}
-\begin{lstlisting}
-int main()
-{ 
-  struct Student stu;
-  int i; float sum=0;
-  scanf("%d%s",&stu.num,stu.name);
-  for(i=0;i<5;i++) 
-     scanf("%f",&stu.score[i]); 
-  // 计算与输出
-  printf("%d %s",stu.num,stu.name);
-  for(i=0;i<5;i++)
-  { 
-     printf(" %.2f ",stu.score[i]);
-     sum=sum+stu.score[i];
-  }
-  printf("%.2f\n",sum/5.0);//平均成绩 
-  return 0;
-}
-\end{lstlisting}
-\end{columns}
-\medskip
-\end{frame}
-
-\begin{frame}[shrink,fragile]{例2: 输入学生信息并输出统计数据(函数实现)}
-\begin{columns}[T]
-\column{0.54\textwidth}
-\begin{lstlisting}
-struct Student 
-{ 
-  int num;
-  char name[20];
-  // 5门课成绩
-  float score[5];
-};
-// 地址传递
-void input(struct Student *stu)
+// 输入m个考生信息
+void input(struct Student *stus, int m)
 {
   int i;
-  scanf("%d%s",&(stu->num),stu->name);
-  for(i=0;i<5;i++) 
-    scanf("%f",&(stu->score[i])); 
-    //scanf("%f",&((*stu).score[i]));
+  for(i=0;i<m;i++) 
+    scanf("%s%d%d",
+      stus[i].no,&stus[i].total,&stus[i].english); 
 }
-\end{lstlisting}
-\column{0.50\textwidth}
-\begin{lstlisting}
-void print(struct Student stu)
+// 输入n个考生信息
+void print(struct Student *stus, int n)
 {
-  int i; float sum=0;
-  printf("%d %s",stu.num,stu.name);
-  for(i=0;i<5;i++)
-  { 
-     printf(" %.2f ",stu.score[i]);
-     sum=sum+stu.score[i];
-  }
-  printf("%.2f\n",sum/5.0);
-}
-int main()
-{ 
-  struct Student stu;
-  input(&stu); print(stu); 
-  return 0;
-}
-\end{lstlisting}
-\end{columns}
-\medskip
-\end{frame}
-
-\begin{frame}[shrink,fragile]{例3: 输入学生信息并输出统计数据(结构体数组), 输入}
-\begin{columns}[T]
-\column{0.3\textwidth}
-\begin{lstlisting}
-// 定义结构体
-struct Student 
-{ 
-  int num;
-  char name[20];
-  // 5门课成绩
-  float score[5];
-};
-\end{lstlisting}
-\column{0.6\textwidth}
-\begin{lstlisting}
-// 输入n个学生信息
-//void input(struct Student stu[],int n)
-void input(struct Student *stu, int n)
-{
-  int i,j;
+  int i;
   for(i=0;i<n;i++) 
-  {
-     scanf("%d%s",&stu[i].num,stu[i].name);
-     for(j=0;j<5;j++) 
-       scanf("%f",&stu[i].score[j]);
-  } 
+    printf("%s %d %d\n",
+      stus[i].no,stus[i].total,stus[i].english); 
 }
 \end{lstlisting}
-\end{columns}
 \end{frame}
 
-\begin{frame}[shrink,fragile]{例3: 输入学生信息并输出统计数据(结构体数组), 输出}
-\begin{columns}[T]
-\column{0.6\textwidth}
-\begin{lstlisting}
-//void print(struct Student stu[],int n)
-void print(struct Student *stu,int n)
-{
-  int i,j; float sum;
-  for(i=0;i<n;i++)
-  {
-    printf("%d %s",stu[i].num,stu[i].name);
-    sum=0;//注意在此处置0
-    for(j=0;j<5;j++)
-    { 
-      printf(" %.0f ",stu[i].score[j]);
-      sum=sum+stu[i].score[j];
-    }
-    printf("%.2f\n",sum/5.0);
-  }
-}
-\end{lstlisting}
-\column{0.4\textwidth}
-\begin{lstlisting}
-int main()
-{ 
-  struct Student stu[100];
-  input(stu,2); // 输入2个学生
-  print(stu,2); // 输出2个学生
-  return 0;
-}
-\end{lstlisting}
-例如, 输入两个学生的数据\\
-1 zhang3 10 20 30 40 50\\
-2 wang5 100 90 80 70 60\\
-1 zhang3 10  20  30  40  50 30.00\\
-2 wang5 100  90  80  70  60 80.00
-\end{columns}
-\medskip
-\end{frame}
-
-\begin{frame}[shrink,fragile]{例4: 输入学生信息并输出统计数据(结构体数组), 输入}
-\begin{columns}[T]
-\column{0.27\textwidth}
-\begin{lstlisting}
-// 含平均成绩的结构体
-struct Student 
-{ 
-  int num;
-  char name[20];
-  // 5门课成绩
-  float score[5];
-  // 平均成绩
-  float aver;
-};
-\end{lstlisting}
-\column{0.73\textwidth}
-\begin{lstlisting}
-// 输入并计算平均成绩, 返回平均成绩最高者(假定唯一)
-struct Student input(struct Student *stu, int n)
-{
-  int i,j,maxIndex=0; float sum;
-  for(i=0;i<n;i++) 
-  {
-    sum=0;
-    scanf("%d%s",&stu[i].num,stu[i].name);
-    for(j=0;j<5;j++)
-    { 
-      scanf("%f",&stu[i].score[j]);
-      sum=sum+stu[i].score[j];
-    }
-    stu[i].aver=sum/5.0; //填充平均成绩
-    //非唯一最大者，这里添加条件。复杂条件可以设计独立函数
-    if(stu[i].aver > stu[maxIndex].aver) maxIndex=i;
-  } 
-  return stu[maxIndex];
-}
-\end{lstlisting}
-\end{columns}
-\medskip
-\end{frame}
-
-\begin{frame}[shrink,fragile]{例4: 输入学生信息并输出统计数据(结构体数组), 输出}
-\begin{columns}[T]
-\column{0.55\textwidth}
-\begin{lstlisting}
-void print(struct Student *stu,int n)
-{
-  int i,j;
-  for(i=0;i<n;i++)
-  {
-    printf("%d %s ",stu[i].num,
-                    stu[i].name);
-    for(j=0;j<5;j++) 
-      printf("%.2f ",stu[i].score[j]);
-    printf("%.2f\n",stu[i].aver);
-  }
-}
-\end{lstlisting}
-\column{0.5\textwidth}
-\begin{lstlisting}
-int main()
-{ 
-  struct Student stu[100],maxStu;
-  maxStu=input(stu,3); // 输入3个学生 
-  print(stu,3); // 输出3个学生
-  // 可复用print函数
-  print(&maxStu,1); // 平均成绩最大者
-  return 0;
-}
-\end{lstlisting}
-\end{columns}
-\medskip
-\end{frame}
-
-\begin{frame}[shrink,fragile]{\small 例5: 输入学生信息并输出统计数据(结构体数组),交换函数}
+\begin{frame}[shrink,fragile]{例5: 复试赛选(结构体数组),交换函数}
 \begin{columns}[T]
 \column{0.8\textwidth}
 \begin{lstlisting}
@@ -521,7 +97,9 @@ int main()
 void swap(struct Student *stu1, struct Student *stu2)
 {
    struct Student tmp;
-   tmp = *stu1; *stu1 = *stu2; *stu2 = tmp;
+   tmp = *stu1; 
+   *stu1 = *stu2;
+   *stu2 = tmp;
 }
 
 \end{lstlisting}
@@ -530,11 +108,11 @@ void swap(struct Student *stu1, struct Student *stu2)
 \medskip
 \end{frame}
 
-\begin{frame}[shrink,fragile]{例5: 输入学生信息并输出统计数据(结构体数组), 排序}
+\begin{frame}[shrink,fragile]{例5: 复试赛选(结构体数组), 排序}
 \begin{columns}[T]
 \column{1.0\textwidth}
 \begin{lstlisting}
-// 定义排序函数(选择法，降序): 按平均值排序，如果平均值相同，按照前2门课比较单科成绩 
+// 定义排序函数(选择法，降序): 按总成绩和英语单科成绩 
 void sort(struct Student stu[],int n)            
 {
   int i,j,k;
@@ -543,13 +121,11 @@ void sort(struct Student stu[],int n)
     k = i; // 未经排序较大者
     for(j = i + 1; j < n; j++)
     {
-       if(stu[j].aver > stu[k].aver) k=j;
-       else if(stu[j].aver == stu[k].aver)
-       { 
-         if(stu[j].score[0] > stu[k].score[0] || 
-            stu[j].score[1] > stu[k].score[1])
-            k = j; 
-       } 
+       // 条件判断语句：善用&&、||运算，简化if else结构
+       if (a[j].total>a[k].total || 
+         (a[j].total==a[k].total &&  a[j].english>a[k].english) || 
+         (a[j].total==a[k].total &&  a[j].english==a[k].english && strcmp(a[j].no,a[k].no)<0))  
+         k = j;
     }
     if(k != i) swap(&stu[i],&stu[k]); // 交换
   } 
@@ -559,19 +135,308 @@ void sort(struct Student stu[],int n)
 \medskip
 \end{frame}
 
-\begin{frame}[shrink]
-\frametitle{lecture-17 主要内容}
-\framesubtitle{建立自己的数据类型}
-%\tableofcontents[hideallsubsections]
-\tableofcontents
-\medskip
-\textbf{\textcolor{blue}{训练编程逻辑思维方式:}}
-\begin{itemize}
-	\item 领会结构化(模块化)编程思想。 
-	\item 用结构体管理相互关联的数据, 使其成为结构化的整体数据, 便于统一处理。 
-	\item 大问题分解为小问题, 设计函数解决小问题, 各个子函数彼此之间相互独立(便于调试, 不易出错)，又可通过参数和返回值传递数据。
-	\item 主程序调用各个子函数, 解决``大"问题。
-\end{itemize}
+\begin{frame}[shrink,fragile]{例5: 复试赛选(结构体数组),主函数}
+\begin{lstlisting}
+// 模块化程序设计，便于调试。
+int main()
+{
+    struct Student stus[N]; 
+    int m,n,i;
+    scanf("%d%d",&m,&n);
+    input(stus,m); 
+    // print(stus,m); // 查看输入数据是否正确
+    sort(stus,m);
+    // print(stus,m); // 查看排序结果是否正确
+    print(stus,n);
+    return 0;
+}
+\end{lstlisting}
 \end{frame}
 
+\begin{frame}[shrink,fragile]{例6: 上机题, 画图}
+在一个定义了直角坐标系的纸上，画一个(x1,y1)到(x2,y2)的矩形，指将横坐标范围从x1到x2，纵坐标范围从y1到y2之间的区域涂上颜色。\\ 
+下图给出了一个画了两个矩形的例子。第一个矩形是(1,1) 到(4, 4)，用绿色和紫色表示。第二个矩形是(2, 3)到(6, 5)，用蓝色和紫色表示。图中，一共有15个单位的面积被涂上颜色，其中紫色部分被涂了两次，但在计算面积时只计算一次。在实际的涂色过程中，所有的矩形 都涂成统一的颜色，图中显示不同颜色仅为说明方便。给出所有要画的矩形，请问总共有多少个单位的面积被涂上颜色。 \\
+输入说明: 输入的第一行包含一个整数n，表示要画的矩形的个数，1<=n<=100 ,接下来n行，每行4个非负整数，分别表示要画的矩形的左下角的横坐标与纵坐标，以及右上角的横坐标与纵坐标。0<=横坐标、纵坐标<=100。\\
+输出说明: 输出一个整数，表示有多少个单位的面积被涂上颜色。
+\begin{columns}[T]
+\column{0.4\textwidth}
+	\includegraphics[scale=0.3]{paint}
+\column{0.4\textwidth}
+	输入样例\\	
+	2 \\
+	1 1 4 4\\ 
+	2 3 6 5 \\
+	输出样例\\	
+	15
+\end{columns}
+\medskip
+\end{frame}
+
+\begin{frame}[shrink,fragile]{例6: 画图(结构体数组), 定义结构体}
+\begin{columns}[T]
+\column{0.5\textwidth}
+\textbf{\textcolor{blue}{思路:}}
+\begin{enumerate}
+	\item 二维数组表示网格;
+	\item 定义矩形结构体, 各矩形组成结构体数组;
+	\item 计算最大矩形, 其覆盖的单元格初始化为0; 
+	\item 每个矩形覆盖的单元格标记为1, 
+	\item 最大矩形被标记的单元格即是被涂色的单位面积。
+\end{enumerate}
+\column{0.4\textwidth}
+\begin{lstlisting}
+#define N 100
+//定义矩形结构体 
+struct Rec
+{
+   int leftBottomX;
+   int leftBottomY;
+   int rightTopX;
+   int rightTopY;
+};
+\end{lstlisting}
+\end{columns}
+\end{frame}
+
+\begin{frame}[shrink,fragile]{例6: 画图(结构体数组), 输入输出}
+\begin{lstlisting}
+// 输入n个矩形
+void input(struct Rec *recs, int n)
+{
+  int i;
+  for(i=0;i<n;i++) 
+     scanf("%d%d%d%d",&recs[i].leftBottomX, &recs[i].leftBottomY, &recs[i].rightTopX,&recs[i].rightTopY);
+}
+// 输出n个矩形
+void print(struct Rec *recs, int n)
+{
+  int i;
+  for(i=0;i<n;i++) 
+    printf("%d,%d,%d,%d\n",recs[i].leftBottomX,recs[i].leftBottomY,recs[i].rightTopX,recs[i].rightTopY);
+} 
+\end{lstlisting}
+\medskip
+\end{frame}
+
+\begin{frame}[shrink,fragile]{例6: 画图(结构体数组),计算最大矩形}
+\begin{lstlisting}
+// 返回最大矩形
+struct Rec Largest(struct Rec res[], int n)
+{
+   struct Rec largest=res[0];
+   int i;
+   for(i=1;i<n;i++)
+   {
+      if(res[i].leftBottomX < largest.leftBottomX)
+          largest.leftBottomX=res[i].leftBottomX;
+      if(res[i].leftBottomY < largest.leftBottomY)
+          largest.leftBottomY=res[i].leftBottomY;
+      if(res[i].rightTopX > largest.rightTopX) 
+          largest.rightTopX=res[i].rightTopX;
+      if(res[i].rightTopY > largest.rightTopY) 
+          largest.rightTopY=res[i].rightTopY;
+   }
+   return largest; 
+} 
+\end{lstlisting}
+\end{frame}
+
+\begin{frame}[shrink,fragile]{例6: 画图(结构体数组), 网格grid[N][N]初始化与标记}
+\begin{lstlisting}
+// rec区域, grid数组元素置1(标记) 
+void grid1(struct Rec rec, int grid[][N])
+{
+   int i,j;
+   for(i=rec.leftBottomY;i<rec.rightTopY;i++)
+   {
+       for(j=rec.leftBottomX;j<rec.rightTopX;j++)
+           grid[i][j]=1;
+   } 
+}
+// largest区域, grid数组元素初始化为0 
+void grid0(struct Rec largest, int grid[][N])
+{
+   int i,j;
+   for(i=largest.leftBottomY;i<largest.rightTopY;i++)
+   {
+      for(j=largest.leftBottomX;j<largest.rightTopX;j++)
+           grid[i][j]=0;
+   } 
+}
+\end{lstlisting}
+\end{frame}
+
+\begin{frame}[shrink,fragile]{例6: 画图(结构体数组), 计算被标记的网格}
+\begin{lstlisting}
+// largest区域, 返回grid数组元素为1的单元数量，即被覆盖的单位面积数 
+int gridNum(struct Rec largest, int grid[][N])
+{
+   int i,j,num=0;
+   for(i=largest.leftBottomY;i<largest.rightTopY;i++)
+   {
+       for(j=largest.leftBottomX;j<largest.rightTopX;j++)
+          if(grid[i][j]) num++;
+   } 
+   return num;
+}
+\end{lstlisting}
+\end{frame}
+
+\begin{frame}[shrink,fragile]{例6: 画图(结构体数组),主函数}
+\begin{lstlisting}
+// 模块化程序设计，便于调试。
+int main()
+{
+    int grid[N][N],n,i,num;
+    struct Rec recs[N],largest;
+    scanf("%d",&n);
+    input(recs,n);
+    // print(recs,n); // 检查输入 
+    largest=Largest(recs,n); // 计算最大矩形 
+    // print(&largest,1); // 查看最大矩形是否正确 
+    grid0(largest,grid); // 初始化 
+    for(i=0;i<n;i++)
+       grid1(recs[i],grid); // 标记网格, 置1 
+    printf("%d\n",gridNum(largest,grid)); // 统计输出 
+    return 0;
+}
+\end{lstlisting}
+\end{frame}
+
+\begin{frame}[shrink,fragile]{例7: 世界杯排名}
+给出世界杯一个小组的小组赛成绩，请找出最终进入淘汰赛的球队。 \\
+小组赛积分规则：胜一场积3分、平一场积1分、负一场积0分。 \\
+小组赛排名规则如下： \\
+1.首先按照积分排名，积分越高，排名越高\\ 
+2.积分相同的队按照净胜球(进球数减去失球数)排名，净胜球越多，排名越高\\ 
+输入说明: 输入数据第一行为两个整数N和M，N表示小组中队伍数量(N<=32)，M表示出线名额(M<=16)。
+接下来是N行数据，每一行表示一只队伍的小组赛比赛信息，
+依次为队名(长度不超过20的字符串)、胜场数、平局数、负场数、进球数、失球数。
+输入数据保证没有两个球队的积分和净胜球完全相同。
+输出说明: 根据题目给出的积分排名规则，按照排名从高到低顺序依次输出出线球队的排名（从1开始排名）、队名、积分和净胜球，
+各个字段之间用空格分隔。\\
+\begin{columns}[T]
+	\column{0.4\textwidth}
+	输入样例\\	
+	4 2\\ 
+	Germany 2	1	0	7	2 \\
+	Portuguesa 1	1	1	4	7 \\
+	America 1	1	1	4	4 \\
+	Ghana 0	1	2	4	6 
+	\column{0.4\textwidth}
+	输出样例\\	
+	1 Germany	7 5 \\
+	2 America 4 0 
+\end{columns}
+\medskip
+\end{frame}
+
+\begin{frame}[shrink,fragile]{例7: 世界杯排名, 定义结构体}
+\begin{columns}[T]
+\column{0.4\textwidth}
+\textbf{\textcolor{blue}{思路:}}
+\begin{enumerate}
+	\item 定义结构体存储球队相关信息;
+	\item 各球队组成结构体数组;
+	\item 按要求对结构体数组进行排序。
+\end{enumerate}
+\begin{lstlisting}
+// 估计最大数 
+#define N 32
+#define M 16
+\end{lstlisting}
+\column{0.5\textwidth}
+\begin{lstlisting}
+// 定义结构体类型，存储球队相关信息 
+struct Team
+{
+  char name[20];
+  int win,draw,lose; // 胜，平，负场数 
+  // 进球数，失球数
+  int goalsNum,losesNum; 
+  int grades; // 积分
+  int goals;  // 净胜球  
+};
+\end{lstlisting}
+\end{columns}
+\end{frame}
+
+\begin{frame}[shrink,fragile]{例7: 世界杯排名, 输入}
+\begin{lstlisting}
+// 输入n个球队信息, 填充结构体成员
+void input(struct Team *teams, int n)
+{
+   for(i = 0; i < n; i++)
+   {
+      scanf("%s%d%d%d%d%d",teams[i].name,&teams[i].win,&teams[i].draw,&teams[i].lose,&teams[i].goalsNum,&teams[i].losesNum);
+      // 填充其它数据成员
+      teams[i].grades =  teams[i].win*3 + teams[i].draw*1;
+      teams[i].goals = teams[i].goalsNum - teams[i].losesNum; 
+   }
+}
+\end{lstlisting}
+\end{frame}
+
+\begin{frame}[shrink,fragile]{例7: 世界杯排名, 交换函数}
+\begin{columns}[T]
+\column{0.8\textwidth}
+\begin{lstlisting}
+// 交换两个结构体指针的内容, 地址传递
+// 两个结构体的各数据成员互相交换 
+void swap(struct Team *team1, struct Team *team2)
+{
+   struct Team tmp;
+   tmp = *team1; 
+   *team1 = *team2; 
+   *team2 = tmp;
+}
+\end{lstlisting}
+%\column{0.5\textwidth}
+\end{columns}
+\medskip
+\end{frame}
+
+\begin{frame}[shrink,fragile]{例7: 世界杯排名, 排序}
+\begin{columns}[T]
+\column{1.0\textwidth}
+\begin{lstlisting}
+// 定义排序函数(选择法，降序): 按总成绩和英语单科成绩 
+void sorts(struct Team a[], int n)
+{
+   int i,j,k;
+   for(i = 0; i < n - 1; i++)
+   {
+      k = i; // 未经排序较大者
+      for (j = i+1; j < n; j++)
+      {
+         // 条件判断语句：善用&&、||运算，简化if else结构 
+        if (a[j].grades > a[k].grades || 
+           (a[j].grades == a[k].grades &&  a[j].goals > a[k].goals))  
+              k = j;
+      }
+      if (k != i) swap(&a[i],&a[k]); // 交换
+   } 
+}
+\end{lstlisting}
+\end{columns}
+\medskip
+\end{frame}
+
+\begin{frame}[shrink,fragile]{例7: 世界杯排名,主函数}
+\begin{lstlisting}
+// 模块化程序设计，便于调试。
+int main()
+{
+   struct Team teams[N]; // 以估计最大数，定义结构体数组 
+   int n,m,i;
+   scanf("%d%d",&n,&m);
+   input(teams,n); 
+   sorts(stus,n); // 排序
+   // 输出前m个排序后的球队 
+   for(i = 0; i < m; i++)
+      printf("%d %s %d %d\n",i+1,teams[i].name,teams[i].grades,teams[i].goals);
+   return 0;
+}
+\end{lstlisting}
+\end{frame}
 
