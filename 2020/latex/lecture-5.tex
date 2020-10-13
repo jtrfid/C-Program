@@ -1,9 +1,10 @@
-%%%%%%%%%%%%%%%%%%%%%%%%%% lecture-6
-\begin{frame}[shrink]
-  \frametitle{lecture-5 主要内容}
-  \framesubtitle{选择结构程序设计}
-  \tableofcontents[hideallsubsections]
-\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%% lecture-5
+%\begin{frame}[shrink]
+%  \frametitle{lecture-5 主要内容}
+%  \framesubtitle{选择结构程序设计}
+%  \tableofcontents[hideallsubsections]
+%  %\tableofcontents[currentsection,hideallsubsections]
+%\end{frame}
 
 \section{选择结构和条件判断}
 
@@ -54,7 +55,7 @@ int main()
    else
    {
       delta = sqrt(b*b-4*a*c);
-      x1 = -b + delta/(2*a);  x2 = -b - delta/(2*a);
+      x1 = (-b + delta)/(2*a);  x2 = (-b - delta)/(2*a);
       printf("x1=%.2lf,x2=%.2lf\n",x1,x2);
    }
    return 0;           

@@ -6,7 +6,7 @@
 %
 %%%%%%%%%%%%%%%%%%%%%%%% Springer-Verlag %%%%%%%%%%%%%%%%%%%%%%%%%%
 %\motto{Use the template \emph{chapter.tex} to style the various elements of your chapter content.}
-\chapter{第1次机试练习参考代码}
+\chapter{第1次机试练习: 熟悉DEV-C++开发平台, 基本输入输出语句练习}
 
 \section{计算球体重量}
 已知铁的比重是7.86(克/立方厘米)，金的比重是19.3(克/立方厘米)。写一个程序，分别计算出给定直径的铁球与金球的质量，假定PI=3.1415926
@@ -45,8 +45,9 @@ int main()
 	\begin{enumerate}
 		\item 整数除以整数, 结果为整数。\\
 		4.0/3.0结果是浮点数，4/3结果是整数
+		\item 化简公式会引起精度问题, 不要随意化简公式。
 		\item pow函数原型: \lstinline|double pow(double x,double y)|\\
-		当形参数整数整数时, 由于精度问题，推荐不使用此函数计算$x^y$. 使用循环语句, 易计算$x^y$。 如果必要, 可自定义函数: \lstinline|int mypow(int x,int y)|。 见课件。
+		当形参数是整数时, 由于精度问题，不要使用此函数计算$x^y$. 推荐使用循环语句, 易计算$x^y$。 如果必要, 可自定义函数: \lstinline|int mypow(int x,int y)|。 见课件。
 	\end{enumerate}
 \end{note}
 
@@ -207,6 +208,8 @@ int main()
 
 56,8
 
+\newpage
+
 \begin{lstlisting}
 #include<stdio.h>    
 int main()                   
@@ -220,7 +223,11 @@ int main()
 \end{lstlisting}
 
 \begin{note}(scanf函数)
-	\lstinline|scanf("原样输入",...);|
+	\lstinline|scanf("原样输入",...); |
+\end{note}
+
+\begin{note}(整型数值与字符混合运算)
+	字符对应的ASCII编码参与整数运算, 其结果也是整数。注意\lstinline|'0'|与\lstinline|0|不同, 本例中输入0,0, 则\lstinline|a=0|,\lstinline|b='0'|, 变量a的值是整数0, 变量b的值是字符\lstinline|'0'|对应的ASCII编码, 即整数48。
 \end{note}
 
 \section{实数运算}
@@ -253,3 +260,10 @@ int main()
 	return 0;           
 }                  
 \end{lstlisting}
+
+\begin{note}(精度问题)
+	32位编译器: \lstinline|a*b*c| 与 \lstinline|a*c*b| 结果一致。
+	但是在64位编译器中, 二者不一致。
+	
+	因此, 浮点数运算会存在精度问题, 不要随意改变运算顺序。
+\end{note}
