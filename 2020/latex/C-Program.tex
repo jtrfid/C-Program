@@ -99,6 +99,14 @@
 \usepackage{tabularx}
 \usepackage{booktabs} % 使用\cmidrule{a-b}
 \usepackage{hyperref} % 生成pdf书签/目录/提纲
+%\hypersetup{
+%	colorlinks=true,
+%	%linkcolor=cyan,
+%	linkcolor=blue,
+%	filecolor=blue,      
+%	urlcolor=red,
+%	citecolor=green,
+%}
 
 \usepackage{bm} % 字体加粗的方法
 
@@ -240,7 +248,7 @@
 \definecolor{mygreen}{rgb}{0,0.6,0}
 \definecolor{mygray}{rgb}{0.5,0.5,0.5}
 \definecolor{mymauve}{rgb}{0.58,0,0.82}
-\usepackage{listings}
+\usepackage[formats]{listings}
 \lstset{ %
 	backgroundcolor=\color{white},   % choose the background color
 	basicstyle=\footnotesize\ttfamily,     % size of fonts used for the code
@@ -249,6 +257,9 @@
 	captionpos=b,                    % sets the caption-position to bottom
 	tabsize=4,
 	showtabs=false,                  % 不显示tab键，不作为
+	showspaces=false,           
+	showstringspaces=false,          % printf("a b c\n");中的空格不显示为特殊字符--，而正常显示为空格
+	%tab=\rightarrowfill,
 	commentstyle=\color{mygreen},    % comment style
 	escapeinside={\%*}{*)},          % if you want to add LaTeX within your code
 	keywordstyle=\color{blue},       % keyword style
@@ -261,8 +272,8 @@
 	%%%%%%%%%%%%%%%%%%%%%%%
 	breaklines=true,  % automatic line breaking only at whitespace
 	extendedchars=false,  % 代码跨页问题
-	keepspaces=true,
-	showspaces=false,
+	%keepspaces=true,
+	mathescape=true  % 注释可以用latex math, eg. $a_{ij}$
 }
 
 \graphicspath{{figures/},} 
@@ -299,40 +310,62 @@
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section*{Outlines}
+\begin{frame}{Outlines}
+\begin{enumerate}[I] % part
+	\item 课程介绍, C语言简介, 数据输入输出, 基本数据类型与表达式
+	\item 选择结构程序设计
+	\item 循环结构程序设计
+	\item 数组
+	\item 函数
+	\item 指针
+	\item 结构体
+\end{enumerate}
+\end{frame}
+
 %\include{report} % 程序设计报告
 
 %\includeonlylecture{part1}
 %\includeonlylecture{part2}
 %\includeonlylecture{part3}
+%\includeonlylecture{part4}
+%\includeonlylecture{part5}
+%\includeonlylecture{part6}
+%\includeonlylecture{part7}
 
-\part{课程介绍, C语言简介, 数据输入输出, 基本数据类型与表达式}
 \lecture{课程介绍, C语言简介, 数据输入输出, 基本数据类型与表达式}{part1}
+\part{课程介绍, C语言简介, 数据输入输出, 基本数据类型与表达式} % 使目录项不包含其他\part中的section
 \frame{\partpage}
 \frame{\frametitle{Outlines}\tableofcontents} 
 \include{lecture-1} % 课程介绍，导论简介， C语言程序设计, 第1次课讲到ACSII编码表
 \include{lecture-2} % 开发工具，算法，初识C语言程序(作业), 第2次课讲到算法特性之前
 \include{lecture-3} % 初识C语言程序(讲解作业), 数据的输入输出, 第3次课平台演示讲解
-\include{lecture-4} % 数据类型, 运算符和表达式, 数学库函数，顺序程序设计举例
+\include{lecture-4} % 数据类型, 运算符和表达式, 数学库函数，顺序程序设计举例, 平台演示讲解。布置ppt 中的Exampe页为作业
 
-\part{选择结构程序设计}
 \lecture{选择结构程序设计}{part2}
+\part{选择结构程序设计}
 \frame{\partpage}
 %\frame{\frametitle{Outlines}\tableofcontents[hideallsubsections]}
-\frame{\frametitle{Outlines}\tableofcontents} 
-\include{lecture-5} % ch4, 选择结构程序设计
+\frame[shrink]{\frametitle{Outlines}\tableofcontents} 
+\include{lecture-5} % ch4, 选择结构程序设计, 讲解上节课的作业(Example), 平台演示讲解if()结构
 
-\part{循环结构程序设计}
 \lecture{循环结构程序设计}{part3}
+\part{循环结构程序设计}
 \frame{\partpage}
 %\frame{\frametitle{Outlines}\tableofcontents[hideallsubsections]}
-\frame{\frametitle{Outlines}\tableofcontents} 
+\frame[shrink]{\frametitle{Outlines}\tableofcontents} 
 \include{lecture-6} % ch5, 循环结构程序设计, 第6次课
 \include{lecture-7} % ch5, 循环结构程序设计举例, 第7次课
 \include{lecture-8} % ch5, 循环结构程序设计举例(续), 布置作业, 学习消化ppt中的所有代码并在第2次上机时, 编写这些代码，实际调试运行。讲解第1次上机练习题
 
-%\include{lecture-9} % ch6, 一维数组，冒泡排序
-%\include{lecture-10} % ch6, 二维数组和字符数组
-%\include{lecture-11} % ch6, 字符串处理库函数及程序举例
+\lecture{数组}{part4}
+\part{数组}
+\frame{\partpage}
+\frame[shrink]{\frametitle{Outlines}\tableofcontents[hideallsubsections]} 
+\include{lecture-9} % ch6, 一维数组，冒泡排序
+\include{lecture-10} % ch6, 二维数组和字符数组
+\include{lecture-11} % ch6, 字符串处理库函数及程序举例
 %%%%%%%%%%%%第13次课: 第2次机试练习讲解
 %\include{lecture-12} % ch7, 函数，定义，声明，调用，值传递，地址传递，模块化设计
 %%%%%%%%%%% lecture-13: 第14次课基本概念, 第15次课，实例分析，第2次机试练习ISBN讲解

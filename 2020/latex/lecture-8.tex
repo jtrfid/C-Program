@@ -103,7 +103,9 @@ for(i=a;i<=b;i++) // 考察i是否水仙数
 {  
   sum = 0; t=i; // 临时变量记住i; 易遗漏每次内层循环前sum要归0
   while(t!=0) // 累加各位立方 
-  { sum+=pow(t%10,3); t=t/10; }
+  { sum+=pow(t%10,3);  // 推荐: t=t%10; sum=sum+t*t*t; 
+    t=t/10; 
+  }
   if(sum==i) n++; // i是水仙数 
 }
 printf("%d\n",n);
@@ -136,21 +138,27 @@ for(x=0;x<=100;x++)
 输入两个整数a和b，求最大公约数。 
 \pause
 \begin{lstlisting}
-#include <stdio.h>
-int main()
+int main() // 暴力循环求解, 效率低
 {
-  int a,b,t,i;
-  scanf("%d%d",&a,&b); // 机试系统不要想当然给提示语句, 除非题目要求 
-  if(a<b) { t=a; a=b; b=t; } // 交换a,b,使a是较大者 
-  for(i=b;i>0;i--)
-    if(a%i==0 && b%i==0){ t=i; break; } // 求得最大公约数 
-  if(i==0)  // 如果循环结束，还未求得公约数，
-  {
-    if(b==0) t = a;
-    else t=1; // a,b互质 
-  } 
-  printf("%d\n",t);
-  return 0;
+	int a,b,t=-1,i; // t给初值是好习惯，否则下面程序逻辑有可能使t得到随机值。 
+	scanf("%d%d",&a,&b); // 机试系统不要想当然给提示语句, 除非题目要求  
+	if(a<b) { t=a; a=b; b=t; } // 交换a,b,使a是较大者 
+	if(b==0) 
+	{
+		t=a; // 考虑分母为0的情况，比如：5,0的最大公约数为5 
+	} 
+	else
+	{
+		for(i=b;i>0;i--)
+		{
+			if(a%i==0 && b%i==0)
+			{
+				t=i; break; // 求得最大公约数，a,b互质, 必然t=1 
+			}
+		}
+	}
+	printf("%d\n",t);
+	return 0;	
 }
 \end{lstlisting}
 \end{frame}
@@ -166,12 +174,11 @@ int main()
 ~\\
 \textbf{伪代码分析}
 \begin{lstlisting}
-a,b的最大公约数，[则: a=mb+r, m=a/b; r=a%b]
-循环, b作被除数，分母是余数r, 
-[则: n=b/r; r=nb; a=mb+nb=(m+n)b; 如果一个整数能整除b, 必整除a]
-直到r=0, 本轮循环的a(上轮循环的b)就是最大公约数。 
+a(大),b(小)的最大公约数: 因为: a=mb+r, m=a/b; r=a%b, $\Rightarrow$a,b的公约数能整除b和r.
+r=a%b,r为0, 则b就是最大公约数。否则迭代循环, a=b，b=r, 直到余数为零, 则分母就是最大公约数。 
 while(1)
 {
+   if(b==0) { gcd=a; break; }
    r = a%b; // 注意b为0时，不能计算余数，a就是最大公约数
    if(r==0) { gcd=a; break; } // 本轮循环的a(上轮循环的b)就是最大公约数
    a=b; b=r; // 准备下一轮迭代    
@@ -179,7 +186,7 @@ while(1)
 \end{lstlisting}
 \end{frame}
 
-\begin{frame}[shrink,fragile]{求整数$a,b$的最大公约数, 欧几里得算法}
+\begin{frame}[shrink,fragile]{求整数$a,b$的最大公约数, 欧几里得算法, 参考代码(1)}
 \begin{lstlisting}
 int a,b,r,t;
 scanf("%d%d",&a,&b); // 机试系统不要想当然给提示语句, 除非题目要求
@@ -188,10 +195,55 @@ while(1)
 {
    if(b==0) { t=a; break; } // 分母为0时, a就是最大公约数
    r = a%b; 
-   if(r==0) {t=b; break;} // 本轮循环的a(上轮循环的b)就是最大公约数
+   if(r==0) {t=b; break;} // b就是最大公约数
    a=b; b=r; // 准备下一轮迭代   
 }
 printf("%d\n",t);// 输出最大公约数
+\end{lstlisting}
+\end{frame}
+
+\begin{frame}[shrink,fragile]{求整数$a,b$的最大公约数, 欧几里得算法, 参考代码(2)}
+\begin{lstlisting}
+int main()
+{
+	int a,b,r,t;
+	scanf("%d%d",&a,&b); // 机试系统不要想当然给提示语句, 除非题目要求
+	if(a<b) { t=a; a=b; b=t; } // 交换a,b,使a是较大者
+	if (b==0) // 考虑分母为0的情况，比如：5,0的最大公约数为5 
+	{
+		printf("%d\n",a);
+		return 0; // 主函数结束
+	}
+	while((r=a%b)!=0) // 去除了分母为0的情况
+	{
+		a=b; b=r; // 准备下一轮迭代   
+	}
+	printf("%d\n",b);
+	return 0; // 主函数结束
+}	
+\end{lstlisting}
+\end{frame}
+
+\begin{frame}[shrink,fragile]{求整数$a,b$的最大公约数, 欧几里得算法, 参考代码(3)}
+\begin{lstlisting}
+int main()
+{
+	int a,b,r,t;
+	scanf("%d%d",&a,&b); // 机试系统不要想当然给提示语句, 除非题目要求
+	if(a<b) { t=a; a=b; b=t; } // 交换a,b,使a是较大者
+	if (b==0) // 考虑分母为0的情况，比如：5,0的最大公约数为5 
+	{
+		printf("%d\n",a);
+	}
+	else
+	{
+		// 排除了分母为0时不能求余数的情况 
+		while((r=a%b)!=0) // a/b的余数赋值给r,r不等于0时执行循环体
+		{	a=b; b=r; }
+		printf("%d\n",b);
+	}
+	return 0; // 主函数结束
+}	
 \end{lstlisting}
 \end{frame}
 

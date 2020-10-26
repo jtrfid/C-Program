@@ -23,16 +23,41 @@
 26
  ****************************************/ 
 #include <stdio.h>
-int main()
+int main1()
 {
-    int n,i=0;
-    scanf("%d",&n);
-    while(n!=1)
+	int n,i=0; // 变量i用于计数的辅助变量
+	scanf("%d",&n);
+	// 因为题目输入假设$n>1$, 因此不必考虑n=1时的情况
+	while(n!=1)  // n不等于1时执行循环体中的语句
 	{
 		if(n%2==0) n=n/2;
 		else n=3*n+1;
 		i++;
 	} 
-    printf("%d\n",i);
+	printf("%d\n",i);
+	return 0;	
+}
+
+// 含程序调试语句，不吝惜写一些printf语句，观察程序的执行过程。 
+int main()
+{
+	int n=22,i=0; // 变量i用于计数的辅助变量
+	//scanf("%d",&n); // 调试时可以注释掉输入语句, 改变变量n的值，观察执行过程 
+	
+	printf("%d->",n);
+	while(n!=1)  // n不等于1时执行循环体中的语句
+	{
+		if(n%2==0) 
+		{ 
+			n=n/2;
+		} 
+		else 
+		{
+			n=3*n+1;
+		}
+		printf("%d->",n);
+		i++;
+	} 
+	printf("\n总共变化次数%d\n",i);
 	return 0;	
 }

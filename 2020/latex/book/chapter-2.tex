@@ -8,6 +8,58 @@
 %\motto{Use the template \emph{chapter.tex} to style the various elements of your chapter content.}
 \chapter{第2次机试练习: 选择与循环语句练习}
 
+\begin{note}[不该再次发生的常见错误,输入输出格式转换符不对应, 导致的严重错误]
+	\begin{lstlisting}
+	int a; float b; double c; char d;
+	scanf("%d",a); // 遗忘变量前的取地址符$\&$
+	scanf("%d\n",&a); // 多余'\n', 导致不能正常输入
+	scanf("%d%f%lf%c",&a,&b,&c,%d); // 正确对应关系
+	scanf("%d%c%f",&a,&c,&b); // 正确对应关系
+	printf("%d,%f,%lf,%c",a,b,c,d); // 正确对应关系
+	\end{lstlisting}
+\end{note}
+
+\begin{note}[不该再次发生的常见错误, 有`;'引发的悲剧]
+	\begin{lstlisting}
+	if();
+	{
+	...
+	}                 
+	
+	while();
+	{
+	...
+	} 
+	
+	for(;;);
+	{
+	...
+	}                  
+	\end{lstlisting}
+\end{note}
+
+\newpage
+\begin{note}[用C语言关系表达式准确表达数学含义]
+\begin{lstlisting}
+int a;
+if(110<=a<=210) // 错误
+{  }
+if(110<=a && a<=210) // 正确 
+{  }
+if(a>=110 && a<=210) // 正确 
+{  }
+\end{lstlisting}	
+\end{note}
+
+\begin{note}[学习体会编程技巧]
+	\begin{itemize}
+		\item 使用\lstinline|printf()|语句, 追踪程序执行细节, 查找出错原因。
+		\item 对于条件结构，循环结构，首先书写整体结构，再添加细节，避免低级错误。
+		\item 提倡一题多解, 举一反三, 体会编程技巧。	
+	\end{itemize}
+\end{note}
+
+
 \section{四则运算}
 输入两个整数和一个四则运算符，根据运算符计算并输出其运算结果（和、差、积、商、余之一）。注意做整除及求余运算时，除数不能为零。
 
@@ -39,12 +91,24 @@ int main()
 		case '+': printf("%d%c%d=%d\n",a,op,b,a+b); break;
 		case '-': printf("%d%c%d=%d\n",a,op,b,a-b); break;
 		case '*': printf("%d%c%d=%d\n",a,op,b,a*b); break;
-		case '/': printf("%d%c%d=%d\n",a,op,b,a/b); break;
-		case '%': printf("%d%c%d=%d\n",a,op,b,a%b); break;
+		// 注意分母为0时, 不会正确运算/,%
+		case '/': if (b!=0) printf("%d%c%d=%d\n",a,op,b,a/b); break;
+		case '%': if (b!=0) printf("%d%c%d=%d\n",a,op,b,a%b); break;
 	}
 	return 0;           
 }                 
 \end{lstlisting}
+
+\begin{note}[printf双引号中的\%输出, \%\%表示输出\%]
+	\begin{lstlisting}
+		int a,b;
+		char op;
+		printf("%d%%%d=%d\n",a,b,a%b);
+		// 或当 op='%'时
+		printf("%d%c%d=%d\n",a,op,b,a%b);
+	\end{lstlisting}
+\end{note}
+	
 
 \section{数位输出}
 输入一个5位整数，求出其各数位数值，并按照从高位到低位的顺序输出，如：输入12345，输出为1 2 3 4 5。
@@ -64,24 +128,148 @@ int main()
 输出样例：
 
 9 6 2 3 7
-
+\newpage
 \begin{lstlisting}
-#include<stdio.h>      
-int main()                   
+#include<stdio.h> 
+/******************************************************
+ 5位整数已知. 首先用10000除以整数a(分子), 得到分子最高位。 
+ 改变分子分母, 循环迭代, 依次获得分子的最高位。
+*******************************************************/        
+int main1()              
 {  
-	int a,b=10000,i=5;
+	int a,b=10000,i=5; // i记录整数a的初始位数
 	scanf("%d",&a);
 	while(i>=1)
 	{
-		if (i==1)printf("%d\n",a/b);
+		if (i==1) printf("%d\n",a/b); // 输出当前a的最高位
 		else printf("%d ",a/b);
-		a = a-a/b*b;
-		b/=10;
+		a = a-a/b*b;  // 去除当前a的最高位，准备下轮迭代的分子a
+		b/=10; // b=b/10, 准备下轮迭代的分母b
 		i--;
 	} 
 	return 0;           
-}               
+}  
+             
+/******************************************************
+ 假设不知整数a的位数。
+ 除10取余，迭代循环，可方便获取整数a的个位，十位，百位，千位, ... 
+ 利用数组存储个位，十位，百位，千位, ... 最后反序输出即是所求。 
+*******************************************************/        
+int main2()              
+{  
+	int a, tmp[100]; // tmp数组存储100(估计的最大值)个整数，用tmp[0],tmp[1],tmp[2],...读写各个整数。
+	int i=0, j;         // i: 记录整数a的位数 
+	scanf("%d",&a);
+	if(a==0) // 考虑整数0的特殊情况，直接输出即可。
+	{
+		printf("%d\n",a); 
+	}
+	else // 因为循环语句判断a是否为0, 因此要有上述判断才能考虑到所有可能情况的发生 
+	{
+		while(a!=0) // 迭代逆序求出整数a的各位数字 
+		{
+			tmp[i]=a%10; // 存储本轮循环a的末位数
+			//printf("调式查看tmp[i]=%d\n",tmp[i]); // 提交时，别忘了注释或删除调试语句 
+			a=a/10;      // 改变分子, 准备下轮循环
+			i++;         // 位数递增 
+		}
+		//printf("调式查看i=%d\n",i); 
+		//  逆序输出tmp, 此时的i是整数a的位数, 注意tmp的下标从i-1开始到下标0结束。 
+		for(j=i-1;j>=0;j--)
+		{
+			printf("%d ",tmp[j]);
+		} 
+	}
+	return 0;           
+}    
+
+/******************************************************
+ 假设不知整数a的位数。
+ 利用递归函数求解, a==0的情况在函数外处理输出较方便。
+ 因此该函数仅考虑a!=0的情况。 
+*******************************************************/    
+void output(int a)              
+{  
+	if(a!=0) // 如果考虑a==0的情况, 不好判断是初始a=0还是迭代后a=0的情况。这里考虑后者。前者的处理留给调用它的程序。 
+	{
+		// '栈'是一种'先进后出'的数据结构 
+		output(a/10); // 递归调用, 函数参数会自动存储在系统维护的'栈'中。 
+		printf("%d ",a%10);  // 从内部存储'栈'中，依次弹出各位数，输出之。 
+	}
+	else // a==0 ,可省略else语句，隐含结束递归调用
+	{
+		return; // 函数结束, 注意本函数无返回值，因此return后无表达式。 
+	} 
+} 
+
+int main()
+{
+	int a;
+	scanf("%d",&a);
+	if(a==0) // 考虑整数0的特殊情况，直接输出即可。
+	{
+		printf("%d\n",a); 
+	}
+	else
+	{
+		output(a); // 函数调用, 完成逆序输出。 
+	} 
+	return 0; 
+}
 \end{lstlisting}
+
+\begin{figure}[H]
+\centering
+\caption{递归函数\lstinline|void output(int a)|中系统内部维护的`栈'结构示意图}	
+\begin{tikzpicture}
+\node[] (tab) {
+\begin{tabular}{|c|c|c|}
+\hline
+参数a&output(a)&递归调用\lstinline|output(a/10); printf("%d ",a%10);|\\
+\hline
+0&output(0)&return; 结束递归, 开始出栈\\
+\hline
+1&output(1)&\lstinline|output(0); printf("%d ",1);|\\
+\hline
+12&output(12)&\lstinline|output(1); printf("%d ",2);|\\
+\hline
+123&output(123)&\lstinline|output(12); printf("%d ",3);|\\
+\hline
+1234&output(1234)&\lstinline|output(123); printf("%d ",4);|\\
+\hline
+\hline
+12345&output(12345)&\lstinline|output(1234); printf("%d ",5);|\\
+\hline
+\end{tabular}
+};
+\path[->,very thick]
+%($(tab.north west)+(-0.5cm,0)$) edge[] node[left] {入栈} +(0,-4cm)
+($(tab.north west)+(-0.5cm,0)$) edge[red] node[left] {入栈} ($(tab.south west)+(-0.5cm,0)$)
+($(tab.south east)+(0.5cm,0)$) edge[blue] node[right] {出栈} ($(tab.north east)+(0.5cm,0)$)
+; 
+\end{tikzpicture}
+\end{figure}
+
+\begin{note}[知识点]
+	\begin{enumerate}
+		\item 体会除10取余, 迭代循环的整数分解技巧;
+		\item 第一种解法的b=1000初值是可计算的, 这样就可扩充此解法为任意位的整数a。
+		\begin{lstlisting}[frame=none]
+		// 因为a要在main1()函数的while循环中使用。
+		// 因此, 定义临时变量, 存储a的值, 用于计算b的初值。
+		int tmp; 
+		b=1; tmp=a;
+		while(tmp!=0)
+		{
+			b=b*10;
+			tmp=tmp/10;
+		}
+		\end{lstlisting}
+		\item 预习数组使用技巧;
+		\item 预习函数定义及调用;
+		\item 预习递归函数的定义, 体会系统维护的内部存储'栈'的数据存储特点。
+	\end{enumerate}
+\end{note}
 
 \section{阶梯电价计费}
 电价分三个档次，[0,110]度电，每度电0.5元；(110,210]度电，超出110部分每度电0.55元，超过210度电，超出210部分每度电0.70元，给出一个家庭一月用电量，请计算出应缴的电费(四舍五入，保留小数点后两位小数)。
@@ -138,7 +326,7 @@ int main()
 	}
 	if (sum > 110)
 	{
-		fee += (sum-110)*u2;
+		fee += (sum-110)*u2; // fee=fee+(sum-110)*u2;
 		sum = 110;
 	}
 	fee += sum*u1;
@@ -175,15 +363,15 @@ int main3() // 另解
 	else if (sum <= 210)
 	{
 		fee = 110*u1;
-		sum -= 110; 
+		sum -= 110; // sum=sum-110;
 		fee += sum*u2;
 	}
 	else // sum > 210
 	{
 		fee = 110*u1; 
-		fee += (210-110)*u2;
-		sum -= 210;
-		fee += sum*u3;
+		fee += (210-110)*u2; // fee = fee+(210-110)*u2
+		sum -= 210;  // sum=sum-210;
+		fee += sum*u3; // fee = fee+ sum*u3;
 	}
 	
 	printf("%.2f\n",fee);
@@ -193,6 +381,10 @@ int main3() // 另解
 
 \begin{note}[四舍五入问题]
 	不同的编译系统，处理结果可能不一致，\lstinline|printf("%.2f\n",fee);|默认输出即可。
+\end{note}
+
+\begin{note}
+	练习if语句的不同组合形式, 杜绝出现\lstinline|if(110<=sum<=210)|的错误形式。
 \end{note}
 
 \section{计算某月天数}
@@ -247,7 +439,7 @@ int main()
 \end{lstlisting}
 
 \begin{note}(逻辑运算符)
-	\&\&, ||, !
+	\&\&, ||, !, 练习符合逻辑的各种组合形式。
 \end{note}
 
 \section{计算整数各位数字之和}
@@ -268,25 +460,83 @@ int main()
 输出样例:	
 
 14
-
+\newpage
 \begin{lstlisting}
 #include <stdio.h>
-int main()
+// 体会除10取余, 迭代循环的整数分解技巧;
+int main1()
 {
 	int n,sum = 0; // 注意初始化sum
 	scanf("%d",&n);
-	while(n)
+	while(n) // 等效于n!=0 
 	{
-		sum += n%10;
-		n /= 10;
+		sum += n%10; // 累加本轮循环的末位数
+		n /= 10;     // 准备下轮循环的分子
 	}
 	printf("%d",sum);
 	return 0;	
 }
+
+// 另解：定义递归函数, 返回整数n的各位数之和 
+int sum(int n)
+{
+	if(n!=0)
+	{
+	    // 递归调用, 累加本轮循环的末位数
+		return (sum(n/10)+n%10); 
+	}
+	else // n==0时, 结束递归调用 
+	{
+		return 0; // 函数结束, 返回整数0
+	}	
+}
+
+int main()
+{
+	int n;
+	scanf("%d",&n);
+	printf("%d\n",sum(n)); // 函数调用。 
+	return 0; 
+}
 \end{lstlisting}
 
-\begin{note}(计算整数各位数字)
-	循环语句: 除10, 取余, 是基本技巧。
+\begin{figure}[H]
+	\centering
+	\caption{递归函数\lstinline|int sum(int n)|中系统内部维护的`栈'结构示意图}	
+	\begin{tikzpicture}
+	\node[] (tab) {
+		\begin{tabular}{|c|c|}
+		\hline
+		参数n&递归调用\lstinline|sum(n)=sum(n/10)+n%10;|\\
+		\hline
+		0&sum(0)=0; 结束递归, 开始出栈\\
+		\hline
+		1&\lstinline|sum(1)=sum(1/10)+1%10=sum(0)+1;|\\
+		\hline
+		12&\lstinline|sum(12)=sum(12/10)+12%10=sum(1)+2;|\\
+		\hline
+		123&\lstinline|sum(123)=sum(123/10)+123%10=sum(12)+3;|\\
+		\hline
+		1234&\lstinline|sum(1234)=sum(1234/10)+1234%10=sum(123)+4;|\\
+		\hline
+		\hline
+		12345&\lstinline|sum(12345)=sum(12345/10)+12345%10=sum(1234)+5;|\\
+		\hline
+		\end{tabular}
+	};
+	\path[->,very thick]
+	%($(tab.north west)+(-0.5cm,0)$) edge[] node[left] {入栈} +(0,-4cm)
+	($(tab.north west)+(-0.5cm,0)$) edge[red] node[left] {入栈} ($(tab.south west)+(-0.5cm,0)$)
+	($(tab.south east)+(0.5cm,0)$) edge[blue] node[right] {出栈} ($(tab.north east)+(0.5cm,0)$)
+	; 
+	\end{tikzpicture}
+\end{figure}
+
+\begin{note}[知识点]
+	\begin{enumerate}
+		\item 体会除10取余, 迭代循环的整数分解技巧;
+		\item 预习递归函数定义及调用。
+	\end{enumerate}
 \end{note}
 
 \section{完数}
@@ -312,21 +562,92 @@ int main()
 
 \begin{lstlisting}
 #include <stdio.h>
-int main()
+/**********************************************
+ 采用两层循环方案
+ (1) 外层循环使整数i递增，完成区间[n1,n2]区间的完数计算 
+ (2) 内层循环, 累加整数i的各因子
+ (3) 判断整数i是否是完数, 如果是，输出之 
+**********************************************/ 
+int main1()
 {
 	int i,j,n1,n2,sum = 0;
 	scanf("%d%d",&n1,&n2);
-	for(i = n1; i <= n2; i++)
+	for(i = n1; i <= n2; i++) // 外层循环使整数i递增，完成区间[n1,n2]区间的完数计算 
 	{
 		if(i == 1) continue; // 避免输出1，1不是完数 
-		sum = 1; // 注意必须在此处初始化sum
-		for(j = 2; j < i; j++)
+		// i不等于1, 计算各因子 
+		sum = 1;// 不要忘记, 内层循环前sum的初始化。1总是一个整数的合法因子 
+		for(j = 2; j < i; j++) // 累加整数i的所有因子 
 		{
-			if(i%j == 0) sum += j; 
+			if(i%j == 0) sum += j; // 如果j是i的因子，累加之。 
 		}
-		if(sum == i) printf("%d\n",i);
+		if(sum == i) printf("%d\n",i); // 如果i是完数，输出之。 
 	} 
+	
+	return 0;	
+}
 
+/**********************************************
+ 采用一重循环 + 调用函数方案
+ (1) 一重循环使整数i递增，函数compute调用，完成区间[n1,n2]区间的完数计算 
+ (2) 定义函数compute, 判断整数参数是否是完数, 如果是，返回它, 否则返回-1 
+**********************************************/ 
+
+// 定义函数compute, 判断整数参数a是否是完数, 如果是，返回a, 否则返回-1 
+int compute(int a)
+{
+	int i,s=1; // s用于存储a的各因子累加值, 1总是一个整数的合法因子 
+	if(a == 1) 
+	{
+		return -1; // 1不是完数
+	}
+	// a不为1, 计算各因子 
+	for(i = 2; i < a; i++) // 累加整数a的所有因子 
+	{
+		if(a%i == 0) s += i; // 如果i是a的因子，累加之。 
+	}
+	if(s == a) 
+	{
+		return a; // 如果a是完数，返回之。
+	} 
+	// 如果程序执行到此处必然不是完数 
+	return -1;
+}
+
+// 另一种方式定义函数compute, 判断整数参数a是否是完数, 如果是，返回a, 否则返回-1 
+// 一条return函数返回语句 
+int compute1(int a)
+{
+	int i,s=1; // s用于存储a的各因子累加值, 1总是一个整数的合法因子 
+	int ret=-1; // 用于返回值，默认为-1 
+	
+	for(i = 2; i < a; i++) // 累加整数a的所有因子 
+	{
+		if(a%i == 0) s += i; // 如果i是a的因子，累加之。 
+	}
+	if(s == a && a!=1) // 如果a是完数，返回值是本身。1不是完数
+	{
+		ret = a; 
+	} 
+	else // a不是完数 
+	{
+		ret = -1;
+	}
+	return ret;
+}
+
+int main()
+{
+	int i,n1,n2;
+	scanf("%d%d",&n1,&n2);
+	for(i = n1; i <= n2; i++) // 调用函数compute，完成区间[n1,n2]区间的完数计算 
+	{
+		
+		if(compute(i)!=-1) printf("%d\n",i); // 如果i是完数，输出之。 
+		// 测试函数compute1的调用 
+		// if(compute1(i)!=-1) printf("%d\n",i); // 如果i是完数，输出之。 
+	} 
+	
 	return 0;	
 }
 \end{lstlisting}
@@ -334,6 +655,22 @@ int main()
 \begin{note}[特别注意]
 	且记：进入内层循环前, 相关变量的初始化问题。	
 \end{note}
+
+\begin{note}[函数定义和调用]
+	\begin{itemize}
+		\item 函数定义: \lstinline|返回类型 函数名(参数列表) { 函数体 }|
+		\item \lstinline|int fun1(float a,float b) { return a/b; // 返回整数部分 }| 
+		\item \lstinline|void fun2(float a,float b) { printf(a/b); // 输出整数部分 }| 
+		\item 函数调用
+		\begin{lstlisting}[frame=none]
+		float m,n;
+		int ret;
+		ret = fun1(m,n); // 调用函数fun1, 其返回值赋值给变量ret;
+		fun2(m,n); // 调用函数fun2, 无返回值可用;
+		\end{lstlisting}
+	\end{itemize}	
+\end{note}
+
 
 \section{最大公约数}	
 最大公约数(GCD)指某几个整数共有因子中最大的一个，最大公约数具有如下性质，
@@ -382,14 +719,14 @@ gcd(a,1)=1
 
 1
 
+\newpage
 \begin{lstlisting}
 #include <stdio.h>
 // 递归函数
 int gcd(int a,int b)
 {
-	if(b==0) return a;
-	if(a%b==0) return b;
-	return gcd(b,a%b);
+	if(b==0) return a;   // 公约数就是a
+	return gcd(b,a%b);   // 递归调用
 }
 
 int main() // 调用递归函数
@@ -397,30 +734,155 @@ int main() // 调用递归函数
 	int a,b,t;
 	scanf("%d%d",&a,&b);
 	if(a<b) { t=a; a=b; b=t; } // 交换a,b 
-	printf("%d\n",gcd(a,b));
+	printf("%d\n",gcd(a,b));   // 函数调用 
 	return 0;	
 }
 
-int main1() // 另解(循环语句)
+int main1() // 暴力循环求解, 效率低。
+{
+	int a,b,t=-1,i;//t给初值是好习惯，否则下面程序逻辑有可能使t得到随机值。 
+	scanf("%d%d",&a,&b); // 机试系统不要想当然给提示语句, 除非题目要求  
+	if(a<b) { t=a; a=b; b=t; } // 交换a,b,使a是较大者 
+	if(b==0) 
+	{
+		t=a; // 考虑分母为0的情况，比如：5,0的最大公约数为5 
+	} 
+	else
+	{
+		for(i=b;i>0;i--)
+		{
+			if(a%i==0 && b%i==0)
+			{
+				t=i; break; // 求得最大公约数，a,b互质, 必然t=1 
+			}
+		}
+	}
+	printf("%d\n",t);
+	return 0;	
+}
+
+int main2() // 利用欧几里得定理循环求解, 效率高。
 {
 	int a,b,r,t;
 	scanf("%d%d",&a,&b); // 机试系统不要想当然给提示语句, 除非题目要求
 	if(a<b) { t=a; a=b; b=t; } // 交换a,b,使a是较大者
 	while(1)
 	{
-		if(b==0) { t=a; break; }  // 分母为0时, a就是最大公约数 
+		if(b==0) { t=a; break; } // 分母为0时, a就是最大公约数
 		r = a%b; 
-		if(r==0) {t=b; break;}    // 本轮循环的a(上轮循环的b)就是最大公约数
-		
+		if(r==0) {t=b; break;} // b就是最大公约数
 		a=b; b=r; // 准备下一轮迭代   
 	}
-	printf("%d\n",t);
-	return 0;	
+	printf("%d\n",t);// 输出最大公约数
+	return 0;
+}
+
+int main3() // 利用欧几里得定理循环求解, 效率高。
+{
+	int a,b,r,t;
+	scanf("%d%d",&a,&b); // 机试系统不要想当然给提示语句, 除非题目要求
+	if(a<b) { t=a; a=b; b=t; } // 交换a,b,使a是较大者
+	if (b==0) // 考虑分母为0的情况，比如：5,0的最大公约数为5 
+	{
+		printf("%d\n",a);
+	}
+	else
+	{
+	   // 排除了分母为0时不能求余数的情况 
+		while((r=a%b)!=0) // a/b的余数赋值给r,r不等于0时执行循环体 
+		{	
+			a=b; 
+			b=r; 
+		}
+		printf("%d\n",b);
+	}
+	return 0; // 主函数结束
+}	
+
+int main4() // 体会函数结束语句return的使用
+{
+	int a,b,r,t;
+	scanf("%d%d",&a,&b); // 机试系统不要想当然给提示语句, 除非题目要求
+	if(a<b) { t=a; a=b; b=t; } // 交换a,b,使a是较大者
+	if (b==0) // 考虑分母为0的情况，比如：5,0的最大公约数为5 
+	{
+		printf("%d\n",a);
+		return 0;  // 主函数结束 
+	}
+	// 排除了分母为0时不能求余数的情况 
+	while((r=a%b)!=0) // a/b的余数赋值给r,r不等于0时执行循环体 
+	{
+		a=b; b=r; // 准备下一轮迭代   
+	}
+	printf("%d\n",b);
+	return 0;	// 主函数结束 
 }
 \end{lstlisting}
 
-\begin{note}(欧几里得定理)
-	见课件。
+\begin{figure}[H]
+	\centering
+	\caption{递归函数\lstinline|int gcd(int a,int b)|中系统内部维护的`栈'结构示意图}	
+	\begin{tikzpicture}
+	\node[] (tab) {
+		\begin{tabular}{|c|c|}
+		\hline
+		参数a,b & 递归调用\lstinline|gcd(a,b)=gcd(b,a%b);|\\
+		\hline
+		a=6,b=0 & gcd(6,0)=6; 6就是公约数, 结束递归, 开始出栈\\
+		\hline
+		a=12,b=6 & \lstinline|gcd(12,6)=gcd(6,12%6)=gcd(6,0);|\\
+		\hline
+		a=18,b=12 & \lstinline|gcd(18,12)=gcd(12,18%12)=gcd(12,6);|\\
+		\hline
+		\end{tabular}
+	};
+    \node[above] at(tab.north) {例1: 计算gcd(18,12)};
+	\path[->,very thick]
+	($(tab.north west)+(-0.5cm,0)$) edge[red] node[left] {入栈} ($(tab.south west)+(-0.5cm,0)$)
+	($(tab.south east)+(0.5cm,0)$) edge[blue] node[right] {出栈} ($(tab.north east)+(0.5cm,0)$)
+	($(tab.south west)+(-0.8cm,-0.2cm)$) edge[-,double] ($(tab.south east)+(0.8cm,-0.2cm)$)
+	; 
+	\end{tikzpicture}
+	
+	\begin{tikzpicture}
+	\node[] (tab) {
+		\begin{tabular}{|c|c|}
+		\hline
+		参数a,b & 递归调用\lstinline|gcd(a,b)=gcd(b,a%b);|\\
+		\hline
+		a=1,b=0 & gcd(1,0)=1; 1就是公约数, 结束递归, 开始出栈\\
+		\hline
+		a=2,b=1 & \lstinline|gcd(2,1)=gcd(1,2%1)=gcd(1,0);|\\
+		\hline
+		a=3,b=2 & \lstinline|gcd(3,2)=gcd(2,3%2)=gcd(2,1);|\\
+		\hline
+		a=2,b=3 & \lstinline|gcd(2,3)=gcd(3,2%3)=gcd(3,2);|\\
+		\hline
+		a=5,b=2 & \lstinline|gcd(5,2)=gcd(2,5%2)=gcd(2,3);|\\
+		\hline
+		a=32,b=5 & \lstinline|gcd(32,5)=gcd(5,32%5)=gcd(5,2);|\\
+		\hline
+		a=37,b=32 & \lstinline|gcd(37,32)=gcd(32,37%32)=gcd(32,5);|\\
+		\hline
+		\end{tabular}
+	};
+    \node[above] at(tab.north) {例2: 计算gcd(37,32)};
+	\path[->,very thick]
+	($(tab.north west)+(-0.5cm,0)$) edge[red] node[left] {入栈} ($(tab.south west)+(-0.5cm,0)$)
+	($(tab.south east)+(0.5cm,0)$) edge[blue] node[right] {出栈} ($(tab.north east)+(0.5cm,0)$)
+	; 
+	\end{tikzpicture}
+\end{figure}
+
+\begin{note}[欧几里得定理]
+	\begin{lstlisting}[frame=none]
+	a(大),b(小)的最大公约数: 因为: a=mb+r, m=a/b; r=a%b, $\Rightarrow$a,b的公约数能整除b和r.
+	r=a%b,r为0, 则b就是最大公约数。否则迭代循环, a=b，b=r, 直到余数为零, 则分母就是最大公约数。
+	\end{lstlisting}
+\end{note}
+
+\begin{note}
+	预习函数及递归函数的使用。
 \end{note}
 
 \section{角谷定理}
@@ -463,9 +925,10 @@ int main1() // 另解(循环语句)
 #include <stdio.h>
 int main()
 {
-	int n,i=0;
+	int n,i=0; // 变量i用于计数的辅助变量
 	scanf("%d",&n);
-	while(n!=1)
+	// 因为题目输入假设$n>1$, 因此不必考虑n=1时的情况
+	while(n!=1)  // n不等于1时执行循环体中的语句
 	{
 		if(n%2==0) n=n/2;
 		else n=3*n+1;
@@ -474,4 +937,32 @@ int main()
 	printf("%d\n",i);
 	return 0;	
 }
+
+// 含程序调试语句，不吝惜写一些printf语句，观察程序的执行过程。 
+int main()
+{
+	int n=22,i=0; // 变量i用于计数的辅助变量
+	//scanf("%d",&n); // 调试时可以注释掉输入语句, 改变变量n的值，观察执行过程 
+	
+	printf("%d->",n);
+	while(n!=1)  // n不等于1时执行循环体中的语句
+	{
+		if(n%2==0) 
+		{ 
+			n=n/2;
+		} 
+		else 
+		{
+			n=3*n+1;
+		}
+		printf("%d->",n);
+		i++;
+	} 
+	printf("\n总共变化次数%d\n",i);
+	return 0;	
+}
 \end{lstlisting}
+
+\begin{note}
+	试着用\lstinline|do{ }while(); for(;;)|改写此程序, 执行相同功能。
+\end{note}

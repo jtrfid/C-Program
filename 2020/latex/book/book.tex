@@ -33,9 +33,27 @@
 \usepackage{wrapfig}
 \usepackage{picins}
 %xxx\usepackage{custom}
+
 \usepackage{tikz}
-\usetikzlibrary{shapes,backgrounds}
-\usetikzlibrary{arrows, decorations.pathmorphing, backgrounds, positioning, fit, petri, automata} %自动机
+\usetikzlibrary{positioning,backgrounds}
+\usetikzlibrary{fadings}
+\usetikzlibrary{patterns}
+\usetikzlibrary{calc}
+\usetikzlibrary{shadings}
+\usetikzlibrary{shapes.symbols,shapes.misc,plotmarks,decorations.text,shapes.geometric} % shapes.symbols
+\usetikzlibrary{arrows,automata,matrix,arrows,graphs,shadows,calc,decorations.pathmorphing,backgrounds,positioning,fit,petri}
+
+\usetikzlibrary[intersections,mindmap,quotes,chains] %
+
+\usetikzlibrary{overlay-beamer-styles}
+
+\usetikzlibrary{fit}
+%\usegdlibray{tree,layered}
+
+\usepgfmodule{decorations}  %decorations
+\usepgflibrary{decorations.pathmorphing}
+
+\usetikzlibrary{cd} % commutative diagram
 
 \usetikzlibrary{matrix,arrows}
 
@@ -68,7 +86,8 @@
 	commentstyle=\color{mygreen},    % comment style
 	frame=shadowbox, % 阴影效果
 	rulesepcolor= \color{ red!20!green!20!blue!20} ,
-	escapeinside=``, % 英文分号中可写入中文
+	%escapeinside=``, % 英文分号中可写入中文
+	escapeinside={\%*}{*)},          % if you want to add LaTeX within your code
 	xleftmargin=1em,xrightmargin=1em, aboveskip=1em,
 	framexleftmargin=1em,
 	breaklines=true,  % automatic line breaking only at whitespace
@@ -77,6 +96,10 @@
 	showspaces=false,
 	tabsize=4,
 	showtabs=false,                  % 不显示tab键，不作为
+	breaklines=true,  % automatic line breaking only at whitespace
+	extendedchars=false,  % 代码跨页问题
+	%keepspaces=true,
+	mathescape=true  % 注释可以用latex math, eg. $a_{ij}$
 } 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \usepackage[top=2cm, bottom=2cm, left=2cm, right=2cm]{geometry}  
@@ -133,8 +156,8 @@
 %%表示文章的正文部分，在生成目录后将从第一页开始
 
 \include{chapter-1}   % 第1次机试练习: 熟悉DEV-C++开发平台, 基本输入输出语句练习
-%\include{chapter-2}   % 第2次机试练习: 选择与循环语句练习
-%\include{chapter-3}   % 第3次机试练习
+\include{chapter-2}   % 第2次机试练习: 选择与循环语句练习
+\include{chapter-3}   % 第3次机试练习
 %\include{chapter-4}   % 第4次机试练习
 %\include{chapter-5-6}   % 第5,6次机试练习
 %\include{chapter-7}   % 第7次机试练习

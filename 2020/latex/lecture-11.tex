@@ -1,18 +1,20 @@
-%%%%%%%%%%%%%%%%%%%%%%%%%% lecture-7
-\begin{frame}[shrink]
-  \frametitle{lecture-12 主要内容}
-  \framesubtitle{字符串处理库函数及程序举例}
-  %\tableofcontents[hideallsubsections]
-  \tableofcontents
-\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%% lecture-11
+%\begin{frame}[shrink]
+%  \frametitle{lecture-11 主要内容}
+%  \framesubtitle{字符串处理库函数及程序举例}
+%  %\tableofcontents[hideallsubsections]
+%  \tableofcontents
+%\end{frame}
 
 \section{字符串处理函数\#include<string.h>}
 
 \begin{frame}[shrink,fragile]{字符串处理函数\#include<string.h>}
+\vspace{-0.2cm}
 \begin{itemize}
 	\item 使用字符串处理库函数, 必须包含头文件\#include<string.h>
 	\item 要求字符串必须以`$\backslash$0'结尾
 \end{itemize}
+\vspace{-0.2cm}
 \begin{lstlisting}
 #include<stdio.h>
 #include<string.h>
@@ -34,6 +36,7 @@ int main()
 \subsection{连接和复制字符串strcat(s1,s2); strcpy(s1,s2); strncpy(s1,s2,n)}
 
 \begin{frame}[shrink,fragile]{\small{连接和复制字符串strcat(s1,s2); strcpy(s1,s2); strncpy(s1,s2,n)}}
+\vspace{-0.3cm}
 \begin{lstlisting}
    char s1[81]="ab"; // 自动追加s1[2]='\0'
    char s2[81]="cdef"; // 自动追加s2[4]='\0'
@@ -130,7 +133,7 @@ char string[81];
 int i,num=0,word=0;
 char c;
 gets(string); //输入一个字符串给字符数组string
-for(i=0;(c=string[i])!='\0';i++) //只要字符不是'\0'就循环
+for(i=0;(c=string[i])!='\0';i++) //只要字符不是'\0'就循环,条件表达式:第i个字符赋值给c, 并且c$\ne$'\0'
 {
    if(c==' ') word=0; //若是空格字符，使word置0
    else if(word==0) //如果不是空格字符且word原值为0
@@ -174,11 +177,11 @@ int main()
    char s[20],max[20];  int i;
    for(i=0;i<3;i++)
    {
-      if(i==0)gets(max);
-      else
+      if(i==0)gets(max); // 常用技巧: 初始, 第一个字符串就是最大者。
+      else // 随后的字符串与max比较
       {
          gets(s);
-         if(strcmp(s,max)>0) strcpy(max,s);
+         if(strcmp(s,max)>0) strcpy(max,s); // 如果该字符串比max大, 替换之。
       }
    }
    printf("\nthe largest string is:\n%s\n",max);
@@ -190,6 +193,7 @@ int main()
 \subsection{矩阵乘法}
 
 \begin{frame}[shrink,fragile]{例: 矩阵乘法}
+\vspace{-0.4cm}
 \begin{align*}
 &c[M][N],a[M][P],b[P][N];\\ &c[i][j]=\sum_{k=0}^{P-1}a[i][k]b[k][j]=a[i][0]b[0][j]+a[i][1]b[1][j]+\cdots +a[i][P-1]b[P-1][j]
 \end{align*}
@@ -218,7 +222,7 @@ a[1][0]b[0][0]+a[1][1]b[1][0]+a[1][2]b[2][0] & a[1][0]b[0][1]+a[1][1]b[1][1]+a[1
 %\medskip
 \pause
 \bigskip
-\textbf{\textcolor{blue}{c[i][j]=a的第i行各列(k)和b的第j列各行(k)的乘积累加}}
+\textbf{\textcolor{blue}{c[i][j]=a的第i行各列(k)和b的第j列各行(k)的乘积累加. $k=0\to(P-1)$}}
 \end{frame}
 
 \begin{frame}[shrink,fragile]{解: 矩阵乘法}
@@ -264,12 +268,12 @@ for(k=0;k<p;k++)
 \end{lstlisting}
 \end{frame}  
 
-\begin{frame}[shrink]
-\frametitle{lecture-12 主要内容}
-\framesubtitle{字符串处理库函数及程序举例}
-%\tableofcontents[hideallsubsections]
-\tableofcontents
-\end{frame}               
+%\begin{frame}[shrink]
+%\frametitle{lecture-12 主要内容}
+%\framesubtitle{字符串处理库函数及程序举例}
+%%\tableofcontents[hideallsubsections]
+%\tableofcontents
+%\end{frame}               
 
 
 

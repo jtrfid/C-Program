@@ -42,7 +42,7 @@ gcd(a,1)=1
 1
  ****************************************/ 
 #include <stdio.h>
-int main()
+int main1()  // 不好的逻辑设计 
 {
     int a,b,t,i;
     scanf("%d%d",&a,&b); // 机试系统不要想当然给提示语句, 除非题目要求  
@@ -59,6 +59,30 @@ int main()
 		if(b==0) t = a;
 		else t=1; // a,b互质 
 	} 
+    printf("%d\n",t);
+	return 0;	
+}
+
+int main()
+{
+    int a,b,t=-1,i; // t给初值是好习惯，否则下面程序逻辑有可能使t得到随机值。 
+    scanf("%d%d",&a,&b); // 机试系统不要想当然给提示语句, 除非题目要求  
+    if(a<b) { t=a; a=b; b=t; } // 交换a,b,使a是较大者 
+    
+    if(b==0) 
+	{
+		t=a; // 考虑分母为0的情况，比如：5,0的最大公约数为5 
+	} 
+	else
+	{
+		for(i=b;i>0;i--)
+		{
+		    if(a%i==0 && b%i==0)
+		    {
+		    	t=i; break; // 求得最大公约数，a,b互质, 必然t=1 
+			}
+		}
+	}
     printf("%d\n",t);
 	return 0;	
 }

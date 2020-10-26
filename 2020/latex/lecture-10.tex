@@ -1,15 +1,16 @@
-%%%%%%%%%%%%%%%%%%%%%%%%%% lecture-7
-\begin{frame}[shrink]
-  \frametitle{lecture-11 主要内容}
-  \framesubtitle{二维数组和字符数组}
-  \tableofcontents[hideallsubsections]
-\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%% lecture-10
+%\begin{frame}[shrink]
+%  \frametitle{lecture-10 主要内容}
+%  \framesubtitle{二维数组和字符数组}
+%  \tableofcontents[hideallsubsections]
+%\end{frame}
 
 
 
 \section{定义和引用二维数组: int a[10][20];}
 
 \begin{frame}[shrink,fragile]{二维数组应用场景}
+\vspace{-0.3cm}
 \begin{example}
 	有3个小分队，每队有6名队员，要把这些队员的工资用数组保存起来以备查。
 	\begin{tabular}{|c|c|c|c|c|c|c|}
@@ -60,6 +61,7 @@ int a[M][N]; // 定义M行N列的整型二维数组
 \begin{lstlisting}
 float a[3][4]; // 定义3行4列的单精度浮点型二维数组
 \end{lstlisting}
+\vspace{-0.3cm}
 \begin{block}{Notes}
 	\small
 	用矩阵形式（如3行4列形式）表示二维数组，是逻辑上的概念，能形象地表示出行列关系。而在内存中，各元素是连续存放的，不是二维的，是线性的。\\
@@ -109,6 +111,7 @@ float a[3][4]; // 定义3行4列的单精度浮点型二维数组
 \section{引用数组: int i=0,j=0; a[i][j]}
 
 \begin{frame}[shrink,fragile]{引用数组: int i=0,j=0; a[i][j]}
+\vspace{-0.3cm}
 \begin{lstlisting}
 #define M 5  // 行数
 #define N 10 // 列数
@@ -118,6 +121,7 @@ int i,j;
 a[0][0]=10;  // 给第0行第0列元素赋值
 a[M-1][N-1]=20; // 给第M-1行第N-1列元素赋值
 \end{lstlisting}
+\vspace{-0.2cm}
 \begin{columns}[T]
 \column{0.5\textwidth}
 \begin{lstlisting}
@@ -132,7 +136,7 @@ for(i=0;i<M;i++)
      scanf("%f", &a[i][j]);
 \end{lstlisting}
 \column{0.5\textwidth}
-\begin{lstlisting}
+\begin{lstlisting}[frame=leftline]
 // 输出数组元素
 for(i=0;i<M;i++)
    for(j=0;j<N;j++)
@@ -146,6 +150,7 @@ for(i=0;i<M;i++)
 \end{frame}
 
 \begin{frame}[shrink,fragile]{输出每个小分队的平均工资}
+\vspace{-0.4cm}
 \begin{lstlisting}
 #define M 100 // 估计最大的行数
 #define N 100 // 估计最大的列数
@@ -219,6 +224,7 @@ b=\left[
 int a[M][N]={{1,2,3},{4,5,6}};
 int b[N][M],i,j;
 \end{lstlisting}
+\vspace{-0.4cm}
 \begin{columns}[T]
 \column{0.4\textwidth}
 \pause
@@ -235,7 +241,7 @@ for(i=0;i<M;i++)
 \end{lstlisting}
 \column{0.4\textwidth}
 \pause
-\begin{lstlisting}
+\begin{lstlisting}[frame=leftline]
 for(i=0;i<N;i++) 
 {
    for(j=0;j<M;j++) 
@@ -287,7 +293,7 @@ for(i=0;i<M;i++)
 }
 \end{lstlisting}
 \column{0.4\textwidth}
-\begin{lstlisting}
+\begin{lstlisting}[frame=leftline]
 // 输出
 for(i=0;i<M;i++) // 行
 {
@@ -302,6 +308,7 @@ for(i=0;i<M;i++) // 行
 \begin{frame}[shrink,fragile]{例: 方阵int a[10][10]上下三角阵}
 \small
 例: 使方阵(行数=列数)下三角阵元素置1, 其它元素为0.
+\vspace{-0.4cm}
 \begin{columns}[T]
 \column{0.4\textwidth}
 \begin{lstlisting}
@@ -323,7 +330,7 @@ for(i=0;i<M;i++) // 行
 }
 \end{lstlisting}
 \column{0.6\textwidth}
-\begin{lstlisting}
+\begin{lstlisting}[frame=leftline]
 printf("上三角阵\n"); 
 for(i=0;i<M;i++) // 行
 {
@@ -355,6 +362,7 @@ char str[]="abcd"; // 5个有效字符
 \end{frame}
 
 \begin{frame}[shrink,fragile]{使用printf函数输出字符串}
+\vspace{-0.3cm}
 \begin{lstlisting}
 // s[0]='a', s='b', s='c', s[3]='d', s[4]以后的字符未赋值
 char s[81]={'a','b','c','d'}; // 4个有效字符
