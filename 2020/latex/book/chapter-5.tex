@@ -1,0 +1,1050 @@
+%%%%%%%%%%%%%%%%%%%%% chapter.tex %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+% sample chapter
+%
+% Use this file as a template for your own input.
+%
+%%%%%%%%%%%%%%%%%%%%%%%% Springer-Verlag %%%%%%%%%%%%%%%%%%%%%%%%%%
+%\motto{Use the template \emph{chapter.tex} to style the various elements of your chapter content.}
+\chapter{第5次机试练习: 流程控制, 字符串, 数组}
+
+\section{歌德巴赫猜想}
+德巴赫猜想：任意一个大偶数都能分解为两个素数的和,对于输入的一个正偶数，写一个程序来验证歌德巴赫猜想。
+
+由于每个正偶数可能分解成多组素数和，仅输出分解值分别是最小和最大素数的一组，按从小到大顺序输出。
+
+输入说明	
+
+输入一个正偶数n，1<n<1000。
+
+输出说明
+	
+输出分解出的两个最小和最大素数。
+
+输入样例
+	
+10
+
+输出样例
+	
+3 7
+
+\begin{lstlisting}
+#include <stdio.h>
+#include <math.h>
+
+// 参数n是素数, 返回1, 否则返回0
+int isPrime(int n)
+{
+	int i;
+	if(n<=2) return 0; // 最小素数是3 
+	for(i = 2; i <= sqrt(n); i++) 
+	{
+		if (n%i == 0) return 0; // n不是素数 
+	}
+	return 1; // n是素数 
+}
+
+int main()
+{
+	int j,k,num; // num大偶数 
+	int flag; // 标志变量：用于标识是否找到符合要求的素数对
+	scanf("%d",&num);
+	// 对于每个大偶数num，分解为两个素数 
+	for(j = 3; j < num; j += 2)  //  找出第一个素数(最小的), for #1 
+	{
+		flag = 0; // 初始化，未找出素数对 
+		for(k = j + 2; k < num; k += 2) // 找出第二个素数, for #2
+		{
+			if(isPrime(j) && isPrime(k) && j+k == num) 
+			{
+				printf("%d %d\n",j,k);
+				flag = 1; // 找出素数对, 如果没有此设置, 将会输出多组 
+				break; // break for #2
+			}
+		}
+		if(flag) break; // break for #1 
+	}
+	return 0;
+}
+
+// 不用标志变量版本 
+int main1()
+{
+	int j,k,num; // num大偶数 
+	scanf("%d",&num);
+	// 对于每个大偶数num，分解为两个素数 
+	for(j = 3; j < num; j += 2)  //  找出第一个素数(最小的)  for #1 
+	{
+		for(k = j + 2; k < num; k += 2) //  找出第二个素数 for #2
+		{
+			if(isPrime(j) && isPrime(k) && j+k == num) 
+			{
+				printf("%d %d\n",j,k);
+				return 0; // 找出素数对，结束主函数 
+			}
+		}
+	}
+return 0;
+}
+\end{lstlisting}
+
+\begin{note}[要点]
+	再次体会标志变量的用法及内层循环前的初始化。仔细审题，本题要求一组输出。
+\end{note}
+
+\section{回文数}
+若一个非负整数其各位数字按照正反顺序读完全相同，则称之为回文数，例如12321。
+判断输入的整数是否是回文数。若是，则输出该整数各位数字之和，否则输出no。
+
+输入说明	
+
+输入为一个整数n，0<=n<100000000。
+
+输出说明	
+
+若该整数为回文数，则输出整数各位数字之和，否则输出no。
+
+输入样例
+	
+样例1输入
+
+131
+
+样例2输入
+
+24
+
+输出样例
+
+样例1输出
+	
+5
+
+样例2输出
+
+no
+
+\begin{lstlisting}
+#include <stdio.h>
+
+// 思路:  求该整数的反序组成的整数，如整数1234, 其反序整数即为4321, 如果二者相等即为回文数。 
+
+// 判断num是否是回文数，是：返回1；不是，返回0
+// 指针参数*sum，返回这个数的各位之和  
+int isPalindromic(int num,int *sum)
+{
+	int reverse = 0, tmp = num;
+	*sum = 0; 
+	while(tmp)
+	{
+		reverse = reverse*10 + tmp%10;
+		*sum += tmp%10;
+		tmp /= 10;
+	}
+	if(reverse == num ) return 1;
+	else return 0;	
+}
+
+int main()
+{
+	int i,num,sum;
+	
+	scanf("%d",&num); 
+	if(isPalindromic(num,&sum)) printf("%d\n",sum);
+	else printf("no\n");
+	return 0;
+} 
+\end{lstlisting}
+
+\begin{note}[要点]
+	\begin{enumerate}
+		\item 掌握函数的地址传递方法。
+		\item 如果是字符串中找回文子串, 如何改写此题? 使用两个指针变量p1, p2, 其中p1指向待查找子串的首字母, 另一个指向末尾, \lstinline|p1++, p2--|; 找字符串回文子串是一个不错的练习。
+	\end{enumerate}
+\end{note}
+
+\section{寻找最大整数}
+从键盘输入四个整数，找出其中的最大值并将其输出。
+
+输入说明
+	
+输入4个整数，用空格分隔
+
+输出说明
+	
+输出值最大的一个整数
+
+输入样例
+	
+25 99 -46 0
+
+输出样例
+	
+99
+
+\begin{lstlisting}
+#include <stdio.h>
+// 不用存储整数序列, 采用一条循环语句，合并输入和计算，减少出错概率。 
+int main() 
+{
+	int i, num, max;
+	// 输入, 并计算 
+	for(i = 0; i < 4; i++) 
+	{ 
+		if (i==0) scanf("%d",&max); // 假定第一个数就是最大的数 
+		else
+		{
+			scanf("%d",&num);
+			if(num > max) max=num; 
+		} 
+	} 
+	printf("%d\n",max);
+	return 0;
+} 
+
+int main1() // 另解, 存储整数序列
+{
+	int i, num[4], max;
+	// 输入 
+	for(i = 0; i < 4; i++) 
+		scanf("%d",&num[i]);
+	// 假定的最大值必须是实际存在的，不要想当然是0,9999,等等。
+	max = num[0]; 
+	for(i = 0; i < 4; i++)  
+		if(max < num[i]) max = num[i];
+	
+	printf("%d\n",max);
+	return 0;
+} 
+\end{lstlisting}
+
+\begin{note}[要点]
+	题目虽然简单，你能体会哪种解法更好? 特别注意假定变量的值必须是实际存在的数。
+\end{note}
+
+\section{ISBN号码}
+每一本正式出版的图书都有一个ISBN号码与之对应，ISBN码包括9位数字、1位识别码和3位分隔符，其规定格式如"x-xxx-xxxxx-x"，
+其中符号“-”是分隔符（键盘上的减号），最后一位是识别码，例如0-670-82162-4就是一个标准的ISBN码。
+
+ISBN码的首位数字表示书籍的出版语言，例如0代表英语；
+
+第一个分隔符“-”之后的三位数字代表出版社，例如670代表维京出版社；
+
+第二个分隔之后的五位数字代表该书在出版社的编号；
+
+最后一位为识别码。识别码的计算方法如下：
+
+首位数字乘以1加上次位数字乘以2……以此类推，用所得的结果mod 11，所得的余数即为识别码，如果余数为10，则识别码为大写字母X。
+例如ISBN号码0-670-82162-4中的识别码4是这样得到的：
+对067082162这9个数字，从左至右，分别乘以1，2，\dots，9，再求和，即$0\times 1+6\times 2+\dots +2\times 9=158$，然后取158 mod 11的结果4作为识别码。
+
+编写程序判断输入的ISBN号码中识别码是否正确，如果正确，则仅输出``Right"; 如果错误，则输出正确的ISBN号码。
+
+输入说明	
+
+输入只有一行，是一个字符序列，表示一本书的ISBN号码(保证输入符合ISBN号码的格式要求)。
+
+输出说明	
+
+输出一行，假如输入的ISBN号码的识别码正确，那么输出``Right"，否则，按照规定的格式，输出正确的ISBN号码(包括分隔符``-")。
+
+输入样例	
+
+样例输入1
+
+0-670-82162-4
+
+样例输入2
+
+0-670-82162-0
+
+输出样例	
+
+样例输出1
+
+Right
+
+样例输出2
+
+0-670-82162-4
+
+\begin{lstlisting}
+#include <stdio.h>
+int main()
+{
+	char ISBN[14] = "0-670-82162-4";  // ISBN[13]='\0'
+	int i,j, code1 = 0, code2;
+	
+	// 末尾自动添加'\0'.
+	scanf("%s",ISBN);  // 或 gets(ISBN); 
+	code2 = ISBN[12] == 'X' ? 'X' : ISBN[12]-'0';
+	for(i = 0,j = 1; i < 11; i++)
+	{
+		if (ISBN[i]=='-') continue;
+		// 整数与单个数字字符的关系：9 = '9' -'0' 
+		code1 += (ISBN[i]-'0')*j;  
+		j++;
+	}   
+	code1 %= 11;
+	if (code1 == 10) code1 = 'X';  
+	if(code1 == code2) printf("Right\n");
+	else 
+	{
+		if(code1 == 'X') ISBN[12] = 'X';
+		else ISBN[12] = code1 + '0';
+		printf("%s\n",ISBN); // 或 puts(ISBN);
+	}
+	return 0;
+} 
+\end{lstlisting}
+
+\begin{note}[要点]
+	\begin{enumerate}
+		\item 定义字符数组表示字符串时，且记给\lstinline|'\0'|留一个字符的位置, 表示字符串的结尾。
+		\item \lstinline|ASCII编码(整数)=字符-'0';|
+		\item \lstinline|字符=ASCII编码(整数)+'0';|
+		\item 整数可以表示字符的ASCII编码(整数), 整数和字符类型可以``混用", 详见课件。
+		\begin{lstlisting}
+		int a; char c='A';
+		a = c+1; // c当作整数运算
+		printf("%d %c %d %c\n",a,a,c,c); //66 B 65 A 
+		\end{lstlisting}
+	\end{enumerate}
+\end{note}
+
+\section{密码强度}
+每个人都有很多密码，你知道你的密码强度吗？假定密码由大写字母、小写字母、数字和非字母数字的符号这四类字符构成，密码强度计算规则如下：
+
+1.	基础分：空密码(密码长度为零)0分, 非空密码1分
+
+2.	加分项1：密码长度超过8位, +1分
+
+3.	加分项2：密码包含两类不同字符+1分, 包含三类不同字符+2分, 包含四类不同字符+3分
+
+按照此规则计算的密码强度为$0\sim 5$。请你设计一个程序计算给出的密码的强度。
+
+输入说明
+	
+输入为一个密码字符串，字符串长度不超过50个字符。
+
+输出说明
+	
+输出一个整数表示该密码的强度。
+
+输入样例
+	
+输入样例1
+
+abcd
+
+输入样例2
+
+ab123
+
+输出样例
+	
+样例1输出：
+
+1
+
+样例2输出
+
+2
+
+\begin{lstlisting}	
+#include <stdio.h>
+#include <string.h>
+int main()
+{
+	char p[51]; // 记得给'\0'留位置
+	int i,strength = 0;
+	// class4[0]=1大写字母， class4[1]=1小写字母, class4[2]=1数字， class4[3]=1非字母数字 
+	int class4[4] = {0,0,0,0};  
+	
+	//scanf("%s",p);  // 不能完整接收含空格的字符串和空密码 
+	gets(p); // last char: '\0'，直接回车，就是空密码 
+	
+	// 	1.	基础分：空密码(密码长度为零)0分，非空密码1分 
+	if(strlen(p) == 0) strength += 0;
+	else  strength += 1;
+	
+	// 2.	加分项1：密码长度超过8位，+1分 
+	if(strlen(p) > 8) strength += 1;
+	
+	// 3.	加分项2：密码包含两类不同字符+1分，包含三类不同字符+2分，包含四类不同字符+3分 
+	for(i = 0; p[i] != '\0'; i++)
+	{
+		if(p[i] >= 'A' && p[i] <= 'Z') class4[0] = 1; 
+		else if(p[i] >= 'a' && p[i] <= 'z') class4[1] = 1; 
+		else if(p[i] >= '0' && p[i] <= '9') class4[2] = 1;
+		else class4[3] = 1; 
+	}
+	int c = 0;
+	for(i = 0; i < 4; i++) c += class4[i];
+	
+	if(c >= 4) strength += 3;
+	else if(c >= 3) strength += 2;
+	else if(c >= 2) strength += 1;
+	
+	printf("%d\n",strength);
+	
+	return 0;
+}
+\end{lstlisting}
+
+\begin{note}[要点]
+	字符串处理的典型问题: \lstinline|'\0'|, 字符串相关函数\lstinline|char s1[81],s2[81]; strlen(s1), strcmp(s1,s2), strcpy(s1,s2); scanf("%s",s1), gets(s1)|的区别等, 应该充分掌握。
+\end{note}
+
+%%%%%%%%%%%%%%%% 留作下次练习
+\begin{comment}
+
+\section{矩阵}
+请写一个程序，对于一个m行m列$(2<m<20)$的方阵，求其每一行、每一列及主、辅对角线元素之和，然后按照从大到小的顺序依次输出这些值。
+
+注：主对角线是方阵从左上角到右下角的一条斜线，辅对角线是方阵从右上角到左下角的一条斜线。
+
+输入说明
+
+输入数据的第一行为一个正整数m;
+
+接下来为m行、每行m个整数表示方阵的元素。
+
+输出说明	
+
+从大到小排列的一行整数，每个整数后跟一个空格，最后换行。
+
+输入样例
+
+4
+
+15  8   -2   6
+
+31  24  18  71
+
+-3  -9   27  13
+
+17  21  38  69
+
+输出样例
+
+159 145 144 135 81 60 44 32 28 27
+
+\begin{lstlisting}
+#include <stdio.h>
+// 估计方阵行列数 
+#define M 20
+
+// input, m是实际方阵行列数 
+void input(int matrix[][M], int m)
+{
+int i,j; 
+for(i = 0; i < m; i++)
+for(j = 0; j < m; j++) 
+scanf("%d",&matrix[i][j]);
+}
+
+// 计算主对角线之和, m是实际方阵行列数 
+int main_diagonal(int matrix[][M], int m)
+{	
+int i,j,sum = 0; 
+for(i = 0; i < m; i++)
+{
+for(j = 0; j < m; j++) 
+{
+if(i == j) sum += matrix[i][j];   // 主对角线 
+}
+}
+return sum;
+}
+
+// 计算副对角线之和, m是实际方阵行列数 
+int counter_diagonal(int matrix[][M], int m)
+{	
+int i,j,sum = 0;
+for(i = 0; i < m; i++)
+{
+for(j = 0; j < m; j++) 
+{ 
+if(j == m-i-1) sum += matrix[i][j]; // 副对角线之和 
+}
+}
+return sum;
+}
+
+// 计算第i行之和, m是实际方阵行列数 
+int sumI(int matrix[][M], int m, int i)
+{ 
+int j,sum = 0; 
+for(j = 0; j < m; j++) // 遍历列 
+{
+sum += matrix[i][j];  // 第i行之和
+}
+return sum; 
+} 
+
+// 计算第j行之和, m是实际方阵行列数 
+int sumJ(int matrix[][M], int m, int j)
+{ 
+int i,sum = 0; 
+for(i = 0; i < m; i++) // 遍历行 
+{
+sum += matrix[i][j];  // 第j行之和
+}
+return sum;
+} 
+
+// 交换两个元素值 
+void swap(int *p1, int *p2)
+{
+int temp;
+temp = *p1; *p1 = *p2; *p2 = temp;
+}
+
+// 选择法排序（降序）
+void sorts(int a[], int n)
+{
+int i,j,k;
+for(i = 0; i < n-1; i++)
+{
+k = i;
+for (j = i+1; j < n; j++)
+if(a[j] > a[k])	k = j;
+if (k != i) swap(&a[i],&a[k]);
+} 
+}
+
+int main()
+{
+int matrix[M][M],a[2*M+2]; // 以估计行列数，定义数组 
+int i,m; 
+scanf("%d",&m); // 实际方阵行列数 
+
+input(matrix,m); // input 
+
+// 调用各函数，装配数组a
+int n = 0; // 记录数组a的实际长度		
+for(i = 0; i < m; i++)
+{
+a[n++] = sumI(matrix,m,i); // 第i行之和
+a[n++] = sumJ(matrix,m,i); // 第i列之和  
+}
+
+a[n++] = main_diagonal(matrix,m);    // 主对角线之和 
+a[n++] = counter_diagonal(matrix,m); // 副对角线之和  
+
+// 排序数组a 
+sorts(a,n);
+
+// 输出 
+for(i = 0; i < n; i++)
+printf("%d ",a[i]);
+
+printf("\n");
+
+return 0;
+}
+\end{lstlisting}
+
+\begin{note}[要点]
+\begin{enumerate}
+\item 思路：定义功能单一的函数，实现简单功能，主程序调用各个函数。
+\item 一维数组a[2*M+2]存储相关函数计算结果，排序数组a即是所求。 
+\item 避免过多循环嵌套，不易出错，简化程序设计。 
+\item 但是缺点是在各函数中分别循环遍历方阵，效率低。
+\item 优化方案是不采用独立函数计算，在主函数中一次遍历方阵，计算各值。 
+\item 二维数组表示矩阵, 是常见题型, 必须熟练掌握元素的下标规律及其遍历技巧。
+\end{enumerate}
+\end{note}
+
+\section{消除类游戏}
+消除类游戏是深受大众欢迎的一种游戏，游戏在一个包含有n行m列的游戏棋盘上进行，棋盘的每一行每一列的方格上放着一个有颜色的棋子，当一行或一列上有连续三个或更多的相同颜色的棋子时，这些棋子都被消除。当有多处可以被消除时，这些地方的棋子将同时被消除。
+
+现在给你一个n行m列的棋盘，棋盘中的每一个方格上有一个棋子，请给出经过一次消除后的棋盘。
+
+请注意：一个棋子可能在某一行和某一列同时被消除。
+
+输入格式
+
+输入的第一行包含两个整数n, m，用空格分隔，分别表示棋盘的行数和列数。
+
+接下来n行，每行m个整数，用空格分隔，分别表示每一个方格中的棋子的颜色。颜色使用1至9编号。
+
+输出格式
+
+输出n行，每行m个整数，相邻的整数之间使用一个空格分隔，表示经过一次消除后的棋盘。如果一个方格中的棋子被消除，则对应的方格输出0，否则输出棋子的颜色编号。
+
+样例输入1
+
+4 5
+
+2 2 3 1 2
+
+3 4 5 1 4
+
+2 3 2 1 3
+
+2 2 2 4 4
+
+样例输出1
+
+2 2 3 0 2
+
+3 4 5 0 4
+
+2 3 2 0 3
+
+0 0 0 4 4
+
+样例说明
+
+棋盘中第4列的1和第4行的2可以被消除，其他的方格中的棋子均保留。
+
+样例输入2
+
+4 5
+
+2 2 3 1 2
+
+3 1 1 1 1
+
+2 3 2 1 3
+
+2 2 3 3 3
+
+样例输出2
+
+2 2 3 0 2
+
+3 0 0 0 0
+
+2 3 2 0 3
+
+2 2 0 0 0
+
+样例说明
+
+棋盘中所有的1以及最后一行的3可以被同时消除，其他的方格中的棋子均保留。
+评测用例规模与约定
+
+所有的评测用例满足：$1 \le n, m \le 30$。
+
+\begin{lstlisting}
+#include <stdio.h>
+#include <math.h>
+#define M 30 // 估计数组最大长度
+
+// 扫描curRow行中可删除的元素, F: 删除标志矩阵, m: 列数 
+void delRow(int curRow, int checker[][M], int F[][M],int m)
+{
+int i,j, current,count;
+for(i=0;i<m;i++) 
+{
+// if(F[curRow][i]==1) continue; // 如果先扫描行，这就不合适了 
+count=1; 
+current=checker[curRow][i];
+for(j=i+1;j<m;j++)
+{
+if(current==checker[curRow][j]) count++;
+else break;
+}
+if(count>=3)
+{
+for(j=i;j<m;j++)
+{
+if(checker[curRow][j]==current) F[curRow][j]=1;//置删除标志
+else break; 
+}
+}
+} 
+}
+
+// 扫描curCol列中可删除的元素, F: 删除标志矩阵, n: 行数 
+void delCol(int curCol, int checker[][M], int F[][M],int n)
+{
+int i,j, current,count;
+for(i=0;i<n;i++) 
+{
+count=1; 
+current=checker[i][curCol];
+for(j=i+1;j<n;j++)
+{
+if(current==checker[j][curCol]) count++;
+else break;
+}
+if(count>=3)
+{
+for(j=i;j<n;j++)
+{
+if(checker[j][curCol]==current) F[j][curCol]=1;//置删除标志
+else break; 
+}
+}
+} 
+}
+
+// 清除所有可删除的元素, F: 删除标志矩阵, n: 行数, m: 列数 
+void del(int checker[][M], int F[][M],int n, int m)
+{
+int i,j;
+for(i=0;i<n;i++)
+{
+for(j=0;j<m;j++)
+{
+if(F[i][j]==1) checker[i][j]=0;
+}
+}
+}
+
+// 读棋盘, n: 行数, m: 列数
+void Read(int checker[][M],int n, int m)
+{
+int i,j;
+for(i=0;i<n;i++)
+{
+for(j=0;j<m;j++)
+{
+scanf("%d",&checker[i][j]);
+}
+}
+}
+
+// 输出棋盘, n: 行数, m: 列数
+void output(int checker[][M],int n, int m)
+{
+int i,j;
+for(i=0;i<n;i++) // 行 
+{
+for(j=0;j<m;j++) // 列 
+{
+printf("%d ",checker[i][j]); 
+}
+printf("\n");
+} 
+}
+
+int main()
+{
+// 棋盘，初始化是为了便于测试 
+int checker[M][M]={{2,2,3,1,2},
+{3,4,5,1,4},
+{2,3,2,1,3},
+{2,2,2,4,4}};
+int n=4,m=5,i,j; // n行，m列 
+/************
+int checker[M][M]={{2,2,3,1,2},
+{3,1,1,1,1},
+{2,3,2,1,3},
+{2,2,3,3,3}};
+int n=4,m=5,i,j; // n行，m列 
+*************/
+// 标志矩阵 
+int F[M][M]; // 对应元素为1,则表示删除 
+
+scanf("%d%d",&n,&m);
+// 读棋盘 
+Read(checker,n,m);
+
+// 初始化F 
+for(i=0;i<n;i++)
+for(j=0;j<m;j++)
+F[i][j]=0;
+
+// 扫描行 
+for(i=0;i<n;i++) // 行 
+delRow(i, checker, F, m);
+
+// 扫描列 
+for(j=0;j<m;j++) // 列 
+delCol(j, checker, F, n);
+
+// 清除 
+del(checker, F, n, m);
+
+// 输出棋盘 
+output(checker,n,m); 
+return 0;
+} 
+\end{lstlisting}
+
+\begin{note}[要点]
+标志矩阵，体会模块化编程思想，初始化变量的程序调试技巧。
+\end{note}
+
+\section{表达式求值}
+表达式由两个非负整数x，y和一个运算符op构成，求表达式的值。
+这两个整数和运算符的顺序是随机的，可能是``x op y", ``op x y"或者``x y op",例如, ``25 + 3"表示25加3, ``5 30 *"表示5乘以30, "/ 600 15"表示600除以15。
+
+输入说明
+
+输入为一个表达式，表达式由两个非负整数x，y和一个运算符op构成，x，y和op之间以空格分隔，但顺序不确定。
+
+x和y均不大于10000000，op可以是+, -,*, /, \%中的任意一种, 分表表示加法, 减法, 乘法, 除法和求余。
+
+除法按整数除法求值, 输入数据保证除法和求余运算的y值不为0。
+
+输出说明	
+
+输出表达式的值。
+
+输入样例
+
+样例1输入
+
+5 20 *
+
+样例2输入
+
+4 + 8
+
+样例3输入
+
+/ 8 4
+
+输出样例
+
+样例1输出
+
+100
+
+样例2输出
+
+12
+
+样例3输出
+
+2
+
+\begin{lstlisting}
+#include <stdio.h>
+// 估计字符串最大长度，存储有效字符(N-1)个，预留最后一个字符'\0' 
+#define N 20 
+
+// 根据参数，计算表达式的值 
+int compute(char op,int x,int y)
+{
+int result = -1;
+switch(op)
+{
+case '+': result = x+y; break;
+case '-': result = x-y; break;
+case '*': result = x*y; break;
+case '/': if(y != 0) result = x/y; break;
+case '%': if(y != 0) result = x%y; break;
+}
+return result;
+}
+
+// 数字字符串s转为int, 要求s以'\0'结尾 
+int strToInt(char *s)// int toInt(char s[]) 
+{
+int result=0;
+while(*s) // *s != '\0'
+{
+result=result*10+ (*s-'0');
+s++; //移至下一字符 
+}
+return result;
+} 
+
+/******************************************************
+提取子串函数 
+忽略s中空格前缀，复制s中的字符串到subs中，遇空格或'\0'结束
+返回subs不含空格。 返回复制后s指针指向(地址) 
+要求s和subs以'\0'结尾。
+*******************************************************/ 
+char* getSubs(char *s, char *subs) 
+{
+int start=0; 
+while(*s)
+{
+if(*s==' ') 
+{
+if(start==0) s++; // 忽略s的前缀空格 
+else break; // 是有效字符串后的一个空格 
+}
+else
+{
+start=1; // 开始复制 
+*subs=*s;
+s++;
+subs++;
+}
+}
+*subs='\0'; // 不要忘记结尾符 
+return s;
+}
+
+// 解析s, 以空格为分隔符, 分解s为3个字符串 
+void parse(char *s,char result[][N])
+{
+char *p;
+p=getSubs(s,result[0]);
+p=getSubs(p,result[1]);
+p=getSubs(p,result[2]);
+} 
+
+// 如果s是操作符，返回1, 参数op返回该操作符
+// 否则, 返回0 
+int isOp(char *s, char *op)
+{
+if(*s >= '0' && *s <= '9') return 0;
+else
+{
+*op=*s;
+return 1;
+}
+} 
+
+int main()
+{
+char s[N],op;
+char s3[3][N];   
+int x,y;
+gets(s); 
+
+parse(s,s3); // s被分解为3个字符串 
+if(isOp(s3[0],&op)) // op x y
+{
+x=strToInt(s3[1]);
+y=strToInt(s3[2]);
+}
+else if(isOp(s3[1],&op)) // x op y
+{
+x=strToInt(s3[0]);
+y=strToInt(s3[2]);
+}
+else if(isOp(s3[2],&op)) // x y op
+{
+x=strToInt(s3[0]);
+y=strToInt(s3[1]);
+}
+
+printf("%d\n",compute(op,x,y)); 
+return 0;
+}
+
+int main1() // 另解，直接读取三个子串, 就不用分解了
+{
+char s[N],op;
+char s3[3][N];   
+int x,y;
+scanf("%s%s%s",s3[0],s3[1],s3[2]); // 利用"%s"读字符串遇空格结束特点，直接读取3个字符串。 
+
+// parse(s,s3); // s被分解为3个字符串 
+if(isOp(s3[0],&op)) // op x y
+{
+x=strToInt(s3[1]);
+y=strToInt(s3[2]);
+}
+else if(isOp(s3[1],&op)) // x op y
+{
+x=strToInt(s3[0]);
+y=strToInt(s3[2]);
+}
+else if(isOp(s3[2],&op)) // x y op
+{
+x=strToInt(s3[0]);
+y=strToInt(s3[1]);
+}
+
+printf("%d\n",compute(op,x,y)); 
+return 0;
+}
+\end{lstlisting}
+
+\begin{note}[要点]
+本例是字符串处理, 指针应用, 模块化程序设计的范例, 上课时做了详细的讲解。详见课件。
+\end{note}
+
+\section{马鞍点}	
+若一个矩阵中的某元素在其所在行最小而在其所在列最大，则该元素为矩阵的一个马鞍点。请写一个程序，找出给定矩阵的马鞍点。
+
+输入说明
+
+输入数据第一行只有两个整数m和n（0<m<100,0<n<100），分别表示矩阵的行数和列数;
+
+接下来的m行、每行n个整数表示矩阵元素（矩阵中的元素互不相同），整数之间以空格间隔。
+
+输出说明
+
+在一行上输出马鞍点的行号、列号(行号和列号从0开始计数)及元素的值(用一个空格分隔), 之后换行;
+
+若不存在马鞍点，则输出一个字符串``no"后换行。
+
+输入样例	
+
+4  3
+
+11    13    121
+
+407   72    88
+
+23    58    1
+
+134   30    62
+
+输出样例
+
+1 1 72
+
+\begin{lstlisting}
+#include <stdio.h>
+// 估计的二维数组最大行列数 
+#define M 100
+#define N 100
+
+// 判断a[row,col]是否是马鞍点, 是: 返回1; 否则返回0
+// m,n是二维数组实际行列数 
+int compute(int a[][N], int m, int n, int row, int col)
+{
+int i,element = a[row][col]; 
+// element在其所在行最小而在其所在列最大 
+for(i = 0; i < n; i++)
+if(a[row][i] < element) return 0; // 不是马鞍点，直接返回0 
+for(i = 0; i < m; i++)
+if(a[i][col] > element) return 0; // 不是马鞍点，直接返回0
+return 1;	// 如果执行至此，肯定是马鞍点，直接返回0 
+}
+
+int main()
+{
+int matrix[M][N]; // 按照估计的最大行列数定义二维数组 
+int i,j,m,n,flag = 0; 
+
+scanf("%d%d",&m,&n); // 实际行列数 
+
+// input
+for(i = 0; i < m; i++)
+for(j = 0; j < n; j++) 
+scanf("%d",&matrix[i][j]);
+
+// 遍历二维数组, 判断马鞍点		
+for(i = 0; i < m; i++)
+{
+for(j = 0; j < n; j++) 
+{
+if(compute(matrix,m,n,i,j))
+{
+printf("%d %d %d\n",i,j,matrix[i][j]);
+flag = 1;
+}
+
+}
+}	
+if (!flag) printf("no\n");
+
+return 0;
+}
+\end{lstlisting}
+
+\begin{note}[要点]
+\begin{enumerate}
+\item 思路：定义函数计算单个元素a[i,j]是否是马鞍点，主程序遍历二维数组，调用此函数。
+\item 避免过多循环嵌套，不易出错，简化程序设计。
+\item 掌握二维数组作为函数参数的定义, 调用方式。
+\end{enumerate}
+\end{note}
+
+\end{comment}

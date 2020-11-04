@@ -1,14 +1,15 @@
-%%%%%%%%%%%%%%%%%%%%%%%%%% lecture-14
-\begin{frame}[shrink]
-  \frametitle{lecture-14 主要内容}
-  \framesubtitle{用函数实现模块化程序设计(嵌套与递归)}
-  %\tableofcontents[hideallsubsections]
-  \tableofcontents
-\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%% lecture-13
+%\begin{frame}[shrink]
+%  \frametitle{lecture-13 主要内容}
+%  \framesubtitle{用函数实现模块化程序设计(嵌套与递归)}
+%  %\tableofcontents[hideallsubsections]
+%  \tableofcontents
+%\end{frame}
 
 \section{函数的嵌套调用}
 
 \begin{frame}[shrink,fragile]{函数的嵌套调用}
+\vspace{-0.3cm}
 \begin{columns}[T]
 \column{0.4\textwidth}
 \begin{lstlisting}
@@ -23,7 +24,7 @@ int main()
 \end{lstlisting}
 \includegraphics[scale=0.3]{main-a-b}
 \column{0.5\textwidth}
-\begin{lstlisting}
+\begin{lstlisting}[frame=leftline]
 int a()
 {
     int c; // 与main()中的c无关
@@ -60,7 +61,7 @@ int main() // 主函数
 }
 \end{lstlisting}
 \column{0.4\textwidth}
-\begin{lstlisting}
+\begin{lstlisting}[frame=leftline]
 // 定义函数
 int max2(int x,int y) // 形式参数
 {  
@@ -101,6 +102,7 @@ int f(int n)
 \end{frame}
 
 \begin{frame}[shrink,fragile]{递归调用过程分析(push)}
+\vspace{-0.2cm}
 \begin{lstlisting}
 // 递推公式: f(0)=0,f(1)=1, n>1: f(n)=n+f(n-1)
 int f(int n) 
@@ -160,6 +162,7 @@ int f(int n)
 \end{frame}
 
 \begin{frame}[shrink,fragile]{递归调用过程分析(pop)}
+\vspace{-0.2cm}
 \begin{lstlisting}
 // 递推公式: f(0)=0,f(1)=1, n>1: f(n)=n+f(n-1)
 int f(int n) 
@@ -235,6 +238,7 @@ age(n)=age(n-1)+2 & (n>1)
 \end{frame}
 
 \begin{frame}[shrink,fragile]{例: age(n), 递归调用过程分析(push)}
+\vspace{-0.2cm}
 \begin{lstlisting}
 // 递推公式: age(1)=10; n>1: age(n)=age(n-1)
 int age(int n) 
@@ -294,6 +298,7 @@ int age(int n)
 \end{frame}
 
 \begin{frame}[shrink,fragile]{例: age(n), 递归调用过程分析(pop)}
+\vspace{-0.2cm}
 \begin{lstlisting}
 // 递推公式: age(1)=10; n>1: age(n)=age(n-1)
 int age(int n) 
@@ -406,71 +411,6 @@ int main()
 \end{lstlisting}
 \end{frame}
 
-\begin{frame}[shrink,fragile]{求整数$a,b$的最大公约数, 欧几里得算法}
-\begin{columns}
-	\column{0.6\textwidth}
-	古希腊数学家欧几里德在其著作<<The Elements>>中最早描述了这种算法。\\
-	\textbf{定理：}两个整数的最大公约数等于其中较小的那个数和两数相除余数的最大公约数。
-	\column{0.3\textwidth}
-	\includegraphics[scale=0.3]{eou}
-\end{columns}
-~\\
-\textbf{伪代码分析}
-\begin{lstlisting}
-a,b的最大公约数，[则: a=mb+r, m=a/b; r=a%b]
-循环, b作被除数，分母是余数r, 
-[则: n=b/r; r=nb; a=mb+nb=(m+n)b; 如果一个整数能整除b, 必整除a]
-直到r=0, 本轮循环的a(上轮循环的b)就是最大公约数。 
-while(1)
-{
-  r = a%b; // 注意b为0时，不能计算余数，a就是最大公约数
-  if(r==0) { gcd=a; break; } // 本轮循环的a(上轮循环的b)就是最大公约数
-  a=b; b=r; // 准备下一轮迭代    
-}
-\end{lstlisting}
-\end{frame}
-
-\begin{frame}[shrink,fragile]{求整数$a,b$的最大公约数, 非递归实现}
-\begin{lstlisting}
-int a,b,r,t;
-scanf("%d%d",&a,&b); // 机试系统不要想当然给提示语句, 除非题目要求
-if(a<b) { t=a; a=b; b=t; } // 交换a,b,使a是较大者
-while(1)
-{
-   if(b==0) { t=a; break; } // 分母为0时, a就是最大公约数
-   r = a%b; 
-   if(r==0) {t=b; break;} // 本轮循环的a(上轮循环的b)就是最大公约数
-   a=b; b=r; // 准备下一轮迭代   
-}
-printf("%d\n",t);// 输出最大公约数
-\end{lstlisting}
-\end{frame}
-
-\begin{frame}[shrink,fragile]{求整数$a,b$的最大公约数, 递归实现}
-\begin{lstlisting}
-// 求a,b的最大公约数(约定a是分子,b是分母)
-int gcd(int a, int b) 
-{
-   int result; 
-   if(b==0) result=a; 
-   else result=gcd(b,a%b); // b是分子，a%b成为分母 
-   return result;
-}
-
-int main()                   
-{  
-  int a,b,t;
-  scanf("%d%d",&a,&b);
-  if(a<b) // 确保 a > b 
-  {
-    t=a; a=b; b=t;
-  }
-  printf("%d\n",gcd(a,b));
-  return 0;           
-}                   
-\end{lstlisting}
-\end{frame}
-
 \begin{frame}[shrink,fragile]{例: 数字处理}
 编写一个程序，从键盘输入一个非零整数n（0 < n <= 1000000000），对整数n进行如下处理：\\
 将整数的各位数字取出来相加，如果结果是一位数则输出该数，否则重复上述过程，直到得到的结果为一位数，并输出该结果。\\
@@ -501,7 +441,7 @@ int main()
 }
 \end{lstlisting}
 \column{0.5\textwidth}
-\begin{lstlisting}
+\begin{lstlisting}[frame=leftline]
 // 整数a的各位数字之和
 int bitsSum(int a)
 {
@@ -535,7 +475,7 @@ int main()
 } 
 \end{lstlisting}
 \column{0.6\textwidth}
-\begin{lstlisting}
+\begin{lstlisting}[frame=leftline]
 // 整数a的各位数字之和
 int bitsSum(int a)
 {
@@ -757,7 +697,7 @@ void move(char one,char two)
 }
 \end{lstlisting}
 \column{0.6\textwidth}
-\begin{lstlisting}
+\begin{lstlisting}[frame=leftline]
 //将n个盘从one移到three,借助two
 void hanoi(int n,char one,char two,char three)
 {
@@ -803,7 +743,7 @@ void hanoi(int n,char one,char two,char three)
 		\end{enumerate}
 	\end{itemize}
 \column{0.6\textwidth}
-\begin{lstlisting}
+\begin{lstlisting}[frame=leftline]
 //将n个盘从one移到three,借助two
 void hanoi(int n,char one,char two,char three)
 {
@@ -870,7 +810,7 @@ int main()
 }
 \end{lstlisting}
 \column{0.5\textwidth}
-\begin{lstlisting}
+\begin{lstlisting}[frame=leftline]
 // 各复合语句中的局部量, 不会相互影响。
 float f1(folat a) 
 {
@@ -913,7 +853,7 @@ int main()
 }
 \end{lstlisting}
 \column{0.5\textwidth}
-\begin{lstlisting}
+\begin{lstlisting}[frame=leftline]
 // 函数内部可以改变数组元素的值,但是对地址的改变不会影响实参的地址
 float f2(folat a[]) 
 {

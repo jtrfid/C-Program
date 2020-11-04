@@ -1,15 +1,16 @@
-%%%%%%%%%%%%%%%%%%%%%%%%%% lecture-13
-\begin{frame}[shrink]
-  \frametitle{lecture-13 主要内容}
-  \framesubtitle{用函数实现模块化程序设计}
-  %\tableofcontents[hideallsubsections]
-  \tableofcontents
-\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%% lecture-12
+%\begin{frame}[shrink]
+%  \frametitle{lecture-12 主要内容}
+%  \framesubtitle{用函数实现模块化程序设计}
+%  %\tableofcontents[hideallsubsections]
+%  \tableofcontents
+%\end{frame}
 
 \section{使用函数进行模块化程序设计}
 
 \begin{frame}[shrink,fragile]{为什么使用函数(1)}
 \tiny
+\vspace{-0.2cm}
 \begin{columns}[T]
 \column{0.4\textwidth}
 \begin{beamerboxesrounded}{函数调用}
@@ -50,6 +51,7 @@ double fabs(double a)
 
 \begin{frame}[shrink,fragile]{为什么使用函数(2)}
 \tiny
+\vspace{-0.2cm}
 \begin{columns}[T]
 \column{0.5\textwidth}
 \begin{beamerboxesrounded}{函数调用}
@@ -90,6 +92,7 @@ int strlen(char s[])
 \end{frame}
 
 \begin{frame}[shrink,fragile]{功能分解是简化程序设计的有效手段}
+\vspace{-0.3cm}
 \begin{columns}[T]
 \column{0.5\textwidth}
 \begin{beamerboxesrounded}{功能分解, 函数调用}
@@ -138,6 +141,7 @@ void output(double a)
 \subsection{函数三要素: 函数原型声明, 函数定义, 函数调用}
 
 \begin{frame}[shrink,fragile]{函数三要素: 函数原型声明, 函数定义, 函数调用}
+\vspace{-0.2cm}
 \begin{columns}[T]
 \column{0.5\textwidth}
 \begin{beamerboxesrounded}{函数原型声明, 函数调用}
@@ -208,9 +212,10 @@ c=(int)pow(a,b); // 将函数的返回值强制转换为int, 不会有警告信�
 \section{实参和形参间的数据传递(值传递和地址传递)}
 
 \begin{frame}[shrink,fragile]{实参和形参间的数据传递(值传递)}
+\vspace{-0.3cm}
 \begin{columns}[T]
 \column{0.5\textwidth}
-\begin{lstlisting}
+\begin{lstlisting}[frame=leftline]
 #include<stdio.h> // 库函数原型声明
 // 函数原型声明, 使编译器认识这个函数
 int max(int x,int y); 
@@ -259,7 +264,7 @@ int main()
 }
 \end{lstlisting}
 \column{0.4\textwidth}
-\begin{lstlisting}
+\begin{lstlisting}[frame=leftline]
 // 倒置数组x的内容, n是x的长度
 // 要求x是地址传递
 void inv(int x[],int n) 
@@ -280,6 +285,7 @@ void inv(int x[],int n)
 \end{frame}
 
 \begin{frame}[shrink,fragile]{值传递与地址传递的不同点}
+\vspace{-0.2cm}
 \begin{itemize}
 	\item 值传递, 对形参值的改变不会引起实参值的改变。
 	\item 地址传递虽然不能改变实参的地址，但是对地址指向内容的改变会引起实参指向内容的改变。
@@ -303,6 +309,7 @@ int main()
 \end{frame}
 
 \begin{frame}[shrink,fragile]{数组名作为函数参数的注意事项}
+\vspace{-0.2cm}
 \begin{columns}[T]
 \column{0.5\textwidth}
 %\begin{beamerboxesrounded}{一维数组}
@@ -368,6 +375,7 @@ PM2.5分级标准为:\\
 \end{frame}
 
 \begin{frame}[shrink,fragile]{例: PM2.5(非模块化设计)}
+\vspace{-0.2cm}
 \begin{lstlisting}
 #include <stdio.h>
 int main()
@@ -396,6 +404,7 @@ int main()
 \end{frame}
 
 \begin{frame}[shrink,fragile]{例: PM2.5(模块化设计, 主程序)}
+\vspace{-0.2cm}
 \begin{lstlisting}
 #include <stdio.h>
 float haze(int pm25[], int day[], int n, int m);// 函数声明
@@ -419,6 +428,7 @@ int main()
 \end{frame}
 
 \begin{frame}[shrink,fragile]{例: PM2.5(模块化设计, 雾霾统计信息)}
+\vspace{-0.2cm}
 \begin{lstlisting}
 // pm25[]: PM2.5值, day[]: 不同标准对应的统计天数; 
 // n是pm25数组的长度, m是数组day的长度, 返回PM2.5平均值

@@ -6,7 +6,7 @@
 %
 %%%%%%%%%%%%%%%%%%%%%%%% Springer-Verlag %%%%%%%%%%%%%%%%%%%%%%%%%%
 %\motto{Use the template \emph{chapter.tex} to style the various elements of your chapter content.}
-\chapter{第3次机试练习}
+\chapter{第3次机试练习: 继续分支与循环练习}
 
 \section{整数分析}
 给出一个整数n（0<=n<=100000000）。求出该整数的位数，以及组成该整数的所有数字中的最大数字和最小数字。
@@ -627,5 +627,9 @@ int main()
 
 \begin{note}[要点]
 	通过本题编程, 有助于训练自己的逻辑思维能力。
+	
+	本题的last变量的使用是要点，它记录上一次的跳跃情况。根据last与本次的跳跃情况的变量a的值，进行条件分类即可得解。
+	
+	连续跳至中心的次数用num变量记录, \lstinline$if(last=2 && (a==1 || a==0))$条件成立时, 结算递增奖励。
 \end{note}
 
