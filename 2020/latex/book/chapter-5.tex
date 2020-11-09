@@ -37,7 +37,7 @@
 int isPrime(int n)
 {
 	int i;
-	if(n<=2) return 0; // 最小素数是3 
+	if(n==2) return 0; // 最小素数是2 
 	for(i = 2; i <= sqrt(n); i++) 
 	{
 		if (n%i == 0) return 0; // n不是素数 
@@ -50,13 +50,16 @@ int main()
 	int j,k,num; // num大偶数 
 	int flag; // 标志变量：用于标识是否找到符合要求的素数对
 	scanf("%d",&num);
-	// 对于每个大偶数num，分解为两个素数 
+	// 大偶数num，分解为两个素数 
 	for(j = 3; j < num; j += 2)  //  找出第一个素数(最小的), for #1 
 	{
+		if(!isPrime(j)) continue; // 如果j不是素数, 继续下一轮迭代 
+		
 		flag = 0; // 初始化，未找出素数对 
 		for(k = j + 2; k < num; k += 2) // 找出第二个素数, for #2
 		{
-			if(isPrime(j) && isPrime(k) && j+k == num) 
+			// j是最小素数, k必然是最大素数
+			if(isPrime(k) && j+k == num) 
 			{
 				printf("%d %d\n",j,k);
 				flag = 1; // 找出素数对, 如果没有此设置, 将会输出多组 
@@ -69,28 +72,54 @@ int main()
 }
 
 // 不用标志变量版本 
-int main1()
+int main2()
 {
 	int j,k,num; // num大偶数 
 	scanf("%d",&num);
-	// 对于每个大偶数num，分解为两个素数 
+	// 大偶数num，分解为两个素数 
 	for(j = 3; j < num; j += 2)  //  找出第一个素数(最小的)  for #1 
 	{
+		if(!isPrime(j)) continue; // 如果j不是素数, 继续下一轮迭代 
+		
 		for(k = j + 2; k < num; k += 2) //  找出第二个素数 for #2
 		{
-			if(isPrime(j) && isPrime(k) && j+k == num) 
+			// j是最小素数, k必然是最大素数
+			if(isPrime(k) && j+k == num) 
 			{
 				printf("%d %d\n",j,k);
-				return 0; // 找出素数对，结束主函数 
+				return 0; // 找出素数对，结束主函数. 不结束, 将会输出多组  
 			}
 		}
 	}
-return 0;
+	return 0;
+}
+
+// 优化，根据题意找出一组：最小素数+最大素数=偶数 
+int main3()
+{
+	int j,k,num; // num大偶数 
+	scanf("%d",&num);
+	// 对于大偶数num，分解为两个素数 
+	for(j = 3; j < num; j += 2)  //  找出第一个素数(最小的)  for #1 
+	{
+		if(!isPrime(j)) continue; // 如果j不是素数, 继续下一轮迭代 
+		
+		for(k = num-1; k>=2; k -= 2) //  找出第二个素数(最大的) for #2
+		{
+			// j是最小素数, 判断k是否是最大素数并且二者之和=num 
+			if(isPrime(k) && j+k == num) 
+			{
+				printf("%d %d\n",j,k);
+				return 0; // 找出素数对，结束主函数. 不结束, 将会输出多组 
+			}
+		}
+	}
+	return 0;
 }
 \end{lstlisting}
 
 \begin{note}[要点]
-	再次体会标志变量的用法及内层循环前的初始化。仔细审题，本题要求一组输出。
+	再次体会标志变量的用法及内层循环前的初始化。仔细审题，本题要求一组输出: 最小素数+最大素数=偶数
 \end{note}
 
 \section{回文数}
@@ -127,15 +156,15 @@ no
 
 \begin{lstlisting}
 #include <stdio.h>
+#include <string.h>
 
-// 思路:  求该整数的反序组成的整数，如整数1234, 其反序整数即为4321, 如果二者相等即为回文数。 
-
+// 思路1:  求该整数的反序组成的整数，如整数1234, 其反序整数即为4321, 如果二者相等即为回文数 
 // 判断num是否是回文数，是：返回1；不是，返回0
 // 指针参数*sum，返回这个数的各位之和  
-int isPalindromic(int num,int *sum)
+int isPalindromic1(int num,int *sum)
 {
 	int reverse = 0, tmp = num;
-	*sum = 0; 
+	*sum = 0; // 初始换指针内容 
 	while(tmp)
 	{
 		reverse = reverse*10 + tmp%10;
@@ -146,21 +175,112 @@ int isPalindromic(int num,int *sum)
 	else return 0;	
 }
 
-int main()
+// 思路2:  构造数组reverse, 反序存储该整数各位数，按照数组下标，前后数组元素相等则为回文数 
+// 判断num是否是回文数，是：返回1；不是，返回0
+// 指针参数*sum，返回这个数的各位之和  
+int isPalindromic2(int num,int *sum)
+{
+	int reverse[9], len=0, i=0; // 依题意数组最大长度为9，最多存储9位数。实际长度用len变量表示 
+	
+	*sum = 0; // 初始换指针内容 
+	//构造数组reverse, 反序存储该整数各位数
+	while(num)
+	{
+		reverse[i]=num%10;  
+		*sum += num%10;   // 累加各位数字 
+		num /= 10;
+		len++; // 计算数组实际长度 
+		i++; 
+	}
+	//按照数组下标，前后数组元素相等则为回文数
+	for(i=0; i<len/2;i++)
+	{
+		if(reverse[i] != reverse[len-i-1]) return 0;  // 不是回文数 
+	}
+	return 1;	// 至此，必然是回文数 
+}
+
+// 测试方法1和2的主程序
+int main12()
 {
 	int i,num,sum;
 	
 	scanf("%d",&num); 
-	if(isPalindromic(num,&sum)) printf("%d\n",sum);
+	//if(isPalindromic1(num,&sum)) printf("%d\n",sum);
+	if(isPalindromic2(num,&sum)) printf("%d\n",sum);
 	else printf("no\n");
 	return 0;
 } 
+
+// 思路3:  按照字符串处理输入的整数，前后数组元素相等则为回文数 
+int main3()
+{
+	char s[10]; // 留出'\0', 最多存储9位数。实际长度用len变量表示
+	int sum=0, len=0,i; 
+	
+	// 以字符串形式接收输入的整数, 末尾自动追加'\0'  
+	gets(s);
+	
+	// 计算len, 或者len=strlen(s), 同时计算各位数字之和 
+	for(len=0;s[i]!='\0';) 
+	{
+		len++;
+		sum=sum+s[i]-'0'; // 计算各位数字之和
+		i++;  
+	}
+	
+	//按照数组下标，前后数组元素相等则为回文数
+	for(i=0; i<len/2;i++)
+	{
+		if(s[i] != s[len-i-1]) // 不是回文数 
+		{
+			printf("no\n");
+			return 0;  // 主函数结束 
+		} 
+	}
+	// 至此，必然是回文数 
+	printf("%d\n",sum);
+	return 0;
+}
+
+// 思路4:  按照字符串处理输入的整数，前后数组元素相等则为回文数。
+// 使用指针操作 
+int main()
+{
+	char s[10]; // 留出'\0', 最多存储9位数。实际长度用len变量表示
+	int sum=0; 
+	char *p1=s,*p2=s; // 用于正序和反序遍历s数组，初始指向第一个元素 
+	
+	// 以字符串形式接收输入的整数，末尾自动追加'\0' 
+	gets(s);
+	
+	// 用p2遍历字符串,同时计算各位数字之和 
+	for(;*p2!='\0';p2++) 
+	{
+		sum=sum+(*p2)-'0'; // 计算各位数字之和
+	}
+	// 至此，p2指向最后一个元素'\0', 我们使它指向最后一个有效元素： 
+	p2--; 
+	
+	//按照数组下标，前后数组元素相等则为回文数
+	for(;p1<p2;p1++,p2--)
+	{
+		if(*p1 != *p2) // 不是回文数 
+		{
+			printf("no\n");
+			return 0;  // 主函数结束 
+		} 
+	}
+	// 至此，必然是回文数 
+	printf("%d\n",sum);
+	return 0;
+}
 \end{lstlisting}
 
 \begin{note}[要点]
 	\begin{enumerate}
 		\item 掌握函数的地址传递方法。
-		\item 如果是字符串中找回文子串, 如何改写此题? 使用两个指针变量p1, p2, 其中p1指向待查找子串的首字母, 另一个指向末尾, \lstinline|p1++, p2--|; 找字符串回文子串是一个不错的练习。
+		\item 使用两个指针变量p1, p2, 其中p1指向待查找子串的首字母, 另一个指向末尾, \lstinline|p1++, p2--|; 是判断字符串是否是回文的有效技巧。
 	\end{enumerate}
 \end{note}
 

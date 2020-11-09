@@ -20,10 +20,11 @@
 #include <stdio.h>
 #include <math.h>
 
+// 判断参数n是否素数, 如果是返回1, 否则返回0 
 int isPrime(int n)
 {
 	int i;
-	if(n<=2) return 0; // 最小素数是3 
+	if(n ==2) return 0; // 最小素数是2 
 	//for(i = 2; i <= sqrt((double)n); i++) // vs2013编译器要求数学函数严格按原型解释
 	for(i = 2; i <= sqrt(n); i++)
 	{
@@ -32,23 +33,25 @@ int isPrime(int n)
     return 1; // n是素数 
 }
 
-int main1()
+int main()
 {
 	int j,k,num; // num大偶数 
 	int flag; // 标志变量：用于标识是否找到符合要求的素数对
 	scanf("%d",&num);
-	// 对于每个大偶数num，分解为两个素数 
+	// 对于大偶数num，分解为两个素数 
     for(j = 3; j < num; j += 2)  //  找出第一个素数(最小的) for #1 
     {
-      flag = 0; // 初始化，未找出素数对 
+      if(!isPrime(j)) continue; // 如果j不是素数, 继续下一轮迭代 
+      
+	  flag = 0; // 初始化，未找出素数对 
 	  for(k = j + 2; k < num; k += 2) // //  找出第二个素数 for #2
       {
-      	if(isPrime(j) && isPrime(k) && j+k == num) 
-		  {
-		  	  printf("%d %d\n",j,k);
-		  	  flag = 1; // 找出素数对, 如果没有此设置, 将会输出多组 
-			  break; // break for #2
-		  }
+      	if(isPrime(k) && j+k == num) // j是最小素数, k必然是最大素数
+		{
+		  	printf("%d %d\n",j,k);
+		  	flag = 1; // 找出素数对, 如果没有此设置, 将会输出多组, 例如num=2020时会有多组素数 
+			break; // break for #2
+		}
 	  }
 	  if(flag) break; // break for #1 
 	}
@@ -56,20 +59,45 @@ int main1()
 }
 
 // 不用标志变量版本 
-int main()
+int main2()
 {
 	int j,k,num; // num大偶数 
 	scanf("%d",&num);
-	// 对于每个大偶数num，分解为两个素数 
+	// 对于大偶数num，分解为两个素数 
     for(j = 3; j < num; j += 2)  //  找出第一个素数(最小的)  for #1 
     {
+	  if(!isPrime(j)) continue; // 如果j不是素数, 继续下一轮迭代 
+	  
 	  for(k = j + 2; k < num; k += 2) //  找出第二个素数 for #2
       {
-      	if(isPrime(j) && isPrime(k) && j+k == num) 
-		  {
-		  	  printf("%d %d\n",j,k);
-		  	  return 0; // 找出素数对，结束主函数 
-		  }
+      	if(isPrime(k) && j+k == num) // j是最小素数, k必然是最大素数 
+		{
+		  	printf("%d %d\n",j,k);
+		  	return 0; // 找出素数对，结束主函数。 如果不结束, 将会输出多组 
+		}
+	  }
+	}
+	return 0;
+}
+
+// 优化，根据题意找出一组：最小素数+最大素数=偶数 
+int main3()
+{
+	int j,k,num; // num大偶数 
+	scanf("%d",&num);
+	// 对于大偶数num，分解为两个素数 
+    for(j = 3; j < num; j += 2)  //  找出第一个素数(最小的)  for #1 
+    {
+	  if(!isPrime(j)) continue; // 如果j不是素数, 继续下一轮迭代 
+	  
+	  for(k = num-1; k>=2; k -= 2) //  找出第二个素数(最大的) for #2
+      {
+      	// j是最小素数, 判断k是否是最大素数并且二者之和=num 
+      	if(isPrime(k) && j+k == num) 
+		{
+		  	printf("%d %d\n",j,k);
+		  	return 0; // 找出素数对，结束主函数。如果不结束, 将会输出多组 
+		}
 	  }
 	}
 	return 0;
