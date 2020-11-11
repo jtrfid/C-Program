@@ -203,9 +203,10 @@ void output(double a) // 无返回值函数
 int a=2,b=3,c;
 // pow函数原型: double pow(double x,double y);
 // 编译器自动把a,b"隐式"转换为double
-// 计算a^b的结果是doublele类型, 赋值语句隐式转换为int, 但是会引起警告信息
+// 计算a^b的结果是double类型, 赋值语句隐式转换为int, 但是会引起警告信息
 c=pow(a,b);
 c=(int)pow(a,b); // 将函数的返回值强制转换为int, 不会有警告信息
+c=(int)pow((double)a,(double)b); // 例如vs2019等编译器要求显示强制转换
 \end{lstlisting}
 \end{frame}
 
@@ -214,8 +215,8 @@ c=(int)pow(a,b); // 将函数的返回值强制转换为int, 不会有警告信�
 \begin{frame}[shrink,fragile]{实参和形参间的数据传递(值传递)}
 \vspace{-0.3cm}
 \begin{columns}[T]
-\column{0.5\textwidth}
-\begin{lstlisting}[frame=leftline]
+\column{0.55\textwidth}
+\begin{lstlisting}
 #include<stdio.h> // 库函数原型声明
 // 函数原型声明, 使编译器认识这个函数
 int max(int x,int y); 
@@ -230,8 +231,8 @@ int main() // 主函数
    return 0; 
 }
 \end{lstlisting}
-\column{0.5\textwidth}
-\begin{lstlisting}
+\column{0.45\textwidth}
+\begin{lstlisting}[frame=leftline]
 // 定义函数求形参x,y中的较大者并返回给调用者
 int max(int x,int y) // 形式参数
 {  
@@ -332,7 +333,7 @@ fun(x,5);//调用时仅用数组名传递x的地址
 %\end{beamerboxesrounded}
 \column{0.5\textwidth}
 %\begin{beamerboxesrounded}{二维数组}
-\begin{lstlisting}
+\begin{lstlisting}[frame=leftline]
 // 函数定义时省略第一维大小,第二维不能省略
 void fun(int a[][N],int m,int n)
 {
@@ -480,26 +481,33 @@ int main()
 \end{frame}
 
 \begin{frame}[shrink,fragile]{例: 数字排序(子函数: 计算整数的各位之和, 输出)}
+\begin{columns}[T]
+	\column{0.4\textwidth}
 \begin{lstlisting}
 // 计算整数a的各位之和
 int bitsSum(int a)
 {
-  int sum=0;
-  while(a)
-  {
-    sum += a%10;
-    a /= 10;
-  }
-  return sum;
+	int sum=0;
+	while(a)
+	{
+		sum += a%10;
+		a /= 10;
+	}
+	return sum;
 }
+\end{lstlisting}
+\column{0.4\textwidth}
+\begin{lstlisting}[frame=leftline]
 // 输出
 void output(int a[], int n)
 {
-    int i;
-    for(i=0;i<n;i++) printf("%d ",a[i]);
-    printf("\n");
+	int i;
+	for(i=0;i<n;i++) 
+		printf("%d ",a[i]);
+	printf("\n");
 }
 \end{lstlisting}
+\end{columns}
 \end{frame}
 
 \begin{frame}[shrink,fragile]{例: 数字排序(排序子函数---方法1: 冒泡排序)}
