@@ -9,9 +9,10 @@
 \section{指针就是指向变量存储单元(首)地址的变量}
 
 \begin{frame}[shrink,fragile]{指针就是指向变量存储单元(首)地址的变量}
-
+\vspace{-0.2cm}
 \begin{columns}[T]
 \column{0.7\textwidth}
+\small
 \begin{itemize}
 \item 在程序中定义的各个变量, 在对程序进行编译时，系统就会给每个变量分配一个存储单元。
 \item 基本存储单元是一个字节(byte)。
@@ -28,6 +29,7 @@ printf("%d,%d,%d,%d\n",sizeof(char),sizeof(int),sizeof(float),sizeof(double));
 // 1,4,4,8
 \end{lstlisting}
 \column{0.3\textwidth}
+\small
 \begin{tabular}{|c|c|c|}
 	\hline 
 	\textbf{变量名} & \textbf{地址} & \textbf{内容} \\ 
@@ -85,6 +87,7 @@ double *pd; // 定义指向双精度浮点类型变量的指针变量pd
 \end{frame}
 
 \begin{frame}[shrink,fragile]{设置指针变量指向的目标变量}
+\vspace{-0.2cm}
 \begin{columns}[T]
 \column{0.7\textwidth}
 \textbf{\textcolor{blue}{地址运算符\&, 可获得变量在内存中的(首)地址。}}
@@ -111,6 +114,7 @@ pa=p; // 或
 pa=&b;
 \end{lstlisting}
 \column{0.3\textwidth}
+\small
 \begin{tabular}{|c|c|c|c|}
 	\hline 
 	\textbf{变量名} & \textbf{指针} &\textbf{地址} & \textbf{内容} \\ 
@@ -174,6 +178,7 @@ d=20.8;
 printf("%c,%d,%f,%lf\n",c,a,f,d);
 \end{lstlisting}
 \column{0.3\textwidth}
+\small
 \begin{tabular}{|c|c|c|}
 	\hline 
 	\textbf{变量名} & \textbf{地址} & \textbf{内容} \\ 
@@ -236,6 +241,7 @@ double d, *pd=&d; //pd是指向char类型变量的指针变量
 printf("%c,%d,%f,%lf\n",*pc,*pa,*pf,*pd);
 \end{lstlisting}
 \column{0.3\textwidth}
+\small
 \begin{tabular}{|c|c|c|c|}
 	\hline 
 	\textbf{变量名} & \textbf{指针} &\textbf{地址} & \textbf{内容} \\ 
@@ -374,6 +380,7 @@ swap函数: p1,p2指向内容交换前\\
 \end{frame}
 
 \begin{frame}[shrink,fragile]{\small 指针变量作为函数参数(地址传递, 形参和实参指向同一存储单元)}
+\textbf{\textcolor{blue}{形参实参地址相同。函数内对指针目标变量的改变, 就是改变实参的内容。}}
 \begin{columns}[T]
 \column{0.6\textwidth}
 \begin{lstlisting}
@@ -421,9 +428,7 @@ swap函数: p1,p2指向内容交换后\\
 	p2 $\to$ & \textcolor{blue}{4000} & \multirow{2}{*}{$20\to 10$} \\ \cline{2-2}  
 	& 4001 &  \\ 
 	\hline 
-\end{tabular}\\
-~\\
-\textbf{\textcolor{blue}{形参实参地址相同。函数内对指针目标变量的改变, 就是改变实参的内容。}}
+\end{tabular}
 \end{columns}
 \medskip
 \end{frame}
@@ -484,15 +489,17 @@ swap函数: 形参是局部变量, \\
 \end{frame}
 
 \begin{frame}[shrink,fragile]{地址传递与值传递小结}
+\vspace{-0.2cm}
 \begin{itemize}
 	\item \textbf{\textcolor{blue}{地址传递: }}指针变量作为函数参数, 形参和实参指向同一存储单元。\\
 	函数内对形参指向内容的改变\textbf{会}引起实参指向内容的改变。
 	\item \textbf{\textcolor{blue}{值传递: }}普通变量作为函数参数, 形参和实参处于不同存储单元。对形参的改变\textbf{不会}引起实参的改变。
 \end{itemize}
+\vspace{-0.5cm}
 \begin{columns}[T]
-\column{0.4\textwidth}
+\column{0.5\textwidth}
 \begin{lstlisting}
-// 地址传递
+//地址传递(p1,p2指向的内容交换,实参变化)
 void swap(int *p1, int *p2)
 {
   int tmp;
@@ -501,9 +508,9 @@ void swap(int *p1, int *p2)
   *p2=tmp;
 }
 \end{lstlisting}
-\column{0.4\textwidth}
-\begin{lstlisting}
-// 值传递
+\column{0.5\textwidth}
+\begin{lstlisting}[frame=leftline]
+//值传递(不能交换p1,p2的值, 实参不变)
 void swap(int p1, int p2)
 {
   int tmp;
@@ -531,7 +538,7 @@ void swap(int *p1, int *p2)
 }
 \end{lstlisting}
 \column{0.5\textwidth}
-\begin{lstlisting}
+\begin{lstlisting}[frame=leftline]
 // tmp使用前，要有指向
 void swap(int *p1, int *p2)
 {
@@ -549,23 +556,23 @@ void swap(int *p1, int *p2)
 \begin{columns}[T]
 \column{0.5\textwidth}
 \begin{lstlisting}
-int fun(int *p1, int *p2, int *p3);
+int fun(float *p1, float *p2, int *p3);
 int main()
 {
-  float a=10,b=20,c=30;
+  float a=10,b=20; int c=30;
   int r=fun(&a,&b,&c);
-  printf("%d,%f,%f,%f\n",r,a,b,c);
-  // 4,1,2,3
+  printf("%d,%f,%f,%d\n",r,a,b,c);
+  // 4,1.0,2.0,3
   return 0;
 }
 \end{lstlisting}
 \column{0.5\textwidth}
-\begin{lstlisting}
+\begin{lstlisting}[frame=leftline]
 //对指针指向内容的改变, "返回"给调用者
-int fun(int *p1, int *p2, int *p3)
+int fun(float *p1, float *p2, int *p3)
 {
-  *p1=1;
-  *p2=2;
+  *p1=1.0;
+  *p2=2.0;
   *p3=3;
   return 4;
 }
@@ -575,8 +582,9 @@ int fun(int *p1, int *p2, int *p3)
 \end{frame}
 
 \begin{frame}[shrink,fragile]{不能混用不同类型的指针变量}
-\begin{columns}
-\column{0.45\textwidth}
+不同数据类型存错空间长度不同, 因此, 不能混用。
+\begin{columns}[T]
+\column{0.4\textwidth}
 \begin{lstlisting}
 int a=10, *p1=&a;
 float b=20,*p2=&b;
@@ -584,10 +592,7 @@ p1=&b; // 错误,虽然编译器不报错
 p2=&a; // 错误,虽然编译器不报错
 p2=p1; // 错误,虽然编译器不报错
 \end{lstlisting}
-\column{0.45\textwidth}
-不同数据类型存错空间长度不同,\\
-因此, 不能混用。\\
-\medskip
+\column{0.5\textwidth}
 \begin{tabular}{|c|c|c|}
 	\hline 
 	\scriptsize{不同类型的指针变量} & \textbf{地址} & \textbf{内容} \\ 
@@ -641,6 +646,7 @@ p2=p1; // 错误,虽然编译器不报错
 \end{frame}
 
 \begin{frame}[shrink,fragile]{用数组名作函数参数(地址传递,数组名是数组首地址)}
+\vspace{-0.5cm}
 \begin{columns}[T]
 \column{0.6\textwidth}
 \begin{lstlisting}
@@ -657,7 +663,7 @@ void fun(int a[],int n)
 }
 \end{lstlisting}
 \column{0.4\textwidth}
-\begin{lstlisting}
+\begin{lstlisting}[frame=leftline]
 // 指针与数组通用
 void fun(int *a,int n)
 {
@@ -669,6 +675,7 @@ void fun(int *a,int n)
 }
 \end{lstlisting}
 \end{columns}
+\vspace{-0.2cm}
 \begin{block}{注}
 	\small
 	用数组名作函数参数时, 编译器会把数组名自动转化为指针变量处理。函数内既可以按指针变量间接访问数组元素，也可以按数组常规访问数组元素。
@@ -676,6 +683,7 @@ void fun(int *a,int n)
 \end{frame}
 
 \begin{frame}[shrink,fragile]{例: 将数组a中n个整数按相反顺序存放. }
+\vspace{-0.5cm}
 \begin{columns}[T]
 \column{0.5\textwidth}
 \begin{lstlisting}
@@ -693,7 +701,7 @@ int main()
 }
 \end{lstlisting}
 \column{0.5\textwidth}
-\begin{lstlisting}
+\begin{lstlisting}[frame=leftline]
 // n是数组长度
 void inv(int *x,int n)
 {
@@ -736,6 +744,7 @@ s3="1234"; // 正确, 指针是变量
 \end{frame}
 
 \begin{frame}[shrink,fragile]{例: 实现自己的字符串拷贝函数}
+\vspace{-0.5cm}
 \begin{columns}[T]
 \column{0.5\textwidth}
 \begin{lstlisting}
@@ -760,7 +769,7 @@ void copy(char to[], char from[])
 }
 \end{lstlisting}
 \column{0.5\textwidth}
-\begin{lstlisting}
+\begin{lstlisting}[frame=leftline]
 // 指针版本
 void copy(char *to, char *from)
 {
@@ -800,8 +809,9 @@ for(i=0;i<n;i++) // 输出
 \end{frame}
 
 \begin{frame}[shrink,fragile]{例: 选择法排序字符串数组}
+\vspace{-0.5cm}
 \begin{columns}[T]
-\column{0.5\textwidth}
+\column{0.45\textwidth}
 \begin{lstlisting}
 #define N 100
 void sort(char name[][81],int n);
@@ -821,8 +831,8 @@ int main()
   }
 }
 \end{lstlisting}
-\column{0.5\textwidth}
-\begin{lstlisting}
+\column{0.55\textwidth}
+\begin{lstlisting}[frame=leftline]
 // 用选择法排序(从小到大)
 void sort(char name[][81],int n)
 {
@@ -832,8 +842,7 @@ void sort(char name[][81],int n)
   {
     k=i;// 未排序部分最小的字符串
     for(j=i+1;j<n;j++)
-      if(strcmp(name[k],name[j])>0) 
-         k=j;
+      if(strcmp(name[k],name[j])>0) k=j;
     if(k!=i) // 交换字符串
     {
        strcpy(tmp,name[i]); 
@@ -844,15 +853,61 @@ void sort(char name[][81],int n)
 }
 \end{lstlisting}
 \end{columns}
-\medskip
+~\\
 \end{frame}
 
-\begin{frame}[shrink]
-\frametitle{lecture-15 主要内容}
-\framesubtitle{善于利用指针}
-%\tableofcontents[hideallsubsections]
-\tableofcontents
+\begin{frame}[shrink,fragile]{例: 输入二进制字符串, 求其表示的整数值, 简单实现}
+e.g., 输入: 10101, 输出: 21; \quad 输入101, 输出:  5
+\begin{lstlisting}
+#include<stdio.h>
+int main()
+{
+	char ch;
+	int sum=0;
+	while(1)
+	{
+		ch=getchar(); //或 scanf("%c",&ch);
+		if(ch!='0' && ch !='1') break; // 遇非0,1字符结束
+		// if(ch=='\n') break; // 遇回车结束, 等效
+		sum=sum*2+ch-'0'; 
+	} 
+	printf("%d\n",sum);
+	return 0;
+}
+\end{lstlisting}
 \end{frame}
+
+\begin{frame}[fragile]{例: 输入二进制字符串, 求其表示的整数值, 字符串数组实现}
+\begin{lstlisting}
+#define N 31 // 估计最大数组大小, 预留'\0'
+char ch[N];
+int sum=0,i;
+gets(ch);
+for(i=0;ch[i]!='\0';i++)
+{
+	sum=sum*2+ch[i]-'0';
+} 
+printf("%d\n",sum);
+\end{lstlisting}
+\end{frame}
+
+\begin{frame}[fragile]{输入二进制字符串, 求其表示的整数值, 指针实现}
+\begin{lstlisting}
+#define N 31 // 估计最大数组大小, 预留'\0'
+char ch[N], *p=ch;
+int sum=0;
+gets(ch);
+while((*p)!='\0')
+{
+	sum=sum*2+ (*p - '0');
+	p++; // 指向下一个字符
+} 
+printf("%d\n",sum);
+\end{lstlisting}
+\end{frame}
+
+\note{讲解回文数(第5次上机练习题)}
+
 
 
 

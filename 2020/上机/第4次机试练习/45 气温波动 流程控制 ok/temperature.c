@@ -22,17 +22,40 @@
 #include <stdio.h>
 #include <math.h>
 
-int main()
+// 不使用数组存储气温值 
+int main1()
 {
-	int i, n, last ,temperature, undulation = 0;
+	int i, n, last ,temperature, undulation = 0; // last：前一天的气温值, temperature: 当天的气温值,  undulation波动值 
 	scanf("%d",&n);
 	for(i = 0; i < n; i++)
 	{
 		scanf("%d",&temperature);
-		if (i != 0 && fabs(temperature - last) > undulation) 
+		if (i != 0 && fabs(temperature - last) > undulation) // 注意i==0时, last无值 
 			undulation = fabs(temperature - last);
 		last = temperature;
 	} 
+	printf("%d\n",undulation); 
+	return 0;
+} 
+
+// 使用数组存储最多30个气温值 
+int main()
+{
+	int i, n,temperature[30], undulation = 0; // temperature数组: 气温值,  undulation波动值 
+	scanf("%d",&n);
+	for(i = 0; i < n; i++)
+	{
+		scanf("%d",&temperature[i]);
+	} 
+	
+	undulation= fabs(temperature[0]-temperature[1]); // 初始波动值
+	 
+	for(i = 2; i < n-1; i++) // 注意数组边界，保证数组不越界 
+	{
+		if (fabs(temperature[i] - temperature[i+1]) > undulation) 
+			undulation = fabs(temperature[i] - temperature[i+1]);
+	} 
+	
 	printf("%d\n",undulation); 
 	return 0;
 } 

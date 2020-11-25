@@ -40,6 +40,7 @@ x和y均不大于10000000, op可以是+, -, *, /, \%中的任意一种，分表�
 \end{frame}
 
 \begin{frame}[shrink,fragile]{例: 表达式求值---解题思路}
+\vspace{-0.5cm}
 \begin{itemize}
 	\item \lstinline|gets|函数读取字符串，遍历字符串，根据op字符是"非数字字符"的特点，判断表达式的三种形式。\\
 	\item 设计各个子函数, 进行模块化程序设计。
@@ -80,7 +81,7 @@ int strToInt(char *s) //等效: int toInt(char s[])
   int result=0;
   while(*s) //等效 *s != '\0'
   {
-     result = result*10 + (*s-'0');
+     result = result*10 + (*s-'0'); // 数字位整数=字符-'0'
      s++; //移至下一字符 
   }
   return result;
@@ -90,6 +91,7 @@ int strToInt(char *s) //等效: int toInt(char s[])
 \end{frame}
 
 \begin{frame}[shrink,fragile]{例: 表达式求值---提取子串函数}
+\vspace{-0.5cm}
 \begin{lstlisting}
 /******************************************************
  提取子串函数, 忽略s中空格前缀，复制s中的字符串到subs中，遇空格或'\0'结束
@@ -151,6 +153,7 @@ int isOp(char *s, char *op)
 \end{frame}
 
 \begin{frame}[shrink,fragile]{例: 表达式求值---测试主函数}
+\vspace{-0.3cm}
 \begin{lstlisting}
 int main1() // 测试主函数, 使能改为main(), 原main()改名
 {
@@ -175,6 +178,7 @@ int main1() // 测试主函数, 使能改为main(), 原main()改名
 \end{frame}
 
 \begin{frame}[shrink,fragile]{例: 表达式求值---主程序}
+\vspace{-0.3cm}
 \begin{lstlisting}
 #include <stdio.h>
 // 自定义函数在调用之前定义，略去函数声明。 
@@ -204,6 +208,7 @@ int main()
 \end{frame}
 
 \begin{frame}[shrink,fragile]{例: 表达式求值---主程序(另解)}
+\vspace{-0.3cm}
 \begin{lstlisting}
 #include <stdio.h>
 // 自定义函数在调用之前定义，略去函数声明。
@@ -231,7 +236,8 @@ int main()
 \end{lstlisting}
 \end{frame}
 
-\section{期中考试总结}
+
+\begin{comment}
 
 \begin{frame}[shrink,fragile]{期中考试总结}
 \begin{enumerate}
@@ -255,105 +261,4 @@ int main()
 	\item 本班题目简单, 其他班有类似机试练习中选QQ号题。期末考试会复杂些。
 \end{enumerate}
 \end{frame}
-
-\begin{frame}[shrink,fragile]{第3题---二进制字符转换, 简单实现}
-10101d $\implies$ 21\qquad 101,1  $\implies$ 5
-\begin{lstlisting}
-#include<stdio.h>
-int main()
-{
-   char ch;
-   int sum=0;
-   while(1)
-   {
-       ch=getchar(); //或 scanf("%c",&ch);
-       if(ch!='0' && ch !='1') break;
-       sum=sum*2+ch-'0';
-   } 
-   printf("%d\n",sum);
-   return 0;
-}
-\end{lstlisting}
-\end{frame}
-
-\begin{frame}[fragile]{第3题---二进制字符转换, 字符串数组实现}
-\begin{lstlisting}
-#define N 31 // 估计最大数组大小, 预留'\0'
-char ch[N];
-int sum=0,i;
-gets(ch);
-for(i=0;;i++)
-{
-   if(ch[i]!='0' && ch[i] !='1') break;
-   sum=sum*2+ch[i]-'0';
-} 
-printf("%d\n",sum);
-\end{lstlisting}
-\end{frame}
-
-\begin{frame}[fragile]{第3题---二进制字符转换, 指针实现}
-\begin{lstlisting}
-#define N 31 // 估计最大数组大小, 预留'\0'
-char ch[N], *p=ch;
-int sum=0;
-gets(ch);
-for(;;)
-{
-  if(*p != '0' && *p !='1') break;
-  sum=sum*2+ (*p - '0');
-  p++; // 指向下一个字符
-} 
-printf("%d\n",sum);
-\end{lstlisting}
-\end{frame}
-
-\section{整数pow函数问题}
-
-\begin{frame}[shrink,fragile]{整数pow函数问题}
-\lstinline|double pow(double x,double y);| 数学库函数真对双精度浮点数设计。用它计算整数$x^y$会有复杂的精度问题, 因此整数运算尽量不要用此函数。 
-\begin{lstlisting}
-#include<stdio.h>
-#include<math.h>   // 数学库函数
-int main()
-{
-  int x=2,y=3;
-  
-  // 有些编译器会输出99,124, 因为转换前是99.999, 124.999 
-  printf("%d,%d\n",(int)pow(10,x),(int)pow(5,y)); 
-  
-  // 奇怪的是下列调用输出结果与上面有可能会输出不一致的结果 
-  printf("%d,%d\n",(int)pow(10,2),(int)pow(5,3)); 
-
-  return 0;
-}
-\end{lstlisting}
-\end{frame}
-
-\begin{frame}[shrink,fragile]{自定义整数pow函数}
-\begin{lstlisting}
-#include<stdio.h>
-// 自定义整数pow函数
-int intpow(int x, int y)
-{
-  int i,p=1;
-  if(x==0) return 0; 
-  for(i=0;i<y;i++) p=p*x;
-  return p;
-} 
-
-int main()
-{
-  int x=2,y=3;
-
-  printf("%d,%d\n",intpow(10,x),intpow(5,y)); // 100,125
-  printf("%d,%d\n",intpow(10,2),intpow(5,3)); // 100,125
-  printf("%d,%d\n",intpow(0,2),intpow(0,0)); // 0,1 
-  
-  return 0;
-}
-\end{lstlisting}
-\end{frame}
-
-
-
-
+\end{comment}
