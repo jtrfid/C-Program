@@ -14,10 +14,12 @@
 %\end{itemize}
 %\end{frame}
 
-\begin{frame} {训练编程逻辑思维方式}
+\begin{frame}{进一步训练程序设计逻辑思维能力}
 \begin{itemize}
-	\item 领会结构化(模块化)编程思想。 
+	\setlength{\itemsep}{.5cm}
+	\item 结构体是一种``高内聚, 低耦合''的数据结构。 
 	\item 用结构体管理相互关联的数据, 使其成为结构化的整体数据, 便于统一处理。 
+	\item 领会结构化(模块化)编程思想。
 	\item 大问题分解为小问题, 设计函数解决小问题, 各个子函数彼此之间相互独立(便于调试, 不易出错)，又可通过参数和返回值传递数据。
 	\item 主程序调用各个子函数, 解决``大"问题。
 \end{itemize}
@@ -62,6 +64,7 @@ struct Student // 定义结构体数据类型struct Student
 \end{frame}
 
 \begin{frame}[shrink,fragile]{\small 嵌套定义结构体: 结构体的成员, 也可以是另外一个结构体变量。}
+\vspace{-0.4cm}
 \begin{lstlisting}
 struct Date // 定义结构体类型 struct Date 
 {
@@ -71,10 +74,7 @@ struct Date // 定义结构体类型 struct Date
 }; 
 struct Student // 定义结构体类型 struct Student
 { 
-   int num;
-   char name[20];
-   char sex;
-   int age;
+   int num;  char name[20];  char sex;  int age;
    struct Date birthday; //成员birthday是struct Date类型变量
    char addr[30]; 
 };
@@ -93,6 +93,7 @@ struct Student // 定义结构体类型 struct Student
 
 \begin{frame}[shrink,fragile]{定义结构体类型变量: struct\, 结构体类型名\, 变量名;}
 定义结构体类型后, 可以当作内置类型(如, int)一样进行变量定义和使用。
+\vspace{-0.2cm}
 \begin{columns}[T]
 \column{0.5\textwidth}<1->
 \begin{lstlisting}
@@ -110,7 +111,7 @@ struct Student
 };         
 \end{lstlisting}
 \column{0.5\textwidth}<2->
-\begin{lstlisting}
+\begin{lstlisting}[frame=leftline]
 void fun1()
 {
    // 定义结构体类型变量
@@ -129,7 +130,7 @@ void fun2(struct Student stu)
 
 \begin{frame}[shrink,fragile]{结构体类型变量的初始化}
 \begin{columns}[T]
-\column{0.5\textwidth}
+\column{0.47\textwidth}
 \begin{lstlisting}
 #include<stdio.h>
 ....
@@ -144,8 +145,8 @@ struct Student
    char addr[30]; 
 };         
 \end{lstlisting}
-\column{0.5\textwidth}
-\begin{lstlisting}
+\column{0.53\textwidth}
+\begin{lstlisting}[frame=leftline]
 void fun()
 {
    // 定义结构体变量时, 初始化各成员变量
@@ -159,7 +160,8 @@ void fun()
 \section{引用结构体变量的数据成员: 结构体变量名.成员名}
 
 \begin{frame}[shrink,fragile]{引用结构体变量的数据成员: 结构体变量名.成员名}
-定义结构体类型和结构体变量后, 通过\textcolor{blue}{``."成员运算符},引用其数据成员。
+定义结构体类型和结构体变量后, 通过\textcolor{blue}{``."成员运算符},引用(读写)其数据成员。
+\vspace{-0.3cm}
 \begin{columns}[T]
 \column{0.5\textwidth}
 \begin{lstlisting}
@@ -177,7 +179,7 @@ struct Student
 };         
 \end{lstlisting}
 \column{0.5\textwidth}
-\begin{lstlisting}
+\begin{lstlisting}[frame=leftline]
 void fun()
 {
   // 定义结构体变量时, 初始化各成员变量
@@ -192,6 +194,7 @@ void fun()
 \end{frame}
 
 \begin{frame}[shrink,fragile]{\small 对结构体变量的成员可以像普通变量一样进行各种运算}
+\vspace{-0.5cm}
 \begin{columns}[T]
 \column{0.4\textwidth}
 \begin{lstlisting}
@@ -212,7 +215,7 @@ struct Student
 };
 \end{lstlisting}
 \column{0.6\textwidth}
-\begin{lstlisting}
+\begin{lstlisting}[frame=leftline]
 struct Student stu1,stu2;
 stu1.num=10010;
 stu1.sex='F';
@@ -233,6 +236,7 @@ stu2.sex=stu1.sex; // 同性别
 \section{结构体指针变量和结构体数组}
 
 \begin{frame}[shrink,fragile]{结构体指针变量}
+\vspace{-0.5cm}
 \begin{columns}[T]
 \column{0.4\textwidth}
 \begin{lstlisting}
@@ -246,8 +250,11 @@ struct Student
   char addr[30]; 
 };
 \end{lstlisting}
+\begin{block}{问题}<2->
+	对\lstinline|stu2|的间接访问对吗？
+\end{block}
 \column{0.5\textwidth}
-\begin{lstlisting}
+\begin{lstlisting}[frame=leftline]
 // stu2是结构体指针变量
 struct Student stu1,*stu2;
 stu1.num=10010;
@@ -266,6 +273,15 @@ stu2->sex=stu1.sex; // 或
 \medskip
 \end{frame}
 
+\note{对\lstinline|stu2|的间接访问对吗？
+	
+	\begin{lstlisting}
+	struct Student stu1, *stu2=stu1;
+	struct Student stu1, *stu2; // 或
+	stu2=stu1; 
+	\end{lstlisting}
+}
+
 \begin{frame}[shrink,fragile]{结构体数组}
 \begin{columns}[T]
 \column{0.4\textwidth}
@@ -281,7 +297,7 @@ struct Student
 };
 \end{lstlisting}
 \column{0.5\textwidth}
-\begin{lstlisting}
+\begin{lstlisting}[frame=leftline]
 // 结构体数组
 struct Student stu[100];
 scanf("%d",&stu[0].num);
@@ -294,7 +310,10 @@ strcpy(stu[0].addr,"Xian");
 \medskip
 \end{frame}
 
+\section{结构体编程举例}
+
 \begin{frame}[shrink,fragile]{例1: 输入学生信息并输出统计数据}
+\vspace{-0.5cm}
 \begin{columns}[T]
 \column{0.4\textwidth}
 \begin{lstlisting}
@@ -305,10 +324,14 @@ struct Student
    // 5门课成绩
    float score[5];
 };
-
 \end{lstlisting}
+\begin{block}{问题}<2->
+	设计name成员, 为何不用指针形式:
+	
+	\lstinline|char *name;| 
+\end{block}
 \column{0.5\textwidth}
-\begin{lstlisting}
+\begin{lstlisting}[frame=leftline]
 int main()
 { 
   struct Student stu;
@@ -331,7 +354,11 @@ int main()
 \medskip
 \end{frame}
 
+%%%%%%%%%%% \note{lstinline中\%}
+\note{指针变量name, 无法通过\lstinline|scanf("\%s",stu.name), gets(stu.name)|读入变量的值, 因为name无指向. 仅能name="Li"; 字符串常量给其赋值。}
+
 \begin{frame}[shrink,fragile]{例2: 输入学生信息并输出统计数据(函数实现)}
+\vspace{-0.5cm}
 \begin{columns}[T]
 \column{0.54\textwidth}
 \begin{lstlisting}
@@ -353,7 +380,7 @@ void input(struct Student *stu)
 }
 \end{lstlisting}
 \column{0.50\textwidth}
-\begin{lstlisting}
+\begin{lstlisting}[frame=leftline]
 void print(struct Student stu)
 {
   int i; float sum=0;
@@ -390,7 +417,7 @@ struct Student
 };
 \end{lstlisting}
 \column{0.6\textwidth}
-\begin{lstlisting}
+\begin{lstlisting}[frame=leftline]
 // 输入n个学生信息
 //void input(struct Student stu[],int n)
 void input(struct Student *stu, int n)
@@ -408,6 +435,7 @@ void input(struct Student *stu, int n)
 \end{frame}
 
 \begin{frame}[shrink,fragile]{例3: 输入学生信息并输出统计数据(结构体数组), 输出}
+\vspace{-0.5cm}
 \begin{columns}[T]
 \column{0.6\textwidth}
 \begin{lstlisting}
@@ -429,7 +457,7 @@ void print(struct Student *stu,int n)
 }
 \end{lstlisting}
 \column{0.4\textwidth}
-\begin{lstlisting}
+\begin{lstlisting}[frame=leftline]
 int main()
 { 
   struct Student stu[100];
@@ -448,6 +476,7 @@ int main()
 \end{frame}
 
 \begin{frame}[shrink,fragile]{例4: 输入学生信息并输出统计数据(结构体数组), 输入}
+\vspace{-0.5cm}
 \begin{columns}[T]
 \column{0.27\textwidth}
 \begin{lstlisting}
@@ -463,7 +492,7 @@ struct Student
 };
 \end{lstlisting}
 \column{0.73\textwidth}
-\begin{lstlisting}
+\begin{lstlisting}[frame=leftline]
 // 输入并计算平均成绩, 返回平均成绩最高者(假定唯一)
 struct Student input(struct Student *stu, int n)
 {
@@ -506,7 +535,7 @@ void print(struct Student *stu,int n)
 }
 \end{lstlisting}
 \column{0.5\textwidth}
-\begin{lstlisting}
+\begin{lstlisting}[frame=leftline]
 int main()
 { 
   struct Student stu[100],maxStu;
@@ -540,6 +569,7 @@ void swap(struct Student *stu1, struct Student *stu2)
 \end{frame}
 
 \begin{frame}[shrink,fragile]{例5: 输入学生信息并输出统计数据(结构体数组), 排序}
+\vspace{-0.5cm}
 \begin{columns}[T]
 \column{1.0\textwidth}
 \begin{lstlisting}
@@ -568,6 +598,7 @@ void sort(struct Student stu[],int n)
 \medskip
 \end{frame}
 
+\begin{comment}
 \begin{frame}[shrink]
 \frametitle{lecture-17 主要内容}
 \framesubtitle{建立自己的数据类型}
@@ -582,5 +613,6 @@ void sort(struct Student stu[],int n)
 	\item 主程序调用各个子函数, 解决``大"问题。
 \end{itemize}
 \end{frame}
+\end{comment}
 
 

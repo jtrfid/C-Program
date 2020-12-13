@@ -141,7 +141,11 @@ int main4()
 \begin{note}[要点]
 	再次体会标志变量的用法及内层循环前的初始化。仔细审题，本题要求一组输出: 最小素数+最大素数=偶数.
 	
-	如果要求找出最接近的一组素数, 修改main4()中的\lstinline|if(isPrime(num-i))为if(isPrime(num-i) && num-i<=i)|, 则输出\lstinline|num-i,i;|即可。
+	如果要求找出最接近的一组素数, 因为$n=\frac{n}{2}+\frac{n}{2}$, 如果$\frac{n}{2}$是素数,即为所求。 否则，所求的两个素数在$\frac{n}{2}$附近， 分别小于和大于$\frac{n}{2}$。
+	
+	方法1: 修改main4()中的\lstinline|if(isPrime(num-i))为if(isPrime(num-i) && num-i<=i)|, 则输出\lstinline|num-i,i;|即可。 
+	
+	方法2: 由$i=\frac{n}{2}\to i=2$迭代, 第一个找到的素数$i$和$num-i$即为所求。
 \end{note}
 
 \section{回文数}

@@ -14,9 +14,7 @@
 %\end{itemize}
 %\end{frame}
 
-\section{结构体编程举例续}
-
-\begin{frame}[shrink,fragile]{例5: 上机题, 复试赛选}
+\begin{frame}[shrink,fragile]{例6: 复试赛选}
 考研初试成绩公布后需要对m个学生的成绩进行排序，筛选出可以进入复试的前n名学生。
 排序规则为首先按照总分排序，总分相同则按英语单科成绩排序，总分和英语成绩也相同时考号小者排在前面。\\
 现给出这m个学生的考研初试成绩，请筛选出可以进入复试的n名学生并按照排名从高到低的顺序依次输出。\\
@@ -42,7 +40,7 @@ XD20160002 330 70
 \medskip
 \end{frame}
 
-\begin{frame}[shrink,fragile]{例5: 复试赛选, 定义结构体}
+\begin{frame}[shrink,fragile]{例6: 复试赛选, 定义结构体}
 \begin{columns}[T]
 \column{0.5\textwidth}
 \textbf{\textcolor{blue}{思路:}}
@@ -55,7 +53,7 @@ XD20160002 330 70
 #include<stdio.h>
 // 字符串比较函数strcmp(s1,s2);
 #include<string.h> 
-#define N 100 // 估计的考生数
+#define N 200 // 估计的考生数
 // 定义结构体
 struct Student 
 { 
@@ -67,7 +65,8 @@ struct Student
 \end{columns}
 \end{frame}
 
-\begin{frame}[shrink,fragile]{例5: 复试赛选(结构体数组), 输入输出}
+\begin{frame}[shrink,fragile]{例6: 复试赛选(结构体数组), 输入输出}
+\vspace{-0.4cm}
 \begin{lstlisting}
 // 输入m个考生信息
 void input(struct Student *stus, int m)
@@ -88,7 +87,7 @@ void print(struct Student *stus, int n)
 \end{lstlisting}
 \end{frame}
 
-\begin{frame}[shrink,fragile]{例5: 复试赛选(结构体数组),交换函数}
+\begin{frame}[shrink,fragile]{例6: 复试赛选(结构体数组),交换函数}
 \begin{columns}[T]
 \column{0.8\textwidth}
 \begin{lstlisting}
@@ -108,7 +107,8 @@ void swap(struct Student *stu1, struct Student *stu2)
 \medskip
 \end{frame}
 
-\begin{frame}[shrink,fragile]{例5: 复试赛选(结构体数组), 排序}
+\begin{frame}[shrink,fragile]{例6: 复试赛选(结构体数组), 排序}
+\vspace{-0.5cm}
 \begin{columns}[T]
 \column{1.0\textwidth}
 \begin{lstlisting}
@@ -122,12 +122,13 @@ void sort(struct Student stu[],int n)
     for(j = i + 1; j < n; j++)
     {
        // 条件判断语句：善用&&、||运算，简化if else结构
+       // 注意(条件1||条件2||$\cdots$)的截断语义
        if (a[j].total>a[k].total || 
          (a[j].total==a[k].total &&  a[j].english>a[k].english) || 
          (a[j].total==a[k].total &&  a[j].english==a[k].english && strcmp(a[j].no,a[k].no)<0))  
          k = j;
     }
-    if(k != i) swap(&stu[i],&stu[k]); // 交换
+    if(k != i) swap(&stu[i],&stu[k]); // 交换, 地址传递
   } 
 }
 \end{lstlisting}
@@ -135,7 +136,7 @@ void sort(struct Student stu[],int n)
 \medskip
 \end{frame}
 
-\begin{frame}[shrink,fragile]{例5: 复试赛选(结构体数组),主函数}
+\begin{frame}[shrink,fragile]{例6: 复试赛选(结构体数组),主函数}
 \begin{lstlisting}
 // 模块化程序设计，便于调试。
 int main()
@@ -153,7 +154,7 @@ int main()
 \end{lstlisting}
 \end{frame}
 
-\begin{frame}[shrink,fragile]{例6: 上机题, 画图}
+\begin{frame}[shrink,fragile]{例7: 画图}
 在一个定义了直角坐标系的纸上，画一个(x1,y1)到(x2,y2)的矩形，指将横坐标范围从x1到x2，纵坐标范围从y1到y2之间的区域涂上颜色。\\ 
 下图给出了一个画了两个矩形的例子。第一个矩形是(1,1) 到(4, 4)，用绿色和紫色表示。第二个矩形是(2, 3)到(6, 5)，用蓝色和紫色表示。图中，一共有15个单位的面积被涂上颜色，其中紫色部分被涂了两次，但在计算面积时只计算一次。在实际的涂色过程中，所有的矩形 都涂成统一的颜色，图中显示不同颜色仅为说明方便。给出所有要画的矩形，请问总共有多少个单位的面积被涂上颜色。 \\
 输入说明: 输入的第一行包含一个整数n，表示要画的矩形的个数，1<=n<=100 ,接下来n行，每行4个非负整数，分别表示要画的矩形的左下角的横坐标与纵坐标，以及右上角的横坐标与纵坐标。0<=横坐标、纵坐标<=100。\\
@@ -172,12 +173,12 @@ int main()
 \medskip
 \end{frame}
 
-\begin{frame}[shrink,fragile]{例6: 画图(结构体数组), 定义结构体}
+\begin{frame}[shrink,fragile]{例7: 画图(结构体数组), 定义结构体}
 \begin{columns}[T]
 \column{0.5\textwidth}
 \textbf{\textcolor{blue}{思路:}}
 \begin{enumerate}
-	\item 二维数组表示网格;
+	\item 二维数组grid[N][N]表示网格, 最左下方单元是grid[0][0]元素。
 	\item 定义矩形结构体, 各矩形组成结构体数组;
 	\item 计算最大矩形, 其覆盖的单元格初始化为0; 
 	\item 每个矩形覆盖的单元格标记为1, 
@@ -198,7 +199,8 @@ struct Rec
 \end{columns}
 \end{frame}
 
-\begin{frame}[shrink,fragile]{例6: 画图(结构体数组), 输入输出}
+\begin{frame}[shrink,fragile]{例7: 画图(结构体数组), 输入输出}
+\vspace{-0.3cm}
 \begin{lstlisting}
 // 输入n个矩形
 void input(struct Rec *recs, int n)
@@ -218,12 +220,13 @@ void print(struct Rec *recs, int n)
 \medskip
 \end{frame}
 
-\begin{frame}[shrink,fragile]{例6: 画图(结构体数组),计算最大矩形}
+\begin{frame}[shrink,fragile]{例7: 画图(结构体数组),计算最大矩形}
+\vspace{-0.3cm}
 \begin{lstlisting}
-// 返回最大矩形
+// 参数res表示n个矩形, 返回最大矩形
 struct Rec Largest(struct Rec res[], int n)
 {
-   struct Rec largest=res[0];
+   struct Rec largest=res[0]; //假设第一个是最大矩形 
    int i;
    for(i=1;i<n;i++)
    {
@@ -241,7 +244,8 @@ struct Rec Largest(struct Rec res[], int n)
 \end{lstlisting}
 \end{frame}
 
-\begin{frame}[shrink,fragile]{例6: 画图(结构体数组), 网格grid[N][N]初始化与标记}
+\begin{frame}[shrink,fragile]{例7: 画图(结构体数组), 网格\lstinline$grid[N][N]$初始化与标记}
+\vspace{-0.3cm}
 \begin{lstlisting}
 // rec区域, grid数组元素置1(标记) 
 void grid1(struct Rec rec, int grid[][N])
@@ -266,7 +270,7 @@ void grid0(struct Rec largest, int grid[][N])
 \end{lstlisting}
 \end{frame}
 
-\begin{frame}[shrink,fragile]{例6: 画图(结构体数组), 计算被标记的网格}
+\begin{frame}[shrink,fragile]{例7: 画图(结构体数组), 计算被标记的网格}
 \begin{lstlisting}
 // largest区域, 返回grid数组元素为1的单元数量，即被覆盖的单位面积数 
 int gridNum(struct Rec largest, int grid[][N])
@@ -282,7 +286,8 @@ int gridNum(struct Rec largest, int grid[][N])
 \end{lstlisting}
 \end{frame}
 
-\begin{frame}[shrink,fragile]{例6: 画图(结构体数组),主函数}
+\begin{frame}[shrink,fragile]{例7: 画图(结构体数组),主函数}
+\vspace{-0.4cm}
 \begin{lstlisting}
 // 模块化程序设计，便于调试。
 int main()
@@ -303,7 +308,7 @@ int main()
 \end{lstlisting}
 \end{frame}
 
-\begin{frame}[shrink,fragile]{例7: 世界杯排名}
+\begin{frame}[shrink,fragile]{例8: 世界杯排名}
 给出世界杯一个小组的小组赛成绩，请找出最终进入淘汰赛的球队。 \\
 小组赛积分规则：胜一场积3分、平一场积1分、负一场积0分。 \\
 小组赛排名规则如下： \\
@@ -331,7 +336,7 @@ int main()
 \medskip
 \end{frame}
 
-\begin{frame}[shrink,fragile]{例7: 世界杯排名, 定义结构体}
+\begin{frame}[shrink,fragile]{例8: 世界杯排名, 定义结构体}
 \begin{columns}[T]
 \column{0.4\textwidth}
 \textbf{\textcolor{blue}{思路:}}
@@ -361,15 +366,15 @@ struct Team
 \end{columns}
 \end{frame}
 
-\begin{frame}[shrink,fragile]{例7: 世界杯排名, 输入}
+\begin{frame}[shrink,fragile]{例8: 世界杯排名, 输入}
 \begin{lstlisting}
-// 输入n个球队信息, 填充结构体成员
+// 输入n个球队信息, 根据规则填充结构体成员
 void input(struct Team *teams, int n)
 {
    for(i = 0; i < n; i++)
    {
       scanf("%s%d%d%d%d%d",teams[i].name,&teams[i].win,&teams[i].draw,&teams[i].lose,&teams[i].goalsNum,&teams[i].losesNum);
-      // 填充其它数据成员
+      // 根据规则填充其它数据成员
       teams[i].grades =  teams[i].win*3 + teams[i].draw*1;
       teams[i].goals = teams[i].goalsNum - teams[i].losesNum; 
    }
@@ -377,7 +382,7 @@ void input(struct Team *teams, int n)
 \end{lstlisting}
 \end{frame}
 
-\begin{frame}[shrink,fragile]{例7: 世界杯排名, 交换函数}
+\begin{frame}[shrink,fragile]{例8: 世界杯排名, 交换函数}
 \begin{columns}[T]
 \column{0.8\textwidth}
 \begin{lstlisting}
@@ -396,7 +401,8 @@ void swap(struct Team *team1, struct Team *team2)
 \medskip
 \end{frame}
 
-\begin{frame}[shrink,fragile]{例7: 世界杯排名, 排序}
+\begin{frame}[shrink,fragile]{例8: 世界杯排名, 排序}
+\vspace{-0.5cm}
 \begin{columns}[T]
 \column{1.0\textwidth}
 \begin{lstlisting}
@@ -422,7 +428,8 @@ void sorts(struct Team a[], int n)
 \medskip
 \end{frame}
 
-\begin{frame}[shrink,fragile]{例7: 世界杯排名,主函数}
+\begin{frame}[shrink,fragile]{例8: 世界杯排名,主函数}
+\vspace{-0.4cm}
 \begin{lstlisting}
 // 模块化程序设计，便于调试。
 int main()

@@ -276,6 +276,8 @@
 	mathescape=true  % 注释可以用latex math, eg. $a_{ij}$
 }
 
+%%%%%%%%%%注意, \note{\lstinline|\%|}
+
 \graphicspath{{figures/},} 
 
 %%%%%%%%%
@@ -333,6 +335,7 @@
 %\includeonlylecture{part5}
 %\includeonlylecture{part6}
 %\includeonlylecture{part7}
+%\includeonlylecture{part8}
 
 \lecture{课程介绍, C语言简介, 数据输入输出, 基本数据类型与表达式}{part1}
 \part{课程介绍, C语言简介, 数据输入输出, 基本数据类型与表达式} % 使目录项不包含其他\part中的section
@@ -387,7 +390,6 @@
 \include{lecture-15} % ch9
 
 
-\begin{comment}
 % 第14,15次课
 \lecture{结构体}{part7}
 \part{结构体}
@@ -396,9 +398,12 @@
 \include{lecture-16} %  结构体
 %%%%%%%%%%%% lecture-16 期中考试总结, pow函数问题，移到第22次课讲
 \include{lecture-17} % 结构体编程举例
-\include{lecture-18} %  结构体编程举例续 
 
-\end{comment}
+% 第16次课, 复习
+\lecture{复习}{part8}
+\part{复习}
+\frame{\partpage}
+\include{lecture-18}
 
 %%%%%%%%%%%%%%%%%%% last frame
 \begin{frame}[plain]{}
