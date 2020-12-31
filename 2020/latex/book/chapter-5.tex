@@ -242,7 +242,7 @@ int main12()
 int main3()
 {
 	char s[10]; // 留出'\0', 最多存储9位数。实际长度用len变量表示
-	int sum=0, len=0,i; 
+	int sum=0, len=0,i=0; 
 	
 	// 以字符串形式接收输入的整数, 末尾自动追加'\0'  
 	gets(s);
@@ -258,13 +258,13 @@ int main3()
 	//按照数组下标，前后数组元素相等则为回文数
 	for(i=0; i<len/2;i++)
 	{
-		if(s[i] != s[len-i-1]) // 不是回文数 
+		if(s[i] != s[len-i-1]) // 不是回文数  
 		{
 			printf("no\n");
 			return 0;  // 主函数结束 
 		} 
 	}
-	// 至此，必然是回文数 
+	// 至此，必然是回文数，包含一位数不进入上面的for循环的情况 
 	printf("%d\n",sum);
 	return 0;
 }

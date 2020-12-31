@@ -82,7 +82,7 @@ int main12()
 int main3()
 {
 	char s[10]; // 留出'\0', 最多存储9位数。实际长度用len变量表示
-	int sum=0, len=0,i; 
+	int sum=0, len=0,i=0; 
 	
 	// 以字符串形式接收输入的整数 
 	gets(s);
@@ -104,7 +104,7 @@ int main3()
 			return 0;  // 主函数结束 
 		} 
 	}
-	// 至此，必然是回文数 
+	// 至此，必然是回文数，包含一位数不进入上面的for循环的情况 
 	printf("%d\n",sum);
 	return 0;
 }
