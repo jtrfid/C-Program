@@ -228,6 +228,8 @@ int main()
 
 \begin{note}(整型数值与字符混合运算)
 	字符对应的ASCII编码参与整数运算, 其结果也是整数。注意\lstinline|'0'|与\lstinline|0|不同, 本例中输入0,0, 则\lstinline|a=0|,\lstinline|b='0'|, 变量a的值是整数0, 变量b的值是字符\lstinline|'0'|对应的ASCII编码, 即整数48。
+	
+	如果本题改为计算整数a+(字符b对应的数字), 则, \lstinline|printf("%d",a+b-'0');|
 \end{note}
 
 \section{实数运算}

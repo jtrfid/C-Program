@@ -75,7 +75,7 @@ int main()
    scanf("%f%f",&a,&b); 
    //不好: scanf("%f,%f",&a,&b);
    if(a>b)
-   {  //将a和b的值互换
+   {  // 将a和b的值互换
       t=a;
       a=b;
       b=t;
@@ -86,7 +86,7 @@ int main()
 \end{lstlisting} 
 \column{0.55\textwidth}
 \small
-\begin{block}{两个变量值的互换}
+\begin{block}{两变量值互换基本技巧}
 a=b;  //把变量b的值赋给变量a，a的值等于b的值\\
 b=a;  //再把变量a的值赋给变量b，变量b值没有改变
 \end{block}
@@ -123,7 +123,7 @@ int main()
 \section{if语句的一般形式}
 
 \begin{frame}[shrink,fragile]{if(条件表达式)\{ 表达式为真(非0)时执行语句; \}}
-\textbf{条件表达式: 关系表达式; 逻辑表达式; 数值表达式。}
+\textcolor{blue}{条件表达式 $\Rightarrow$ 关系表达式; 逻辑表达式; 数值表达式。}
 \begin{columns}[t]
 \column{0.3\textwidth}
 \begin{beamerboxesrounded}{形式1(无else)}
@@ -178,24 +178,24 @@ else
 \begin{lstlisting}
 int a=5,b=10,c=20; //以int为例
 if(a<b+c) // 相当于a<(b+c)
-{ ... }
-if(a<=b+c) 
-{ ... }
+	{ a小于(b+c)时执行 }
+if(a<=b+c) // 
+	{ a小于等于(b+c)时执行 }
 if(a>b+c) 
-{ ... }
+	{ a大于(b+c)时执行 }
 if(a>=b+c) 
-{ ... }
-if(a==b+c)//a是否等于(b+c),与a=(b+c)不同
-{ ... }
-if(a!=b+c) // a不等于(b+c)
-{ ... }
+	{ a大于等于(b+c)时执行 }
+if(a==b+c) // 与a=(b+c)不同
+	{ a等于(b+c)时执行 }
+if(a!=b+c) 
+	{ a不等于(b+c)时执行 }
 \end{lstlisting}
 \column{0.5\textwidth}
 \includegraphics[scale=0.3]{pre}\\
 分析:
 \begin{lstlisting}
-if(a>b==c){...}
-if(a=b>c) {...}
+if(a>b==c) // 相当于(a>b)==c
+if(a=b>c)  // 相当于a=(b+c),避免==写为=
 \end{lstlisting}
 \end{columns}
 \end{frame}
@@ -209,46 +209,47 @@ if(a=b>c) {...}
 		\item 在C的逻辑运算中, 以``1''代表``真''，以``0''代表``假''。	
 	\end{itemize}
 \end{block}
+\vspace{-0.5cm}
 \begin{columns}[T]
-\column{0.5\textwidth}
+\column{0.43\textwidth}
 \begin{lstlisting}
 int a=3, b=2, c=1, d1, d2; 
-d1 = a > b; // d1=1
-d2 = a > b > c; //自左至右结合,d2=0
+d1 = a>b; // d1=(a>b), d1=1
+d2 = a>b> c;//d2=(a>b>c),d2=0
 if(d1)
-{ printf("执行此语句") }
+	{ printf("执行此语句") }
 if(d2) 
-{ printf("不执行此语句"); }
+	{ printf("不执行此语句"); }
 \end{lstlisting}
-\column{0.5\textwidth}
+\column{0.57\textwidth}
 \begin{lstlisting}
-if(d1 = a > b) // d1的值就是表达式的值
-{ printf("执行此语句"); }
-if(d2 = a > b > c)//d2的值就是表达式的值
-{ printf("不执行此语句"); }
+if(d1 = a>b) //d1=(a>b),赋值后d1非0即真
+	{ printf("执行此语句"); }
+if(d2 = a>b>c)//d2=(a>b>c),赋值后d2非0即真
+	{ printf("不执行此语句"); }
 \end{lstlisting}
 \end{columns}
 \end{frame}
 
 \section{逻辑运算符}
 
-\begin{frame}[shrink,fragile]{逻辑运算符}
+\begin{frame}[shrink,fragile]{逻辑运算符(与\&\&, 或|~|,非!)}
 \begin{lstlisting}
 int a=5,b=10,c=0; //以int为例
 if(!a) // 逻辑非(NOT), a是非0, 所以!a的值是0
-{ ... }
+	{ ... }
 if(a && b) // 逻辑与(AND), a,b均为非0, 所以(a && b)的值为1
-{ ... }
+	{ ... }
 if(a || c) // 逻辑或(OR), a,c之一是非0, 即为真
-{ ... }
+	{ ... }
 \end{lstlisting}
 \end{frame}
 
-\begin{frame}[shrink,fragile]{逻辑运算符真值表}
+\begin{frame}[shrink,fragile]{逻辑运算符真值表, 非0即真}
 \centering
 \begin{tabular}{|c|c||c|c|c|c|}
 \hline 
-a       & b      & !a    & !b    & a\&\&b & a||b \\ 
+a       & b      & !a    & !b    & a\&\&b & a |~| b \\ 
 \hline 
 真(非0) & 真(非0) & 假(0) & 假(0) & 真(1)  & 真(1) \\ 
 \hline
@@ -260,16 +261,16 @@ a       & b      & !a    & !b    & a\&\&b & a||b \\
 \hline  
 \end{tabular} 
 \begin{itemize}
-	\item ``\&\&''和``‖''是双目运算符，要求有两个运算对象(操作数);\\ ``!''是单目运算符，只要有一个运算对象
-	\item 由高到低优先次序: !(非)$\to$\&\&(与)$\to$‖(或);\\
-          逻辑运算符中的``\&\&''和``||''低于关系运算符, ``!''高于算术运算符
-	\item 逻辑运算结果不是0就是1，不可能是其他数值。\\
+	\item ``\&\&''和``|~|''是双目运算符，要求有两个运算对象(操作数);\\ ``!''是单目运算符，只要有一个运算对象
+	\item 由高到低优先次序: !(非)$\to$\&\&(与)$\to$|~|(或);\\
+          逻辑运算符中的``\&\&''和``|~|''低于关系运算符, ``!''高于算术运算符
+	\item \textcolor{blue}{逻辑运算结果不是0就是1，不可能是其他数值。}\\
 	      而运算对象可以是0(假)或任何非0的数值(按``真''对待)
 \end{itemize}
 \end{frame}
 
 \begin{frame}[shrink,fragile]{逻辑运算示例(1)}
-判别用year表示的某一年是否闰年，可以用一个逻辑表达式来表示。闰年的条件是符合下面二者之一: (1)能被4整除，但不能被100整除。（2）能被100整除，又能被400整除。
+判别用year表示的某一年是否闰年。闰年的条件是符合下面二者之一: (1)能被4整除，但不能被100整除。（2）能被100整除，又能被400整除。
 \begin{lstlisting}
 int year;
 scanf("%d",&year);
@@ -283,28 +284,28 @@ else
 \end{lstlisting}
 \end{frame}
 
-\begin{frame}[shrink,fragile]{逻辑运算示例(2)}
-判别用year表示的某一年是否闰年，可以用一个逻辑表达式来表示。闰年的条件是符合下面二者之一: (1)能被4整除，但不能被100整除。（2）能被100整除，又能被400整除。
+\begin{frame}[shrink,fragile]{逻辑运算示例(2), 使用标志变量是基本技巧}
+判别用year表示的某一年是否闰年。闰年的条件是符合下面二者之一: (1)能被4整除，但不能被100整除。（2）能被100整除，又能被400整除。
 \begin{lstlisting}
-int year, flag = 'N';
+int year, flag = 'N'; \\ flag称为标志变量, 等效设置 char flag = 'N'; 
 scanf("%d",&year);
 // 闰年
 if(year%4 == 0 && year%100 != 0)
-{ flag = 'Y'; }
+	{ flag = 'Y'; }
 else
 { 
    if(year%100 == 0 && year%400 == 0)
-   { flag = 'Y'; }
+   		{ flag = 'Y'; }
 }
 if(flag == 'Y') 
-{ printf("%d是闰年\n", year); }
+	{ printf("%d是闰年\n", year); }
 else
-{ printf("%d不是闰年\n", year); }
+	{ printf("%d不是闰年\n", year); }
 \end{lstlisting}
 \end{frame}
 
-\begin{frame}[shrink,fragile]{逻辑运算示例(3)}
-判别用year表示的某一年是否闰年，可以用一个逻辑表达式来表示。闰年的条件是符合下面二者之一: (1)能被4整除，但不能被100整除。（2）能被100整除，又能被400整除。
+\begin{frame}[shrink,fragile]{逻辑运算示例(3), 善用\&\&,|~|,!组成逻辑表达式, 简化程序逻辑表达}
+判别用year表示的某一年是否闰年，\textcolor{blue}{可以用一个逻辑表达式来表示}。闰年的条件是符合下面二者之一: (1)能被4整除，但不能被100整除。（2）能被100整除，又能被400整除。
 \begin{lstlisting}
 int year;
 scanf("%d",&year);
@@ -320,7 +321,7 @@ else
 
 \begin{frame}[shrink,fragile]{条件运算符和条件表达式}
 \begin{columns}[T]
-\column{0.5\textwidth}
+\column{0.45\textwidth}
 \begin{lstlisting}
 int a,b,max;
 scanf("%d%d",&a,&b);
@@ -328,14 +329,14 @@ if(a>b)
 { max = a; }
 else
 { max = b; }
-// 等效为
+// 等效于条件表达式
 max = (a>b) ? a : b;
 // 或
 a>b ? (max=a) : (max=b);
-// 甚至用在语句中
+// 甚至可用在语句中
 printf("%d\n",a>b ? a : b);
 \end{lstlisting}
-\column{0.5\textwidth}
+\column{0.45\textwidth}
 \colorbox{yellow}{\textcolor{blue}{表达式1 ? 表达式2 : 表达式3}}\\
 \includegraphics[scale=0.3]{if3}
 \end{columns}
@@ -359,11 +360,13 @@ printf("ch=%c\n",ch);
 \section{数学表达式与C语言表达式的不同}
 
 \begin{frame}[shrink,fragile]{数学表达式与C语言表达式的不同}
+\vspace{-0.3cm}
 \begin{lstlisting}
 int a = 100;
-if(20 <= a && a <= 30) // 表达式的值为假(0), 条件表达式与数学含义相同
+if(20 <= a && a <= 30)//表达式的值为假(0), 条件表达式与数学含义$(20\le a\le 30)$相同
+// 或 if(a>=20 && a<=30)
 { ...  }
-if(20 <= a <= 30) // (20<=a)<=30, 表达式为真(1), 条件表达式与数学含义不同
+if(20 <= a <= 30)//(20<=a)<=30, 表达式为真(1), 与数学含义$(20\le a\le 30)$不同
 { ...  }
 // 类似的
 // if(a==20) 与 if(a=20)意义不同
@@ -381,83 +384,87 @@ printf("%d\n",a); // 20
 
 \section{用switch语句实现多分支选择结构}
 
-\begin{frame}[shrink,fragile]{用switch语句实现多分支选择结构}
-switch(int或char型表达式)
-\begin{columns}[T]
-\column{0.3\textwidth}
-\begin{lstlisting}
-int a;
-scanf("%d",&a)
-switch(a)
-{
-   case 10: 多条语句1; 
-            break;
-   case 20: 多条语句2; 
-            break;
-   case 30: 多条语句3; 
-            break;
-   default: 多条语句4;
-}
-\end{lstlisting}
-\column{0.2\textwidth}
-\vspace{3cm}
-$\implies$
-\column{0.3\textwidth}
-\begin{lstlisting}
-int a;
-scanf("%d",&a)
-if(a == 10)
-{ 多条语句1; } 
-else if(a == 20 )
-{ 多条语句2; } 
-else if(a == 30) 
-{ 多条语句3; }
-else
-{ 多条语句4; }
-\end{lstlisting}
-\end{columns}
+\begin{frame}[shrink,fragile]{用switch(int或char型表达式), 实现多分支选择结构}
+\begin{tikzpicture}[outer xsep=5pt]
+\node[draw,text width=0.5\textwidth] (left) {	
+	\begin{lstlisting}
+	int a;
+	scanf("%d",&a)
+	switch(a)
+	{
+		case 10: 多条语句1; 
+		//break表示该条件执行完毕
+		break; 
+		case 20: 多条语句2; 
+		break;
+		case 30: 多条语句3; 
+		break;
+		default:
+		// 以上不满足时执行
+		多条语句4;
+	}
+	\end{lstlisting}
+	};
+\node[draw,right,text width=0.5\textwidth] at (left.east) {
+	\begin{lstlisting}
+	// 等效于 
+	int a;
+	scanf("%d",&a)
+	if(a == 10)
+		{ 多条语句1; } 
+	else if(a == 20 )
+		{ 多条语句2; } 
+	else if(a == 30) 
+		{ 多条语句3; }
+	else
+		{ 多条语句4; }
+	\end{lstlisting}
+};
+\end{tikzpicture}
+\end{frame}
+
+\begin{frame}[shrink,fragile]{无break, 直接往下执行}
+\begin{tikzpicture}[outer xsep=5pt]
+\node[draw,text width=0.5\textwidth] (left) {	
+	\begin{lstlisting}
+	char a; // 或 int a;
+	scanf("%c",&a)
+	swach(a)
+	{
+		case 'A':
+		case 'a': 多条语句1; 
+			break;
+		case 'B':
+		case 'b': 多条语句2; 
+			break;
+		case 'C':
+		case 'c': 多条语句3; 
+			break;
+		default: 多条语句4;
+	}
+	\end{lstlisting}
+};
+\node[draw,right,text width=0.5\textwidth] at (left.east) {
+	\begin{lstlisting}	
+	// 等效于
+	char a; // 或 int a;
+	scanf("%d",&a)
+	if(a == 'A' || a == 'a')
+		{ 多条语句1; } 
+	else if(a == 'B' || a == 'b')
+		{ 多条语句2; } 
+	else if(a == 'C' || a == 'c') 
+		{ 多条语句3; }
+	else
+		{ 多条语句4; }
+	\end{lstlisting}
+};
+\end{tikzpicture}
 \end{frame}
 
 \begin{frame}[shrink,fragile]
-\begin{columns}[T]
-\column{0.5\textwidth}
-\begin{lstlisting}
-char a; // 或 int a;
-scanf("%c",&a)
-swach(a)
-{
-    case 'A':
-    case 'a': 多条语句1; 
-              break;
-    case 'B':
-    case 'b': 多条语句2; 
-              break;
-    case 'C':
-    case 'c': 多条语句3; 
-              break;
-    default: 多条语句4;
-}
-\end{lstlisting}
-\column{0.5\textwidth}
-\begin{lstlisting}	
-char a; // 或 int a;
-scanf("%d",&a)
-if(a == 'A' || a == 'a')
-{ 多条语句1; } 
-else if(a == 'B' || a == 'b')
-{ 多条语句2; } 
-else if(a == 'C' || a == 'c') 
-{ 多条语句3; }
-else
-{ 多条语句4; }
-\end{lstlisting}
-\end{columns}
-\end{frame}
-
-\begin{frame}[shrink,fragile]
-\begin{columns}[T]
-\column{0.4\textwidth}
-\small
+\begin{tikzpicture}[outer xsep=2pt]
+\node[draw,text width=0.5\textwidth,font=\small] (left) {	
 [例4.10,p99]运输公司对用户计算运输费用。路程越远，运费越低。标准如下:  
 \begin{align*}
 s<250 &&\text{没有折扣}\\
@@ -467,25 +474,29 @@ s<250 &&\text{没有折扣}\\
 2000\le s < 3000 &&\text{10\%折扣}\\
 3000\le s  &&\text{15\%折扣}
 \end{align*}
-\column{0.6\textwidth}
-\vspace{-0.4cm}
+};
+\node[draw,right,text width=0.5\textwidth] at(left.east) {
+\vspace{-0.2cm}
 \begin{lstlisting}
 int c,s; //c是分类整数, s是距离
 float p,w,d,f; //单价,重量,折扣,运费
 // 运费 f = p*w*s*(1-d%) 
 scanf("%f%f%d",&p,&w,&s);
-if(s>=3000) { c = 12; } else {c = s/250; }
+if(s>=3000) { c = 12; } 
+else {c = s/250; }
 switch(c) {
    case 0: d=0; break;
    case 1: d=2; break;
    case 2: case 3: d=5; break;
    case 4: case 5: case 6: case 7: 
-        d=8; break;
+   		d=8; break;
    case 8: case 9: case 10: case 11: 
-        d=10 break;
+   		d=10 break;
    case 12: d=15; break;
 }
-f = p*w*s*(1-d/100);  printf("%.2f\n",f);
+f = p*w*s*(1-d/100);  
+printf("%.2f\n",f);
 \end{lstlisting}
-\end{columns}
+};
+\end{tikzpicture}
 \end{frame}
