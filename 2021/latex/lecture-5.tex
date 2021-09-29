@@ -287,7 +287,7 @@ else
 \begin{frame}[shrink,fragile]{逻辑运算示例(2), 使用标志变量是基本技巧}
 判别用year表示的某一年是否闰年。闰年的条件是符合下面二者之一: (1)能被4整除，但不能被100整除。（2）能被100整除，又能被400整除。
 \begin{lstlisting}
-int year, flag = 'N'; \\ flag称为标志变量, 等效设置 char flag = 'N'; 
+int year, flag = 'N'; // flag称为标志变量, 等效设置 char flag = 'N'; 
 scanf("%d",&year);
 // 闰年
 if(year%4 == 0 && year%100 != 0)
