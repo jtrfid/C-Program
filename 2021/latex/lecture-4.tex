@@ -152,6 +152,12 @@ int main()
 	\begin{lstlisting}
 	int a=-5; unsigned int b=0x85;
 	printf("%d,%d,%X,%X,%u\n",a,b,a,b,b); // -5,133,FFFFFFFB,85,133
+	
+	// 求m的最后一个字节
+    int m;
+    printf("%d,%X\n",m%16+m/16%16*16，m%16+m/16%16*16);
+    // 或
+    printf("%d,%X\n",m%256，m%256);
 	\end{lstlisting}
 }
 

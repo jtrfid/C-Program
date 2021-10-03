@@ -67,7 +67,7 @@ while( i<=50 )   // 当i的值小于或等于50时执行花括号内的语句
 		每轮循环: 首先判断表达式的值, 若``真" (以非0值表示)时，就执行循环体语句；为``假" (以0表示)时，就不执行循环体语句。
 	\end{block}
 \end{columns}
-\vspace{-0.5cm}
+\vspace{-0.4cm}
 \begin{columns}
 \column{0.45\textwidth}
 \begin{block}{常见错误}
@@ -97,7 +97,7 @@ $[$例5.1$]$ 求$1+2+3+\cdots+100$, 即$\sum\limits_{i=1}^{100}i$
 \medskip
 \begin{lstlisting}[frame=lines]
    int i=1,sum=0;      //定义变量i的初值为1,sum的初值为0  
-   while(i <= 100)     //当i>100，条件表达式i<=100的值为假，不执行循环体
+   while(i <= 100)     //当i>100，条件表达式的值为假(0)，不执行循环体
    {                   //循环体开始
       sum=sum+i;          //第1次累加后，sum的值为1
       i++;                //加完后，i的值加1，为下次累加做准备
@@ -107,7 +107,7 @@ $[$例5.1$]$ 求$1+2+3+\cdots+100$, 即$\sum\limits_{i=1}^{100}i$
 \begin{enumerate}
 	\setlength{\itemsep}{.2cm}
 	\item 循环体如果包含一个以上的语句，应该用花括号括起来，作为复合语句出现。
-	\item 不要忽略给$i$和$sum$赋初值，否则它们的值是不可预测的，结果显然不正确。
+	\item 不要忘记给$i$和$sum$赋初值，否则它们的值是不可预测的，结果显然不正确。
 	\item 在循环体中应有使循环趋向于结束的语句。如本例中的$i++;$语句。如果无此语句，则i的值始终不改变，循环永远不结束。
 \end{enumerate}
 \end{frame}
@@ -115,7 +115,7 @@ $[$例5.1$]$ 求$1+2+3+\cdots+100$, 即$\sum\limits_{i=1}^{100}i$
 \section{$do \{\cdots\} while(\text{表达式});$}
 
 \begin{frame}[shrink,fragile]{$do \{\cdots\} while(\text{表达式});$}
-\vspace{-0.4cm}
+\vspace{-0.3cm}
 \begin{columns}
 	\column{0.3\textwidth}
 	\begin{lstlisting} 
@@ -132,7 +132,7 @@ $[$例5.1$]$ 求$1+2+3+\cdots+100$, 即$\sum\limits_{i=1}^{100}i$
 		先无条件地执行循环体，然后判断循环条件是否成立。
 	\end{block}
 \end{columns}
-\vspace{-0.5cm}
+\vspace{-0.2cm}
 \begin{columns}
 \column{0.45\textwidth}
 \begin{block}{易犯错误}
@@ -378,7 +378,7 @@ printf("num=%d\naver=%10.2f\n",i,aver);
 \textbf{\textcolor{blue}{注意: break语句只能用于循环语句和switch语句之中，而不能单独使用。}}
 \end{frame}
 
-\begin{frame}[shrink,fragile]{用continue语句提前结束本次循环}
+\begin{frame}[shrink,fragile]{用continue语句终止本次循环, 开始下轮循环。}
 $[$例5.4$]$要求输出100$\sim$200之间的不能被3整除的数。
 \vspace{-0.3cm}
 \begin{columns}

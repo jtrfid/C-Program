@@ -179,7 +179,7 @@ else
 int a=5,b=10,c=20; //以int为例
 if(a<b+c) // 相当于a<(b+c)
 	{ a小于(b+c)时执行 }
-if(a<=b+c) // 
+if(a<=b+c) 
 	{ a小于等于(b+c)时执行 }
 if(a>b+c) 
 	{ a大于(b+c)时执行 }
@@ -195,7 +195,7 @@ if(a!=b+c)
 分析:
 \begin{lstlisting}
 if(a>b==c) // 相当于(a>b)==c
-if(a=b>c)  // 相当于a=(b+c),避免==写为=
+if(a=b>c)  // 相当于a=(b>c),避免==写为=
 \end{lstlisting}
 \end{columns}
 \end{frame}
@@ -215,7 +215,7 @@ if(a=b>c)  // 相当于a=(b+c),避免==写为=
 \begin{lstlisting}
 int a=3, b=2, c=1, d1, d2; 
 d1 = a>b; // d1=(a>b), d1=1
-d2 = a>b> c;//d2=(a>b>c),d2=0
+d2 = a>b>c;//d2=(a>b>c),d2=0
 if(d1)
 	{ printf("执行此语句") }
 if(d2) 

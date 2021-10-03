@@ -163,22 +163,52 @@ int main() // 暴力循环求解, 效率低
 \end{lstlisting}
 \end{frame}
 
-\begin{frame}[shrink,fragile]{求整数$a,b$的最大公约数, 欧几里得算法}
-\begin{columns}
-	\column{0.6\textwidth}
-	古希腊数学家欧几里德在其著作<<The Elements>>中最早描述了这种算法。\\
-	\textbf{定理：}两个整数的最大公约数等于其中较小的那个数和两数相除余数的最大公约数。
-	\column{0.3\textwidth}
-	\includegraphics[scale=0.3]{eou}
-\end{columns}
-~\\
-\textbf{伪代码分析}
+\begin{frame}[fragile]{求整数$a,b$的最大公约数, 欧几里得算法}
+\begin{tikzpicture}[font=\small]
+\node[align=left,text width=0.8\textwidth] (left) {古希腊数学家欧几里德在其著作<<The Elements>>中最早描述了这种算法。\\
+	\textbf{定理：}两个整数的最大公约数等于其中较小的那个数和两数相除余数的最大公约数。};
+\node[right] at(left.east) {\includegraphics[scale=0.3]{eou}};
+\end{tikzpicture}
+
+令 $a=bq+r, q=\lfloor\frac{a}{b}\rfloor,r=a\%b$, 设$a,b$的公约数$u,(a=su, b=tu)$, 我们有
+
+$r=a-bq=su-qtu=(s-qt)u$, 表明$a,b$的公约数$u$也整除$r$. 
+
+类似的, 设$b$和$r$的公约数$v,(b=s'v, r=t'v$), 则
+
+$a=bq+r=s'vq+t'v=(s'q+t')v$, 表明$b$和$r$的公约数$v$也整除$a$. 得到定理的结论.
+
+\medskip
+\small\textcolor{blue}{注: $\lfloor\frac{a}{b}\rfloor$表示$\frac{a}{b}$的结果向下取整, 在C语言中, $a/b=\lfloor\frac{a}{b}\rfloor$}
+\end{frame}
+
+\begin{frame}{欧几里得算法 --- 求整数$a,b$最大公约数: 迭代过程}
+%Therefore, every common divisor of $a$ and $b$ is a common divisor of $b$ and $r$, so the procedure can be iterated as follows:
+\vspace{-1cm}
+\begin{align*}
+q_1&=\lfloor\frac{a}{b}\rfloor		& a&=bq_1+r_1    	& r_1&=a-bq_1\\
+q_2&=\lfloor\frac{b}{r_1}\rfloor 	& b&=q_2r_1+r_2  	& r_2&=b-q_2r_1\\
+q_3&=\lfloor\frac{r_1}{r_2}\rfloor 	& r_1&=q_3r_2+r_3  	& r_3&=r_1-q_3r_2\\
+q_4&=\lfloor\frac{r_2}{r_3}\rfloor 	& r_2&=q_4r_3+r_4  	& r_4&=r_2-q_4r_3\\
+\cdots\\
+q_n&=\lfloor\frac{r_{n-2}}{r_{n-1}}\rfloor 	& r_{n-2}&=q_4r_{n-1}+r_n  	& r_n&=r_{n-2}-q_nr_{n-1}\\
+q_{n+1}&=\lfloor\frac{r_{n-1}}{r_{n}}\rfloor 	& r_{n-1}&=q_{n+1}r_{n}+0  	& r_n&=r_{n-1}/q_{n+1} 
+\end{align*}
+
+迭代至$q_{n+1}, r_{n-1}\%r_n=0$, 得到$a,b$的最大公约数: $r_n=r_{n-1}/q_{n+1}$. 就是余数为0时的分母值.
+%For integers, the algorithm terminates when $q_{n+1}$ divides $r_{n-1}$ exactly, at which point $r_n$ corresponds to the greatest common divisor of $a$ and $b,~\text{GCD}(a,b)=r_n$. 
+\end{frame}
+
+\begin{frame}[fragile]{欧几里得算法 --- 求整数$a,b$的最大公约数: 伪代码}
+\textbf{定理：}两个整数的最大公约数等于其中较小的那个数和两数相除余数的最大公约数。
+
+\medskip
 \begin{lstlisting}
-a(大),b(小)的最大公约数: 因为: a=mb+r, m=a/b; r=a%b, $\Rightarrow$a,b的公约数能整除b和r.
+a(大),b(小)的最大公约数: 因为: a=qb+r, q=a/b; r=a%b, $\Rightarrow$a,b的公约数能整除b和r.
 r=a%b,r为0, 则b就是最大公约数。否则迭代循环, a=b，b=r, 直到余数为零, 则分母就是最大公约数。 
 while(1)
 {
-   if(b==0) { gcd=a; break; }
+   if(b==0) { gcd=a; break; } // 分母(上轮计算的余数)为0时, a就是最大公约数
    r = a%b; // 注意b为0时，不能计算余数，a就是最大公约数
    if(r==0) { gcd=a; break; } // 本轮循环的a(上轮循环的b)就是最大公约数
    a=b; b=r; // 准备下一轮迭代    
@@ -193,7 +223,7 @@ scanf("%d%d",&a,&b); // 机试系统不要想当然给提示语句, 除非题目
 if(a<b) { t=a; a=b; b=t; } // 交换a,b,使a是较大者
 while(1)
 {
-   if(b==0) { t=a; break; } // 分母为0时, a就是最大公约数
+   if(b==0) { t=a; break; } // 分母(上轮计算的余数)为0时, a就是最大公约数
    r = a%b; 
    if(r==0) {t=b; break;} // b就是最大公约数
    a=b; b=r; // 准备下一轮迭代   
