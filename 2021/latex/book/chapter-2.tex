@@ -8,13 +8,15 @@
 %\motto{Use the template \emph{chapter.tex} to style the various elements of your chapter content.}
 \chapter{第2次机试练习: 选择与循环语句练习}
 
+\section*{--- 特别提示 ---}
+
 \begin{note}[不该再次发生的常见错误,输入输出格式转换符不对应, 导致的严重错误]
 	\begin{lstlisting}
 	int a; float b; double c; char d;
 	scanf("%d",a); // 遗忘变量前的取地址符$\&$
 	scanf("%d\n",&a); // 多余'\n', 导致不能正常输入
 	scanf("%d%f%lf%c",&a,&b,&c,%d); // 正确对应关系
-	scanf("%d%c%f",&a,&c,&b); // 正确对应关系
+	scanf("%d%c%f",&a,&d,&b); // 正确对应关系
 	printf("%d,%f,%lf,%c",a,b,c,d); // 正确对应关系
 	\end{lstlisting}
 \end{note}
@@ -23,17 +25,17 @@
 	\begin{lstlisting}
 	if();
 	{
-	...
+		...
 	}                 
 	
 	while();
 	{
-	...
+		...
 	} 
 	
 	for(;;);
 	{
-	...
+		...
 	}                  
 	\end{lstlisting}
 \end{note}
@@ -671,298 +673,3 @@ int main()
 	\end{itemize}	
 \end{note}
 
-
-\section{最大公约数}	
-最大公约数(GCD)指某几个整数共有因子中最大的一个，最大公约数具有如下性质，
-
-gcd(a,0)=a
-
-gcd(a,1)=1
-
-因此当两个数中有一个为0时，gcd是不为0的那个整数，当两个整数互质时最大公约数为1。
-
-输入两个整数a和b，求最大公约数
-
-输入说明：
-
-输入为两个正整数a和b（0<=a,b<10000），a和b之间用空格分隔，
-
-输出说明：
-
-输出其最大公约数
-
-输入样例：
-
-样例1输入
-	
-2 4
-
-样例2输入：
-
-12 6
-
-样例3输入：
-
-3 5
-
-输出样例：
-
-样例1输出
-	
-2
-
-样例2输出
-
-6
-
-样例3输出
-
-1
-
-\newpage
-\begin{lstlisting}
-#include <stdio.h>
-// 递归函数
-int gcd(int a,int b)
-{
-	if(b==0) return a;   // 公约数就是a
-	return gcd(b,a%b);   // 递归调用
-}
-
-int main() // 调用递归函数
-{
-	int a,b,t;
-	scanf("%d%d",&a,&b);
-	if(a<b) { t=a; a=b; b=t; } // 交换a,b 
-	printf("%d\n",gcd(a,b));   // 函数调用 
-	return 0;	
-}
-
-int main1() // 暴力循环求解, 效率低。
-{
-	int a,b,t=-1,i;//t给初值是好习惯，否则下面程序逻辑有可能使t得到随机值。 
-	scanf("%d%d",&a,&b); // 机试系统不要想当然给提示语句, 除非题目要求  
-	if(a<b) { t=a; a=b; b=t; } // 交换a,b,使a是较大者 
-	if(b==0) 
-	{
-		t=a; // 考虑分母为0的情况，比如：5,0的最大公约数为5 
-	} 
-	else
-	{
-		for(i=b;i>0;i--)
-		{
-			if(a%i==0 && b%i==0)
-			{
-				t=i; break; // 求得最大公约数，a,b互质, 必然t=1 
-			}
-		}
-	}
-	printf("%d\n",t);
-	return 0;	
-}
-
-int main2() // 利用欧几里得定理循环求解, 效率高。
-{
-	int a,b,r,t;
-	scanf("%d%d",&a,&b); // 机试系统不要想当然给提示语句, 除非题目要求
-	if(a<b) { t=a; a=b; b=t; } // 交换a,b,使a是较大者
-	while(1)
-	{
-		if(b==0) { t=a; break; } // 分母为0时, a就是最大公约数
-		r = a%b; 
-		if(r==0) {t=b; break;} // b就是最大公约数
-		a=b; b=r; // 准备下一轮迭代   
-	}
-	printf("%d\n",t);// 输出最大公约数
-	return 0;
-}
-
-int main3() // 利用欧几里得定理循环求解, 效率高。
-{
-	int a,b,r,t;
-	scanf("%d%d",&a,&b); // 机试系统不要想当然给提示语句, 除非题目要求
-	if(a<b) { t=a; a=b; b=t; } // 交换a,b,使a是较大者
-	if (b==0) // 考虑分母为0的情况，比如：5,0的最大公约数为5 
-	{
-		printf("%d\n",a);
-	}
-	else
-	{
-	   // 排除了分母为0时不能求余数的情况 
-		while((r=a%b)!=0) // a/b的余数赋值给r,r不等于0时执行循环体 
-		{	
-			a=b; 
-			b=r; 
-		}
-		printf("%d\n",b);
-	}
-	return 0; // 主函数结束
-}	
-
-int main4() // 体会函数结束语句return的使用
-{
-	int a,b,r,t;
-	scanf("%d%d",&a,&b); // 机试系统不要想当然给提示语句, 除非题目要求
-	if(a<b) { t=a; a=b; b=t; } // 交换a,b,使a是较大者
-	if (b==0) // 考虑分母为0的情况，比如：5,0的最大公约数为5 
-	{
-		printf("%d\n",a);
-		return 0;  // 主函数结束 
-	}
-	// 排除了分母为0时不能求余数的情况 
-	while((r=a%b)!=0) // a/b的余数赋值给r,r不等于0时执行循环体 
-	{
-		a=b; b=r; // 准备下一轮迭代   
-	}
-	printf("%d\n",b);
-	return 0;	// 主函数结束 
-}
-\end{lstlisting}
-
-\begin{figure}[H]
-	\centering
-	\caption{递归函数\lstinline|int gcd(int a,int b)|中系统内部维护的`栈'结构示意图}	
-	\begin{tikzpicture}
-	\node[] (tab) {
-		\begin{tabular}{|c|c|}
-		\hline
-		参数a,b & 递归调用\lstinline|gcd(a,b)=gcd(b,a%b);|\\
-		\hline
-		a=6,b=0 & gcd(6,0)=6; 6就是公约数, 结束递归, 开始出栈\\
-		\hline
-		a=12,b=6 & \lstinline|gcd(12,6)=gcd(6,12%6)=gcd(6,0);|\\
-		\hline
-		a=18,b=12 & \lstinline|gcd(18,12)=gcd(12,18%12)=gcd(12,6);|\\
-		\hline
-		\end{tabular}
-	};
-    \node[above] at(tab.north) {例1: 计算gcd(18,12)};
-	\path[->,very thick]
-	($(tab.north west)+(-0.5cm,0)$) edge[red] node[left] {入栈} ($(tab.south west)+(-0.5cm,0)$)
-	($(tab.south east)+(0.5cm,0)$) edge[blue] node[right] {出栈} ($(tab.north east)+(0.5cm,0)$)
-	($(tab.south west)+(-0.8cm,-0.2cm)$) edge[-,double] ($(tab.south east)+(0.8cm,-0.2cm)$)
-	; 
-	\end{tikzpicture}
-	
-	\begin{tikzpicture}
-	\node[] (tab) {
-		\begin{tabular}{|c|c|}
-		\hline
-		参数a,b & 递归调用\lstinline|gcd(a,b)=gcd(b,a%b);|\\
-		\hline
-		a=1,b=0 & gcd(1,0)=1; 1就是公约数, 结束递归, 开始出栈\\
-		\hline
-		a=2,b=1 & \lstinline|gcd(2,1)=gcd(1,2%1)=gcd(1,0);|\\
-		\hline
-		a=3,b=2 & \lstinline|gcd(3,2)=gcd(2,3%2)=gcd(2,1);|\\
-		\hline
-		a=2,b=3 & \lstinline|gcd(2,3)=gcd(3,2%3)=gcd(3,2);|\\
-		\hline
-		a=5,b=2 & \lstinline|gcd(5,2)=gcd(2,5%2)=gcd(2,3);|\\
-		\hline
-		a=32,b=5 & \lstinline|gcd(32,5)=gcd(5,32%5)=gcd(5,2);|\\
-		\hline
-		a=37,b=32 & \lstinline|gcd(37,32)=gcd(32,37%32)=gcd(32,5);|\\
-		\hline
-		\end{tabular}
-	};
-    \node[above] at(tab.north) {例2: 计算gcd(37,32)};
-	\path[->,very thick]
-	($(tab.north west)+(-0.5cm,0)$) edge[red] node[left] {入栈} ($(tab.south west)+(-0.5cm,0)$)
-	($(tab.south east)+(0.5cm,0)$) edge[blue] node[right] {出栈} ($(tab.north east)+(0.5cm,0)$)
-	; 
-	\end{tikzpicture}
-\end{figure}
-
-\begin{note}[欧几里得定理]
-	\begin{lstlisting}[frame=none]
-	a(大),b(小)的最大公约数: 因为: a=mb+r, m=a/b; r=a%b, $\Rightarrow$a,b的公约数能整除b和r.
-	r=a%b,r为0, 则b就是最大公约数。否则迭代循环, a=b，b=r, 直到余数为零, 则分母就是最大公约数。
-	\end{lstlisting}
-\end{note}
-
-\begin{note}
-	预习函数及递归函数的使用。
-\end{note}
-
-\section{角谷定理}
-角谷定理定义如下：
-对于一个大于1的整数n，如果n是偶数，则n = n / 2。如果n是奇数，则n = 3 * n +1，反复操作后，n一定为1。
-
-例如输入22的变化过程： 22 ->11 -> 34 -> 17 -> 52 -> 26 -> 13 -> 40 -> 20 -> 10 -> 5 -> 16 -> 8 -> 4 -> 2 -> 1，数据变化次数为15。
-
-输入一个大于1的整数，求经过多少次变化可得到自然数1。
-
-输入说明	
-
-输入为一个整数n，1<n<100000。
-
-输出说明	
-
-输出变为1需要的次数
-
-输入样例
-	
-样例1输入
-
-22
-
-样例2输入
-
-33
-
-输出样例
-
-样例1输出
-	
-15
-
-样例2输出
-
-26
-
-\begin{lstlisting}
-#include <stdio.h>
-int main()
-{
-	int n,i=0; // 变量i用于计数的辅助变量
-	scanf("%d",&n);
-	// 因为题目输入假设$n>1$, 因此不必考虑n=1时的情况
-	while(n!=1)  // n不等于1时执行循环体中的语句
-	{
-		if(n%2==0) n=n/2;
-		else n=3*n+1;
-		i++;
-	} 
-	printf("%d\n",i);
-	return 0;	
-}
-
-// 含程序调试语句，不吝惜写一些printf语句，观察程序的执行过程。 
-int main()
-{
-	int n=22,i=0; // 变量i用于计数的辅助变量
-	//scanf("%d",&n); // 调试时可以注释掉输入语句, 改变变量n的值，观察执行过程 
-	
-	printf("%d->",n);
-	while(n!=1)  // n不等于1时执行循环体中的语句
-	{
-		if(n%2==0) 
-		{ 
-			n=n/2;
-		} 
-		else 
-		{
-			n=3*n+1;
-		}
-		printf("%d->",n);
-		i++;
-	} 
-	printf("\n总共变化次数%d\n",i);
-	return 0;	
-}
-\end{lstlisting}
-
-\begin{note}
-	试着用\lstinline|do{ }while(); for(;;)|改写此程序, 执行相同功能。
-\end{note}

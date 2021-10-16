@@ -372,6 +372,7 @@ for (i=1,total=0; i<=1000; i++)// 表达式1给多个变量赋初值，用逗号
   total = total + amount; 
   if(total >= SUM) break; // 终止整个循环,也不会执行for语句的表达式3 (i++)
 }
+i=(i<=1000)?i:(i-1); // 想一想,此语句为何必要?
 aver=total/i;
 printf("num=%d\naver=%10.2f\n",i,aver); 
 \end{lstlisting}

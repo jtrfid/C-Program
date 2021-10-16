@@ -1,0 +1,5 @@
+ XDOJ上机练习平台：
+校外/宿舍上机网址：http://39.98.193.72/xdoj-ssm/login.jsp
+机房上机网址：http://168.168.215.80/xdoj-ssm 或
+                         http://168.168.215.90/xdoj-ssm 
+

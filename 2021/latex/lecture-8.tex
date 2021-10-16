@@ -84,7 +84,6 @@ for(m=100;m<=999;m++)
 \end{lstlisting}
 \end{columns}
 ~\\
-\pause
 \textcolor{blue}{思考: 输出共有多少个水仙数?}
 \end{frame}
 
@@ -103,7 +102,7 @@ for(i=a;i<=b;i++) // 考察i是否水仙数
 {  
   sum = 0; t=i; // 临时变量记住i; 易遗漏每次内层循环前sum要归0
   while(t!=0) // 累加各位立方 
-  { sum+=pow(t%10,3);  // 推荐: t=t%10; sum=sum+t*t*t; 
+  { t=t%10; sum=sum+t*t*t;   // 不好: sum+=pow(t%10,3);
     t=t/10; 
   }
   if(sum==i) n++; // i是水仙数 
@@ -124,16 +123,15 @@ int x,y,z; // 公鸡、母鸡、小鸡个数
 for(x=0;x<=100;x++) 
    for(y=0;y<=100;y++) 
      for(z=0;z<=100;z++) 
-       if(5*x+3*y+z/3 == 100 && x+y+z == 100 && z%3 == 0) // 全部条件 
+       if(5*x+3*y+z/3 == 100 && x+y+z == 100 && z%3 == 0) //全部条件 
           printf("%d,%d,%d\n",x,y,z);
 \end{lstlisting}
 \end{columns}
 \vspace{0.5cm}
-\pause
 \textcolor{blue}{如何考虑无解的情况?}
 \end{frame}
 
-\begin{frame}[shrink,fragile]
+\begin{frame}[shrink,fragile,plain]
 附加题5-1: 求整数$a,b$的最大公约数，当两个数中有一个为0时，公约数是不为0的那个整数; 当两个整数互质时最大公约数为1。
 输入两个整数a和b，求最大公约数。 
 \pause
@@ -143,18 +141,12 @@ int main() // 暴力循环求解, 效率低
 	int a,b,t=-1,i; // t给初值是好习惯，否则下面程序逻辑有可能使t得到随机值。 
 	scanf("%d%d",&a,&b); // 机试系统不要想当然给提示语句, 除非题目要求  
 	if(a<b) { t=a; a=b; b=t; } // 交换a,b,使a是较大者 
-	if(b==0) 
-	{
-		t=a; // 考虑分母为0的情况，比如：5,0的最大公约数为5 
-	} 
+	if(b==0) t=a; // 考虑分母为0的情况，比如：5,0的最大公约数为5 
 	else
 	{
 		for(i=b;i>0;i--)
 		{
-			if(a%i==0 && b%i==0)
-			{
-				t=i; break; // 求得最大公约数，a,b互质, 必然t=1 
-			}
+			if(a%i==0 && b%i==0) { t=i; break; } // 求得最大公约数，a,b互质, 必然t=1 
 		}
 	}
 	printf("%d\n",t);

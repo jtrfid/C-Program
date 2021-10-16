@@ -145,7 +145,7 @@ int main()
 	\column{0.3\textwidth}
 	\includegraphics[scale=0.5]{prime}
 \end{columns}
-\textbf{\textcolor{blue}{只要在循环结束后检查循环变量i的值，就能判定循环是提前结束还是正常结束的。从而判定n是否为素数。这种判断循环结束的方法以后会常用到。}}
+\textcolor{blue}{只要在循环结束后检查循环变量i的值，就能判定循环是提前结束还是正常结束的。从而判定n是否为素数。这种判断循环结束的方法以后会常用到。}
 \end{frame}
 
 \begin{frame}[shrink,fragile]
@@ -225,30 +225,71 @@ int main()
 \end{frame}
 
 \begin{frame}[shrink,fragile]
-\small
 $[$例5.11$]$译密码。为使电文保密，往往按一定规律将其转换成密码，收报人再按约定的规律将其译回原文。例如，可以按以下规律将电文变成密码:将字母A变成字母E，a变成e，即变成其后的第4个字母，W变成A，X变成B，Y变成C，Z变成D。
-\pause
-\begin{lstlisting}
-char c;
-c=getchar(); //输入一个字符给字符变量c
-while(c!='\n') //检查c的值是否为换行符'\n'  
-{
-  if((c>='a' && c<='z') || (c>='A' && c<='Z')) //c如果是字母
-  {
-     if((c>='W' && c<='Z') || (c>='w' && c<='z')) c = c-22; //如果是26个字母中最后4个字母之一就使c-22
-     else  c =c + 4;   //如果是前面22个字母之一，就使c + 4
-  }
-  printf("%c",c); //输出已改变的字符
-  c=getchar();    //再输入下一个字符给字符变量c
-}
-printf("\n");
-\end{lstlisting}
+\begin{center}
+\begin{tikzpicture}[>=latex, shorten >=1pt,node distance=1cm, on grid, auto,semithick,initial text=, every state/.style={draw=none,minimum size=0.5cm,outer sep=0pt,inner sep=1pt},every label/.style={outer sep=0pt,inner sep=3pt,},every fit/.style={rectangle,rounded corners=3mm,inner xsep=5mm,inner ysep=3mm,outer sep=2pt},font=\small]
+\node[state,label={below:0}] (a) {A};
+\node[state,label={below:1}] (b) [right= of a] {B};
+\node[state,label={below:2}] (c) [right= of b] {C};
+\node[state,label={below:3}] (d) [right= of c] {D};
+\node[state,label={below:4}] (e) [right= of d] {E};
+\node[state,label={below:$\cdots$}] (dot) [right=2cm of e] {$\cdots$};
+\node[state,label={below:22}] (w) [right= of dot] {W};
+\node[state,label={below:23}] (x) [right= of w] {X};
+\node[state,label={below:24}] (y) [right= of x] {Y};
+\node[state,label={below:25}] (z) [right= of y] {Z};
+\node[] at($(a)+(-0.7,-0.4)$) {Index};
+\path[->]
+(a) edge[bend right=45] (e)
+(w) edge[bend right,dashed,blue] (a)
+(x) edge[bend left=45,dashed,red] (b)
+;
+\end{tikzpicture}
+\end{center}
+\end{frame}
+
+\begin{frame}[shrink,fragile,plain]
+\begin{tikzpicture}[>=latex, shorten >=1pt,node distance=0.7cm, on grid, auto,semithick,initial text=, every state/.style={draw=none,minimum size=0.5cm,outer sep=0pt,inner sep=1pt},every label/.style={outer sep=0pt,inner sep=3pt,},every fit/.style={rectangle,rounded corners=3mm,inner xsep=5mm,inner ysep=3mm,outer sep=2pt},font=\small]
+\node[state,label={below:0}] (a) {A};
+\node[state,label={below:1}] (b) [right= of a] {B};
+\node[state,label={below:2}] (c) [right= of b] {C};
+\node[state,label={below:3}] (d) [right= of c] {D};
+\node[state,label={below:4}] (e) [right= of d] {E};
+\node[state,label={below:$\cdots$}] (dot) [right=2cm of e] {$\cdots$};
+\node[state,label={below:22}] (w) [right= of dot] {W};
+\node[state,label={below:23}] (x) [right= of w] {X};
+\node[state,label={below:24}] (y) [right= of x] {Y};
+\node[state,label={below:25}] (z) [right= of y] {Z};
+\node[] at($(a)+(-0.7,-0.4)$) {Index};
+\path[->]
+(a) edge[bend right=45] (e)
+(w) edge[bend right,dashed,blue] (a)
+(x) edge[bend left=45,dashed,red] (b)
+;
+\node[anchor=north west,text width=0.9\textwidth,draw] at($(a)+(-0.5,-1.4)$) {
+	\vspace{-0.4cm}
+	\begin{lstlisting}
+	char c;
+	c=getchar(); //输入一个字符给字符变量c
+	while(c!='\n') //检查c的值是否为换行符'\n'  
+	{
+		if((c>='a' && c<='z') || (c>='A' && c<='Z')) //c如果是字母
+		{
+			if((c>='W' && c<='Z') || (c>='w' && c<='z')) c = c-22; //如果是26个字母中最后4个字母之一就使c-22
+			else  c =c + 4;   //如果是前面22个字母之一，就使c + 4
+		}
+		printf("%c",c); //输出已改变的字符
+		c=getchar();    //再输入下一个字符给字符变量c
+	}
+	printf("\n");
+	\end{lstlisting}
+};
+\end{tikzpicture}
 \end{frame}
 
 \note{a,b,c,d,e,$\dots$,v(第22个字符),w(c-22),x(c-22),y(c-22),z(c-22)}
 
-\begin{frame}[shrink,fragile]
-\textbf{\textcolor{blue}{在循环条件中接收输入的字符是一种常见技巧。}}
+\begin{frame}[shrink,fragile]{在循环条件中接收输入的字符是一种常见技巧}
 \begin{lstlisting}
 char c;
 while((c=getchar())!='\n') //检查c的值是否为换行符'\n'  
