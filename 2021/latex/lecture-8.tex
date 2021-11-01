@@ -90,8 +90,9 @@ for(m=100;m<=999;m++)
 \begin{frame}[fragile]
 附加题3-3: 求整数区间$[a,b]$中水仙花数的个数。
 \pause
+\vspace{-0.2cm}
 \begin{columns}
-\column{0.8\textwidth}
+\column{1.0\textwidth}
 \begin{lstlisting}
 int n=0; //计数 
 int a,b; // a,b 区间
@@ -102,8 +103,8 @@ for(i=a;i<=b;i++) // 考察i是否水仙数
 {  
   sum = 0; t=i; // 临时变量记住i; 易遗漏每次内层循环前sum要归0
   while(t!=0) // 累加各位立方 
-  { t=t%10; sum=sum+t*t*t;   // 不好: sum+=pow(t%10,3);
-    t=t/10; 
+  { sum=sum+(t%10)*(t%10)*(t%10);   // 不好: sum+=pow(t%10,3);
+     t=t/10; 
   }
   if(sum==i) n++; // i是水仙数 
 }
@@ -146,7 +147,8 @@ int main() // 暴力循环求解, 效率低
 	{
 		for(i=b;i>0;i--)
 		{
-			if(a%i==0 && b%i==0) { t=i; break; } // 求得最大公约数，a,b互质, 必然t=1 
+			if(a%i==0 && b%i==0) 
+			{ t=i; break; } // 求得最大公约数，a,b互质, 必然t=1 
 		}
 	}
 	printf("%d\n",t);
