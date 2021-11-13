@@ -6,7 +6,7 @@
 %
 %%%%%%%%%%%%%%%%%%%%%%%% Springer-Verlag %%%%%%%%%%%%%%%%%%%%%%%%%%
 %\motto{Use the template \emph{chapter.tex} to style the various elements of your chapter content.}
-\chapter{第5次机试练习: 流程控制, 字符串, 数组}
+\chapter{第6次机试练习: 流程控制, 字符串, 数组}
 
 \section{歌德巴赫猜想}
 德巴赫猜想：任意一个大偶数都能分解为两个素数的和,对于输入的一个正偶数，写一个程序来验证歌德巴赫猜想。
@@ -310,155 +310,6 @@ int main()
 	\end{enumerate}
 \end{note}
 
-\section{寻找最大整数}
-从键盘输入四个整数，找出其中的最大值并将其输出。
-
-输入说明
-	
-输入4个整数，用空格分隔
-
-输出说明
-	
-输出值最大的一个整数
-
-输入样例
-	
-25 99 -46 0
-
-输出样例
-	
-99
-
-\begin{lstlisting}
-#include <stdio.h>
-// 不用存储整数序列, 采用一条循环语句，合并输入和计算，减少出错概率。 
-int main() 
-{
-	int i, num, max;
-	// 输入, 并计算 
-	for(i = 0; i < 4; i++) 
-	{ 
-		if (i==0) scanf("%d",&max); // 假定第一个数就是最大的数 
-		else
-		{
-			scanf("%d",&num);
-			if(num > max) max=num; 
-		} 
-	} 
-	printf("%d\n",max);
-	return 0;
-} 
-
-int main1() // 另解, 存储整数序列
-{
-	int i, num[4], max;
-	// 输入 
-	for(i = 0; i < 4; i++) 
-		scanf("%d",&num[i]);
-	// 假定的最大值必须是实际存在的，不要想当然是0,9999,等等。
-	max = num[0]; 
-	for(i = 0; i < 4; i++)  
-		if(max < num[i]) max = num[i];
-	
-	printf("%d\n",max);
-	return 0;
-} 
-\end{lstlisting}
-
-\begin{note}[要点]
-	题目虽然简单，你能体会哪种解法更好? 特别注意假定变量的值必须是实际存在的数。
-\end{note}
-
-\section{ISBN号码}
-每一本正式出版的图书都有一个ISBN号码与之对应，ISBN码包括9位数字、1位识别码和3位分隔符，其规定格式如"x-xxx-xxxxx-x"，
-其中符号“-”是分隔符（键盘上的减号），最后一位是识别码，例如0-670-82162-4就是一个标准的ISBN码。
-
-ISBN码的首位数字表示书籍的出版语言，例如0代表英语；
-
-第一个分隔符“-”之后的三位数字代表出版社，例如670代表维京出版社；
-
-第二个分隔之后的五位数字代表该书在出版社的编号；
-
-最后一位为识别码。识别码的计算方法如下：
-
-首位数字乘以1加上次位数字乘以2……以此类推，用所得的结果mod 11，所得的余数即为识别码，如果余数为10，则识别码为大写字母X。
-例如ISBN号码0-670-82162-4中的识别码4是这样得到的：
-对067082162这9个数字，从左至右，分别乘以1，2，\dots，9，再求和，即$0\times 1+6\times 2+\dots +2\times 9=158$，然后取158 mod 11的结果4作为识别码。
-
-编写程序判断输入的ISBN号码中识别码是否正确，如果正确，则仅输出``Right"; 如果错误，则输出正确的ISBN号码。
-
-输入说明	
-
-输入只有一行，是一个字符序列，表示一本书的ISBN号码(保证输入符合ISBN号码的格式要求)。
-
-输出说明	
-
-输出一行，假如输入的ISBN号码的识别码正确，那么输出``Right"，否则，按照规定的格式，输出正确的ISBN号码(包括分隔符``-")。
-
-输入样例	
-
-样例输入1
-
-0-670-82162-4
-
-样例输入2
-
-0-670-82162-0
-
-输出样例	
-
-样例输出1
-
-Right
-
-样例输出2
-
-0-670-82162-4
-
-\begin{lstlisting}
-#include <stdio.h>
-int main()
-{
-	char ISBN[14] = "0-670-82162-4";  // ISBN[13]='\0'
-	int i,j, code1 = 0, code2;
-	
-	// 末尾自动添加'\0'.
-	scanf("%s",ISBN);  // 或 gets(ISBN); 
-	code2 = ISBN[12] == 'X' ? 'X' : ISBN[12]-'0';
-	for(i = 0,j = 1; i < 11; i++)
-	{
-		if (ISBN[i]=='-') continue;
-		// 整数与单个数字字符的关系：9 = '9' -'0' 
-		code1 += (ISBN[i]-'0')*j;  
-		j++;
-	}   
-	code1 %= 11;
-	if (code1 == 10) code1 = 'X';  
-	if(code1 == code2) printf("Right\n");
-	else 
-	{
-		if(code1 == 'X') ISBN[12] = 'X';
-		else ISBN[12] = code1 + '0';
-		printf("%s\n",ISBN); // 或 puts(ISBN);
-	}
-	return 0;
-} 
-\end{lstlisting}
-
-\begin{note}[要点]
-	\begin{enumerate}
-		\item 定义字符数组表示字符串时，且记给\lstinline|'\0'|留一个字符的位置, 表示字符串的结尾。
-		\item \lstinline|ASCII编码(整数)=字符-'0';|
-		\item \lstinline|字符=ASCII编码(整数)+'0';|
-		\item 整数可以表示字符的ASCII编码(整数), 整数和字符类型可以``混用", 详见课件。
-		\begin{lstlisting}
-		int a; char c='A';
-		a = c+1; // c当作整数运算
-		printf("%d %c %d %c\n",a,a,c,c); //66 B 65 A 
-		\end{lstlisting}
-	\end{enumerate}
-\end{note}
-
 \section{密码强度}
 每个人都有很多密码，你知道你的密码强度吗？假定密码由大写字母、小写字母、数字和非字母数字的符号这四类字符构成，密码强度计算规则如下：
 
@@ -471,15 +322,15 @@ int main()
 按照此规则计算的密码强度为$0\sim 5$。请你设计一个程序计算给出的密码的强度。
 
 输入说明
-	
+
 输入为一个密码字符串，字符串长度不超过50个字符。
 
 输出说明
-	
+
 输出一个整数表示该密码的强度。
 
 输入样例
-	
+
 输入样例1
 
 abcd
@@ -489,7 +340,7 @@ abcd
 ab123
 
 输出样例
-	
+
 样例1输出：
 
 1

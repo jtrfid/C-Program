@@ -32,7 +32,53 @@
  ***********************************************************/
  
 #include <stdio.h>
+// 简洁 
 int main()
+{
+	// 按题意, 存储ISBN需要13个字符, 再加上字符串结束字符'\0'.
+	char ISBN[14] = "0-670-82162-4";  // ISBN[13]='\0'
+	//char ISBN[14] = "0-670-82162-0";  
+	int i,j,sum=0,r; // r=sum % 11 
+    
+    // 调试时，注释输入语句 
+    // 末尾自动添加'\0'.
+    scanf("%s",ISBN);  // 或 gets(ISBN);
+    
+    // 对识别码之前的数字求和, 注意边界.
+	for(i = 0,j = 1; i < 11; i++)
+	{
+		if (ISBN[i]=='-') continue;
+		sum += (ISBN[i]-'0')*j;   // 整数与单个数字字符的关系：9 = '9' -'0' 
+		j++;
+	}   
+	r=sum%11;
+	
+	// 特别处理识别码 ISBN[12]
+	if (r==10)
+	{
+		if(ISBN[12]=='X') printf("Right\n");
+		else 
+		{
+			ISBN[12]='X';
+			printf("%s\n",ISBN); // 或 puts(ISBN);
+		}
+	}
+	else
+	{
+		// 数字转字符 r+'0'
+		if(ISBN[12]== r +'0') printf("Right\n");
+		else 
+		{
+			ISBN[12]= r +'0';
+			printf("%s\n",ISBN); // 或 puts(ISBN);
+		}
+	} 
+	
+	return 0;
+} 
+
+// 复杂 
+int main1111()
 {
 	//char ISBN[14] = "0-670-82162-4";  // ISBN[13]='\0'
 	char ISBN[14] = "0-670-82162-0";  

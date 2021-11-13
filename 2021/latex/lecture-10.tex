@@ -287,7 +287,7 @@ printf("max=%d,row=%d,col=%d\n",max,row,col);
 \end{lstlisting}
 \end{frame}
 
-\begin{frame}[shrink,fragile]{\small{例: 使方阵(行数=列数)左对角线元素置1, 其它元素为0.}}
+\begin{frame}[shrink,fragile]{\small{例: 使方阵(行数=列数)右对角线元素置1, 其它元素为0.}}
 \begin{tikzpicture}[font=\scriptsize]
 \matrix (4N) [matrix of nodes,nodes={anchor=north,minimum size=6mm,draw},column 1/.style={red},row 1/.style={red}]
 {
@@ -312,7 +312,6 @@ for(i=0;i<M;i++) // 行
 {
    for(j=0;j<M;j++) // 列
    {
-      //右对角线(i+j==M-1)
       if(i==j) a[i][j]=1; 
       else a[i][j]=0;
    }

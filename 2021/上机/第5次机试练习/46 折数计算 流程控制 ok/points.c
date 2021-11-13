@@ -25,7 +25,7 @@
  ***********************************************************/
  
 #include <stdio.h>
-int main()
+int mainOk()
 {
 	int i = 0, points = 0, n = 7, a[100] = {5,4,1,2,3,6,4};
 	int up; // 标志变量 
@@ -59,3 +59,18 @@ int main1()
 	printf("%d\n",points);
 	return 0;
 } 
+
+int main()
+{
+	int i = 0, points = 0, n = 7, a[100] = {5,4,1,2,3,6,4};
+	scanf("%d",&n);
+	for(i=0;i<n;i++) scanf("%d",&a[i]);
+	
+	for(i=1;i<n-1;i++) // 注意数组边界 
+	{
+		if((a[i]<a[i-1] && a[i]<a[i+1]) || (a[i]>a[i-1] && a[i]>a[i+1]))
+			points++;
+	}
+	printf("%d\n",points);
+	return 0;
+}
