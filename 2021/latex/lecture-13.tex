@@ -362,12 +362,9 @@ age(2)=age(1)+2=12
 \end{frame}
 
 \begin{frame}[shrink,fragile]{例: $n!$}
-\[ n!=\begin{cases}
-1 &(n=0,1)\\
-n(n-1) &(n>1)
-\end{cases} 
-\]
-\pause
+\vspace{-0.3cm}
+\begin{tikzpicture}
+\node[text width=\textwidth] (a) {
 \begin{lstlisting}
 double fac(int n) // n!较大，因此函数返回类型设置为double
 {
@@ -383,15 +380,20 @@ int main()
    return 0;           
 }           
 \end{lstlisting}
+};
+\node[anchor=north east] at($(a.north east)+(-2,-2)$) {
+	$n!=\begin{cases}
+	1 &(n=0,1)\\
+	n(n-1) &(n>1)
+	\end{cases}$
+};
+\end{tikzpicture}
 \end{frame}
 
 \begin{frame}[shrink,fragile]{例: 斐波那契数列}
-\[ \begin{cases}
-F_n=1 &(n=0,1)\\
-F_n=F_{n-1}+F_{n-2} &(n>1)
-\end{cases} 
-\]
-\pause
+\vspace{-0.3cm}
+\begin{tikzpicture}
+\node[text width=\textwidth] (a) {
 \begin{lstlisting}
 double F(int n) // Fn较大，因此函数返回类型设置为double
 {
@@ -409,6 +411,14 @@ int main()
    return 0;           
 }                            
 \end{lstlisting}
+};
+\node[anchor=north east] at($(a.north east)+(-2,-2)$) {
+$\begin{cases}
+F_n=1 &(n=0,1)\\
+F_n=F_{n-1}+F_{n-2} &(n>1)
+\end{cases}$
+};
+\end{tikzpicture}
 \end{frame}
 
 \begin{frame}[shrink,fragile]{例: 数字处理}
@@ -421,6 +431,7 @@ int main()
 \end{frame}
 
 \begin{frame}[shrink,fragile]{例: 数字处理---非递归实现}
+\vspace{-0.3cm}
 \begin{columns}[T]
 \column{0.5\textwidth}
 \begin{lstlisting}
@@ -440,7 +451,7 @@ int main()
     return 0;
 }
 \end{lstlisting}
-\column{0.5\textwidth}
+\column{0.4\textwidth}
 \begin{lstlisting}[frame=leftline]
 // 整数a的各位数字之和
 int bitsSum(int a)
@@ -459,6 +470,7 @@ int bitsSum(int a)
 \end{frame}
 
 \begin{frame}[shrink,fragile]{例: 数字处理---递归实现}
+\vspace{-0.3cm}
 \begin{columns}[T]
 \column{0.4\textwidth}
 \begin{lstlisting}
@@ -498,6 +510,7 @@ int bits1(int n)
 \end{frame}
 
 \begin{frame}[shrink,fragile]{例: 二进制输出(正序)}
+\vspace{-0.3cm}
 \begin{columns}[T]
 \column{0.6\textwidth}
 \begin{lstlisting}
@@ -523,7 +536,7 @@ void to_binary(unsigned long n)
   putchar('0'+r);//11010010
 } 
 \end{lstlisting}
-\column{0.4\textwidth}
+\column{0.3\textwidth}
 以\lstinline|x=0XD2|为例，分析递归过程。 \\
 \lstinline|r=n%2;|\\
 计算$2^0,2^1,\dots,2^7$
@@ -786,8 +799,7 @@ void hanoi(int n,char one,char two,char three)
 \section{局部变量和全局变量}
 
 \begin{frame}[shrink,fragile]{局部变量及其作用域}
-定义在函数内部或复合语句中的变量称为\textbf{局部变量}。\\
-局部变量的\textbf{作用域}是从定义语句开始至函数或复合语句结束，不会影响作用域以外的同类型的同名变量值。 
+定义在函数内部或复合语句中的变量称为\textbf{局部变量}。局部变量的\textbf{作用域}是从定义语句开始至函数或复合语句结束，不会影响作用域以外的同类型的同名变量值。 
 \begin{columns}[T]
 \column{0.5\textwidth}
 \begin{lstlisting}
