@@ -6,164 +6,7 @@
 %
 %%%%%%%%%%%%%%%%%%%%%%%% Springer-Verlag %%%%%%%%%%%%%%%%%%%%%%%%%%
 %\motto{Use the template \emph{chapter.tex} to style the various elements of your chapter content.}
-\chapter{第6次机试练习: 函数, 矩阵, 数组, 字符串, 排序}
-
-
-\section{矩阵}
-请写一个程序，对于一个m行m列$(2<m<20)$的方阵，求其每一行、每一列及主、辅对角线元素之和，然后按照从大到小的顺序依次输出这些值。
-
-注：主对角线是方阵从左上角到右下角的一条斜线，辅对角线是方阵从右上角到左下角的一条斜线。
-
-输入说明
-
-输入数据的第一行为一个正整数m;
-
-接下来为m行、每行m个整数表示方阵的元素。
-
-输出说明	
-
-从大到小排列的一行整数，每个整数后跟一个空格，最后换行。
-
-输入样例
-
-\begin{tabular}{llll}
-4&&&\\
-15  &~8   &~-2   &~6\\
-31  &~24  &~18  &~71\\
--3  &~-9  &~27  &~13\\
-17  &~21  &~38  &~69
-\end{tabular}
-
-输出样例
-
-159 145 144 135 81 60 44 32 28 27
-
-\begin{lstlisting}
-#include <stdio.h>
-// 估计方阵行列数 
-#define M 20
-
-// input, m是实际方阵行列数 
-void input(int matrix[][M], int m)
-{
-	int i,j; 
-	for(i = 0; i < m; i++)
-	for(j = 0; j < m; j++) 
-	scanf("%d",&matrix[i][j]);
-}
-
-// 计算主对角线之和, m是实际方阵行列数 
-int main_diagonal(int matrix[][M], int m)
-{	
-	int i,j,sum = 0; 
-	for(i = 0; i < m; i++)
-	{
-		for(j = 0; j < m; j++) 
-		{
-			if(i == j) sum += matrix[i][j];   // 主对角线 
-		}
-	}
-	return sum;
-}
-
-// 计算副对角线之和, m是实际方阵行列数 
-int counter_diagonal(int matrix[][M], int m)
-{	
-	int i,j,sum = 0;
-	for(i = 0; i < m; i++)
-	{
-		for(j = 0; j < m; j++) 
-		{ 
-			if(j == m-i-1) sum += matrix[i][j]; // 副对角线之和 
-		}
-	}
-	return sum;
-}
-
-// 计算第i行之和, m是实际方阵行列数 
-int sumI(int matrix[][M], int m, int i)
-{ 
-	int j,sum = 0; 
-	for(j = 0; j < m; j++) // 遍历列 
-	{
-		sum += matrix[i][j];  // 第i行之和
-	}
-	return sum; 
-} 
-
-// 计算第j行之和, m是实际方阵行列数 
-int sumJ(int matrix[][M], int m, int j)
-{ 
-	int i,sum = 0; 
-	for(i = 0; i < m; i++) // 遍历行 
-	{
-		sum += matrix[i][j];  // 第j行之和
-	}
-	return sum;
-} 
-
-// 交换两个元素值 
-void swap(int *p1, int *p2)
-{
-	int temp;
-	temp = *p1; *p1 = *p2; *p2 = temp;
-}
-
-// 选择法排序（降序）
-void sorts(int a[], int n)
-{
-	int i,j,k;
-	for(i = 0; i < n-1; i++)
-	{
-		k = i;
-		for (j = i+1; j < n; j++)
-			if(a[j] > a[k])	k = j;
-		if (k != i) swap(&a[i],&a[k]);
-	} 
-}
-
-int main()
-{
-	int matrix[M][M],a[2*M+2]; // 以估计行列数，定义数组 
-	int i,m; 
-	scanf("%d",&m); // 实际方阵行列数 
-	
-	input(matrix,m); // input 
-	
-	// 调用各函数，装配数组a
-	int n = 0; // 记录数组a的实际长度		
-	for(i = 0; i < m; i++)
-	{
-		a[n++] = sumI(matrix,m,i); // 第i行之和
-		a[n++] = sumJ(matrix,m,i); // 第i列之和  
-	}
-
-	a[n++] = main_diagonal(matrix,m);    // 主对角线之和 
-	a[n++] = counter_diagonal(matrix,m); // 副对角线之和  
-	
-	// 排序数组a 
-	sorts(a,n);
-	
-	// 输出 
-	for(i = 0; i < n; i++)
-	printf("%d ",a[i]);
-	
-	printf("\n");
-
-	return 0;
-}
-\end{lstlisting}
-
-\begin{note}[要点]
-\begin{enumerate}
-\item 思路：定义功能单一的函数，实现简单功能，主程序调用各个函数。
-\item 一维数组a[2*M+2]存储相关函数计算结果，排序数组a即是所求。 
-\item 避免过多循环嵌套，不易出错，简化程序设计。 
-\item 但是缺点是在各函数中分别循环遍历方阵，效率低。
-\item 优化方案是不采用独立函数计算，在主函数中一次遍历方阵，计算各值。 
-\item 二维数组表示矩阵, 是常见题型, 必须熟练掌握元素的下标规律及其遍历技巧。
-\end{enumerate}
-\end{note}
+\chapter{第7次机试练习: 函数,数组,排序,字符串练习}
 
 \section{消除类游戏}
 消除类游戏是深受大众欢迎的一种游戏，游戏在一个包含有n行m列的游戏棋盘上进行，棋盘的每一行每一列的方格上放着一个有颜色的棋子，当一行或一列上有连续三个或更多的相同颜色的棋子时，这些棋子都被消除。当有多处可以被消除时，这些地方的棋子将同时被消除。
@@ -334,16 +177,16 @@ void output(int checker[][M],int n, int m)
 int main()
 {
 	// 棋盘，初始化是为了便于测试 
-	int checker[M][M]={{2,2,3,1,2},
-	{3,4,5,1,4},
-	{2,3,2,1,3},
-	{2,2,2,4,4}};
+	int checker[M][M]={ {2,2,3,1,2},
+						{3,4,5,1,4},
+						{2,3,2,1,3},
+						{2,2,2,4,4} };
 	int n=4,m=5,i,j; // n行，m列 
 	/************
-	int checker[M][M]={{2,2,3,1,2},
-	{3,1,1,1,1},
-	{2,3,2,1,3},
-	{2,2,3,3,3}};
+	int checker[M][M]={ {2,2,3,1,2},
+						{3,1,1,1,1},
+						{2,3,2,1,3},
+						{2,2,3,3,3} };
 	int n=4,m=5,i,j; // n行，m列 
 	*************/
 	// 标志矩阵 
@@ -355,28 +198,29 @@ int main()
 	
 	// 初始化F 
 	for(i=0;i<n;i++)
-		for(j=0;j<m;j++)
-			F[i][j]=0;
-	
+	for(j=0;j<m;j++)
+	F[i][j]=0;
+
 	// 扫描行 
 	for(i=0;i<n;i++) // 行 
-		delRow(i, checker, F, m);
+	delRow(i, checker, F, m);
 	
 	// 扫描列 
 	for(j=0;j<m;j++) // 列 
-		delCol(j, checker, F, n);
+	delCol(j, checker, F, n);
 	
 	// 清除 
 	del(checker, F, n, m);
 	
 	// 输出棋盘 
 	output(checker,n,m); 
-	return 0;
+	
+	return 0;																	
 } 
 \end{lstlisting}
 
 \begin{note}[要点]
-标志矩阵，体会模块化编程思想，初始化变量的程序调试技巧。
+	标志矩阵，体会模块化编程思想，初始化变量的程序调试技巧。
 \end{note}
 
 \section{表达式求值}
@@ -533,7 +377,8 @@ int main()
 	return 0;
 }
 
-int main1() // 另解，直接读取三个子串, 就不用分解了
+// 简单实现, 直接读取三个子串, 就不用分解了
+int main1() 
 {
 	char s[N],op;
 	char s3[3][N];   
@@ -563,165 +408,412 @@ int main1() // 另解，直接读取三个子串, 就不用分解了
 \end{lstlisting}
 
 \begin{note}[要点]
-本例是字符串处理, 指针应用, 模块化程序设计的范例, 上课时做了详细的讲解。详见课件。
+	体会字符串处理, 指针应用, 模块化程序设计思想。
 \end{note}
 
-\section{马鞍点}	
-若一个矩阵中的某元素在其所在行最小而在其所在列最大，则该元素为矩阵的一个马鞍点。请写一个程序，找出给定矩阵的马鞍点。
+\section{排序}	
+给定N个不同的整数，要求对这N个整数按如下规则排序并输出。
 
-输入说明
+规则一：所有的偶数排在奇数前面。
 
-输入数据第一行只有两个整数m和n（0<m<100,0<n<100），分别表示矩阵的行数和列数;
-
-接下来的m行、每行n个整数表示矩阵元素(矩阵中的元素互不相同), 整数之间以空格间隔。
-
-输出说明
-
-在一行上输出马鞍点的行号、列号(行号和列号从0开始计数)及元素的值(用一个空格分隔), 之后换行;
-
-若不存在马鞍点，则输出一个字符串``no"后换行。
-
-输入样例
-	
-\begin{tabular}{p{1cm}p{1cm}p{1cm}p{1cm}l}
-4  &3&\\
-11    &13    &121\\
-407   &72    &88\\
-23    &58    &1\\
-134   &30    &62
-\end{tabular} 
-
-输出样例
-
-1 1 72
-
-\begin{lstlisting}
-#include <stdio.h>
-// 估计的二维数组最大行列数 
-#define M 100
-#define N 100
-
-// 判断a[row,col]是否是马鞍点, 是: 返回1; 否则返回0
-// m,n是二维数组实际行列数 
-int compute(int a[][N], int m, int n, int row, int col)
-{
-	int i,element = a[row][col]; 
-	// element在其所在行最小而在其所在列最大 
-	for(i = 0; i < n; i++)
-		if(a[row][i] < element) return 0; // 不是马鞍点，直接返回0 
-	for(i = 0; i < m; i++)
-		if(a[i][col] > element) return 0; // 不是马鞍点，直接返回0
-	return 1;	// 如果执行至此，肯定是马鞍点，直接返回0 
-}
-
-int main()
-{
-	int matrix[M][N]; // 按照估计的最大行列数定义二维数组 
-	int i,j,m,n,flag = 0; 
-	
-	scanf("%d%d",&m,&n); // 实际行列数 
-	
-	// input
-	for(i = 0; i < m; i++)
-		for(j = 0; j < n; j++) 
-			scanf("%d",&matrix[i][j]);
-	
-	// 遍历二维数组, 判断马鞍点		
-	for(i = 0; i < m; i++)
-	{
-		for(j = 0; j < n; j++) 
-		{
-			if(compute(matrix,m,n,i,j))
-			{
-				printf("%d %d %d\n",i,j,matrix[i][j]);
-				flag = 1;
-			}
-		}
-	}	
-	if (!flag) printf("no\n");
-	
-	return 0;
-}
-\end{lstlisting}
-
-\begin{note}[要点]
-\begin{enumerate}
-\item 思路：定义函数计算单个元素a[i,j]是否是马鞍点，主程序遍历二维数组，调用此函数。
-\item 避免过多循环嵌套，不易出错，简化程序设计。
-\item 掌握二维数组作为函数参数的定义, 调用方式。
-\end{enumerate}
-\end{note}
-
-\section{数字分解排序}
-输入一个9位以内的正整数n，按数值从高到低的顺序输出n的各位数字。
+规则二：在规则一的前提下按照从大到小的顺序排序。
 
 输入说明	
 
-一个正整数n(0<n<1000000000)
+数据由两行构成，第一行为整数n (n<=100), 表示待排序整数的数量。第二行是n个整数，每个整数的取值区间都为$[-32768\sim32767]$，整数之间以空格间隔。
 
-输出说明	
-
-按数值从高到低的顺序输出n的各位数字，数字之间用空格隔开
+输出说明
+	
+在一行输出排好序的整数，整数之间以空格间隔。
 
 输入样例	
 
-564391
+5 
+
+1 2 3 4 5
 
 输出样例
-
-9 6 5 4 3 1
+	
+4 2 5 3 1
 
 \begin{lstlisting}
-#include <stdio.h>
+# include <stdio.h>
+#define N 100
 
-void order(int a[],int n);  // 排序函数说明
+// 选择法从大到小排序 
+int sorts(int a[],int n)
+{
+	int i,j,k,tmp;
+	for(i=0;i<n-1;i++)
+	{
+		k=i; // 未排序中较大者 
+		for(j=i+1;j<n;j++)
+		if(a[j]>a[k]) k=j;
+		if(k!=i)
+		{
+			tmp=a[i];
+			a[i]=a[k];
+			a[k]=tmp;
+		} 
+	}
+}
 
 int main()
 {
-	int i = 0,j,k,n,num[9];
+	int even[N],odd[N],n,i,num;
+	int evenN=0, oddN=0;
 	scanf("%d",&n);
-	k=0; // 数字个数 
-	while(n) // 构造数组num存储n的各位数字(从最低位到最高位存储)
+	for(i=0;i<n;i++)
 	{
-		num[i++] = n%10;
-		n /= 10;
-		k++;
+		scanf("%d",&num);
+		if(num%2==0) // even
+		{
+			even[evenN]=num;
+			evenN++;
+		}
+		else
+		{
+			odd[oddN]=num;
+			oddN++;
+		}
 	} 
-
-	// 输出验证，调试技巧之一。 
-	//for(j = 0; j < k; j++) printf("%d ",num[j]);
-	//   printf("\n");
-	
-	order(num,k);  // 排序函数
-	
-	// 输出
-	for(j = 0; j < k; j++) printf("%d ",num[j]);
-	
-	printf("\n");
+	// 排序
+	sorts(even,evenN);
+	sorts(odd,oddN);
+	// 输出 
+	for(i=0;i<evenN;i++) printf("%d ",even[i]); 
+	for(i=0;i<oddN;i++) printf("%d ",odd[i]); 
+	printf("\n"); 
 	return 0;
-} 
-
-// 冒泡排序函数 
-void order(int a[],int n)
-{ 
-	int i,j,t,flag; 
-	for(j = 1; j <= n-1; j++)
-	{ 
-		flag=0; // 且记! 必须在进入内层循环前初始化。
-		for(i = 0; i < n - j; i++)
-			if (a[i] < a[i+1]) 
-			{ 
-				t = a[i]; a[i] = a[i+1]; a[i+1] = t; 
-				flag=1;
-			}
-		if(!flag) break;
-	}
 }
 \end{lstlisting}
 
 \begin{note}[要点]
-排序函数必须掌握，注意检查数组是否越界问题。
+	各种形式的排序问题(整数, 字符, 字符串, 结构体)是必须掌握的重点之一。选择法排序或冒泡法排序必须信手拈来。
 \end{note}
 
+\section{等差数列}	
+请写一个程序，判断给定整数序列能否构成一个等差数列。
 
+输入说明
+	
+输入数据由两行构成，第一行只有一个整数n(n<100), 表示序列长度(该序列中整数的个数);
+
+第二行为n个整数，每个整数的取值区间都为$[-32768\sim 32767]$, 整数之间以空格间隔。
+
+输出说明	
+
+对输入数据进行判断，不能构成等差数列输出``no", 能构成等差数列输出表示数列公差(相邻两项的差)的绝对值的一个整数。
+
+输入样例
+	
+样例1输入
+
+6
+
+23 15 4 18 35 11
+
+样例2输入
+
+5
+
+2 6 8 4 10
+
+输出样例
+	
+样例1输出
+
+no
+
+样例2输出
+
+2
+
+\begin{lstlisting}
+# include <stdio.h>
+#define N 100
+
+// 选择法从大到小排序 
+int sorts(int a[],int n)
+{
+	int i,j,k,tmp;
+	for(i=0;i<n-1;i++)
+	{
+		k=i; // 未排序中较大者 
+		for(j=i+1;j<n;j++)
+		if(a[j]>a[k]) k=j;
+		if(k!=i)
+		{
+			tmp=a[i];
+			a[i]=a[k];
+			a[k]=tmp;
+		} 
+	}
+}
+
+// 排序后的a是否构成等差数列，是返回1，否则返回0
+// 若是等差数列, 指针参数tolerance返回公差的绝对值。 
+int check(int a[],int n, int *tolerance)
+{
+	int i;
+	*tolerance = a[0]-a[1]; // 大-小，不用求绝对值 
+	for(i=1;i<n-1;i++) // 注意检查数组越界问题
+	{
+		if(a[i]-a[i+1] != *tolerance) return 0;
+	} 
+	return 1;
+}
+
+int main()
+{
+	int a[N],n,i,tolerance;
+	scanf("%d",&n);
+	for(i=0;i<n;i++)
+	{
+		scanf("%d",&a[i]);
+	} 
+	// 排序
+	sorts(a,n);
+	// check
+	if(check(a,n, &tolerance)) printf("%d\n",tolerance);
+	else printf("no\n");
+	return 0;
+}
+\end{lstlisting}
+
+\begin{note}[要点]
+	数组越界问题, 排序, 地址传递, 模块化程序设计。
+\end{note}
+
+\section{0-1矩阵}	
+查找一个只包含0和1的矩阵中每行最长的连续1序列。
+
+输入说明
+	
+输入第一行为两个整数m和n (0<=m,n<=100)表示二维数组行数和列数，其后为m行数据，每行n个整数(0或1), 输入数据中不会出现同一行有两个最长1序列的情况。
+
+输出说明
+	
+找出每一行最长的连续1序列，输出其起始位置(从0开始计算)和结束位置(从0开始计算)，如果这一行没有1则输出两个-1,然后换行。
+
+输入样例 
+	
+5 6
+
+1 0 0 1 1 0
+
+0 0 0 0 0 0
+
+1 1 1 1 1 1
+
+1 1 1 0 1 1
+
+0 0 1 1 0 0
+
+输出样例
+	
+3 4
+
+-1 -1
+
+0 5
+
+0 2
+
+2 3
+
+\begin{lstlisting}
+#include <stdio.h>
+#define N 100
+
+int main()
+{
+	// 标志变量start,end, maxLen: 记录本行最长连续1总体情况
+	// 标志变量tmpStart, tmpLen: 标志是否开始连续1及连续长度 
+	int a[N][N],m,n,i,j,start,end,tmpStart,maxLen,tmpLen;
+	scanf("%d%d",&m,&n);
+	for(i=0;i<m;i++)
+		for(j=0;j<n;j++)
+			scanf("%d",&a[i][j]);
+	
+	// 遍历各行		
+	for(i=0;i<m;i++) // 行
+	{
+		start=-1; end=-1; maxLen=0; // 本行连续1总体情况
+		tmpStart=-1; tmpLen=0; // 标志是否开始连续1及连续长度
+		for(j=0;j<n;j++) // 列
+		{
+			if(a[i][j]==1) // 1开始 
+			{
+				if (tmpStart==-1) tmpStart=j; // 开始记录 
+				tmpLen++;
+			}
+			else // 遇0结算 
+			{
+				if(tmpStart!=-1 && tmpLen>maxLen) 
+				{
+					start=tmpStart;
+					end=j-1;
+					maxLen=tmpLen;
+					tmpStart=-1;
+					tmpLen=0;
+				}
+			}
+		}
+		if(tmpStart!=-1 && tmpLen>maxLen) // 末尾是1的情况 
+		{
+			start=tmpStart;
+			end=n-1;
+		}
+		printf("%d %d\n",start,end);
+	}
+	return 0;
+}
+\end{lstlisting}
+
+\begin{note}[要点]
+	合理使用标志变量, 训练自己的逻辑思维能力。
+\end{note}
+
+\section{寻找最长的行}	
+寻找若干行文本中最长的一行
+
+输入说明	
+
+输入为多个字符串(每个字符串长度不超过100个字符)，每个字符串占一行，输入的行为``***end***"时表示输入结束
+
+输出说明
+	
+输出其中最长的一行长度后换行再输出最长行的内容，如果最长行不止一个，则输出其中的第一行。
+
+输入样例
+	
+abce
+
+abdf dlfd
+
+***end***
+
+输出样例
+	
+9
+
+abdf dlfd 
+
+\begin{lstlisting}
+#include <stdio.h>
+#include <string.h> // str前缀的字符串处理函数需要此头文件 
+
+// 估计字符串长度，实际容纳(N-1)个有效字符，预留最后一个字符'\0' 
+#define N 100
+
+int main()
+{
+	char lines[N],maxLine[N];
+	
+	// 在输入的同时，即可处理，不必设置一个一维数组存储这些数。
+	while(1)
+	{
+		gets(lines);  // 不能使用scanf("%s",lines),因其遇空格结束 
+		if(strcmp(lines,"***end***") == 0) break;
+		if(strlen(lines) > strlen(maxLine)) strcpy(maxLine,lines);
+	}
+	
+	printf("%d\n%s\n",strlen(maxLine),maxLine); 
+	
+	return 0;
+} 
+\end{lstlisting}
+
+\begin{note}[要点]
+	简单处理即可, 不必用二维字符数组存储各个字符串，否则会导致超时。
+\end{note}
+
+\section{统计正整数的个数}
+统计n个正整数中每个数出现的次数。
+
+输入说明	
+
+第一行是一个整数n(5<n<30), 表示要待统计整数的个数;
+
+第二行是n个整数，每个整数均小于100000
+
+输出说明
+	
+按照整数从小到大的顺序依次输出不同的整数及其出现次数, 整数和出现次数之间用冒号$(:)$分隔。
+
+输入样例	
+
+12
+ 
+19 223 35 321 2 33 44 223 2 19 2 19
+
+输出样例
+
+2:3
+
+19:3
+
+33:1
+
+35:1
+
+44:1
+
+223:2
+
+321:1
+
+\begin{lstlisting}
+// 思路: 首先排序, 再统计每个数的个数.
+#include <stdio.h>
+int main()
+{
+	int n,num[30],i=0;
+	scanf("%d",&n);
+	while(i < n) 
+	{ 
+		scanf("%d",&num[i]);
+		i++; 
+	} 
+	
+	// 冒泡排序
+	int p,q,t;
+	for(p = 1; p <= n-1; p++)
+	{
+		for(q = 0; q < n-p; q++)
+		{
+			if(num[q] > num[q+1])
+			{
+				t = num[q];
+				num[q] = num[q+1];
+				num[q+1] = t;
+			}
+		}
+	} 
+	
+	// 判断重复数
+	int x,num_i = 0;
+	x = num[0]; 
+	for(i = 0; i < n; i++)
+	{
+		if(num[i] == x) num_i++;
+		else 
+		{
+			printf("%d:%d\n",x,num_i);
+			x = num[i]; // 新数 
+			num_i = 1;  // 至少有一个数  
+		}	
+		
+		if (i == n - 1)  // 最后一个数 
+		printf("%d:%d\n",x,num_i);
+	} 
+	
+	return 0;
+} 
+\end{lstlisting}
+
+\begin{note}[要点]
+	基本思路: 首先排序, 再统计每个数的个数.
+\end{note}
 

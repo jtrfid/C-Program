@@ -122,6 +122,10 @@
 
 \usepackage{xlop} % 竖式公式
 
+%\usepackage[thicklines,makeroom]{cancel} % 公式划掉，option [makeroom] to increase the horizontal spacing，[thicklines] asks for heavier lines and arrows
+\usepackage[thicklines]{cancel} % 公式划掉
+\renewcommand{\CancelColor}{\color{red}} % colored
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% notes page
 % \note{note text}
 \usepackage{pgfpages}
@@ -354,7 +358,7 @@
 \frame[shrink]{\frametitle{Outlines}\tableofcontents} 
 \include{lecture-5} % ch4, 选择结构程序设计，以及讲解Example作业
 
-% 第6，7次课: 
+% 第6,7次课: 
 \lecture{循环结构程序设计}{part3}
 \part{循环结构程序设计}
 \frame{\partpage}
@@ -364,8 +368,7 @@
 \include{lecture-7} % ch5, 循环结构程序设计举例
 \include{lecture-8} % ch5, 循环结构程序设计举例(续), 布置作业, 学习消化ppt中的所有代码
 
-% 第8次课: 讲解第2次上机练习, 第9次课: 结合第2次上机练习部分题目, 讲解函数，递归，数组, 包括ppt中的一、二维数组
-% 第10次课, 讲解字符数组,字符串处理
+% 第8,9课, 第10次课讲一半函数
 \lecture{数组}{part4}
 \part{数组}
 \frame{\partpage}
@@ -374,7 +377,7 @@
 \include{lecture-10} % ch6, 二维数组和字符数组
 \include{lecture-11} % ch6, 字符串处理库函数及程序举例
 
-% 第9次课, 讲一半，函数值传递，地址传递 
+% 第10次课讲一半，第11次讲实例, 第12次讲递归 
 %(前面结合上机练习已经讲了函数和递归的用法--- 留到后面)
 \lecture{函数}{part5}
 \part{函数}
@@ -383,31 +386,27 @@
 \include{lecture-12} % ch7, 函数，定义，声明，调用，值传递，地址传递，模块化设计
 \include{lecture-13} % ch7, 嵌套与递归, 汉诺塔,全局变量与局部变量
 
-\end{document} %%%%%%%%%%%%%%%%%%
-
-% 第12,13次课, 指针
+% 第13 指针, 第14次课首先在开发平台总结上节课内容，再讲示例。
 \lecture{指针}{part6}
 \part{指针}
 \frame{\partpage}
 \frame[shrink]{\frametitle{Outlines}\tableofcontents[hideallsubsections]} 
 \include{lecture-14} % ch8, 指针 
-\include{lecture-15} % ch9
+\include{lecture-15} % 示例
 
-
-% 第14,15次课
+% 第15课,第16次课开发平台讲示例：复试, 画图. 复习注意事项.
 \lecture{结构体}{part7}
 \part{结构体}
 \frame{\partpage}
 \frame[shrink]{\frametitle{Outlines}\tableofcontents[hideallsubsections]} 
 \include{lecture-16} %  结构体
-%%%%%%%%%%%% lecture-16 期中考试总结, pow函数问题，移到第22次课讲
 \include{lecture-17} % 结构体编程举例续
 
-% 第16次课, 复习
-\lecture{复习}{part8}
-\part{复习}
-\frame{\partpage}
-\include{lecture-18}
+%% 不讲了
+%\lecture{复习}{part8}
+%\part{复习}
+%\frame{\partpage}
+%\include{lecture-18}
 
 %%%%%%%%%%%%%%%%%%% last frame
 \begin{frame}[plain]{}

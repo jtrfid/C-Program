@@ -20,10 +20,12 @@
 	\item 结构体是一种``高内聚, 低耦合''的数据结构。 
 	\item 用结构体管理相互关联的数据, 使其成为结构化的整体数据, 便于统一处理。 
 	\item 领会结构化(模块化)编程思想。
-	\item 大问题分解为小问题, 设计函数解决小问题, 各个子函数彼此之间相互独立(便于调试, 不易出错)，又可通过参数和返回值传递数据。
+	\item 大问题分解为小问题, 相互关联的数据组织在一起，设计函数解决小问题, 各个子函数彼此之间相互独立(便于调试, 不易出错)，又可通过参数和返回值传递数据。
 	\item 主程序调用各个子函数, 解决``大"问题。
 \end{itemize}
 \end{frame}
+
+\note{高内聚: 结构体使得各个不同类型的数据可以``聚合''在一起. 低耦合: 至与外界整体联系，比如学号，姓名，成绩。便于组织程序逻辑.}
 
 
 \section{定义结构体数据类型:  struct\, 结构体类型名\{...\};}
@@ -235,7 +237,7 @@ stu2.sex=stu1.sex; // 同性别
 
 \section{结构体指针变量和结构体数组}
 
-\begin{frame}[shrink,fragile]{结构体指针变量}
+\begin{frame}[shrink,fragile]{结构体指针变量. 数据成员引用: \lstinline|指针变量名->成员名|}
 \vspace{-0.5cm}
 \begin{columns}[T]
 \column{0.4\textwidth}
@@ -262,7 +264,7 @@ stu1.sex='F';
 // 引用结构体指针变量指向的数据成员
 (*stu2).num=10011; // 一定要有括号
 stu2->num=10011; // 或
-scanf("%d",&(*stu2).num));
+scanf("%d",&(*stu2).num);
 scanf("%d",&(stu2->num)); // 或
 gets((*stu2).name); 
 gets(stu2->name); // 或
@@ -276,10 +278,9 @@ stu2->sex=stu1.sex; // 或
 \note{对\lstinline|stu2|的间接访问对吗？
 	
 	\begin{lstlisting}
-	struct Student stu1, *stu2=stu1;
-	struct Student stu1, *stu2; // 或
-	stu2=stu1; 
+	struct Student stu1, *stu2=&stu1;
 	\end{lstlisting}
+	要有指向！
 }
 
 \begin{frame}[shrink,fragile]{结构体数组}
@@ -376,6 +377,7 @@ void input(struct Student *stu)
   scanf("%d%s",&(stu->num),stu->name);
   for(i=0;i<5;i++) 
     scanf("%f",&(stu->score[i])); 
+    // 等效
     //scanf("%f",&((*stu).score[i]));
 }
 \end{lstlisting}
@@ -403,7 +405,7 @@ int main()
 \medskip
 \end{frame}
 
-\begin{frame}[shrink,fragile]{例3: 输入学生信息并输出统计数据(结构体数组), 输入}
+\begin{frame}[shrink,fragile]{例3: 输入$n$个学生信息(结构体数组)}
 \begin{columns}[T]
 \column{0.3\textwidth}
 \begin{lstlisting}
@@ -434,7 +436,7 @@ void input(struct Student *stu, int n)
 \end{columns}
 \end{frame}
 
-\begin{frame}[shrink,fragile]{例3: 输入学生信息并输出统计数据(结构体数组), 输出}
+\begin{frame}[shrink,fragile]{例3: 输出$n$个学生信息以及统计数据(结构体数组)}
 \vspace{-0.5cm}
 \begin{columns}[T]
 \column{0.6\textwidth}
@@ -478,7 +480,7 @@ int main()
 \begin{frame}[shrink,fragile]{例4: 输入学生信息并输出统计数据(结构体数组), 输入}
 \vspace{-0.5cm}
 \begin{columns}[T]
-\column{0.27\textwidth}
+\column{0.35\textwidth}
 \begin{lstlisting}
 // 含平均成绩的结构体
 struct Student 
@@ -570,10 +572,9 @@ void swap(struct Student *stu1, struct Student *stu2)
 
 \begin{frame}[shrink,fragile]{例5: 输入学生信息并输出统计数据(结构体数组), 排序}
 \vspace{-0.5cm}
-\begin{columns}[T]
-\column{1.0\textwidth}
+\begin{tikzpicture}
+\node[text width=0.7\textwidth] (t) {
 \begin{lstlisting}
-// 定义排序函数(选择法，降序): 按平均值排序，如果平均值相同，按照前2门课比较单科成绩 
 void sort(struct Student stu[],int n)            
 {
   int i,j,k;
@@ -594,25 +595,12 @@ void sort(struct Student stu[],int n)
   } 
 }
 \end{lstlisting}
-\end{columns}
-\medskip
+};
+\node[anchor=west,text width=0.5\textwidth,draw] at(t.east) {
+	定义排序函数(选择法，降序): 按平均值排序，如果平均值相同，按照前2门课比较单科成绩. 
+};
+\end{tikzpicture}
 \end{frame}
 
-\begin{comment}
-\begin{frame}[shrink]
-\frametitle{lecture-17 主要内容}
-\framesubtitle{建立自己的数据类型}
-%\tableofcontents[hideallsubsections]
-\tableofcontents
-\medskip
-\textbf{\textcolor{blue}{训练编程逻辑思维方式:}}
-\begin{itemize}
-	\item 领会结构化(模块化)编程思想。 
-	\item 用结构体管理相互关联的数据, 使其成为结构化的整体数据, 便于统一处理。 
-	\item 大问题分解为小问题, 设计函数解决小问题, 各个子函数彼此之间相互独立(便于调试, 不易出错)，又可通过参数和返回值传递数据。
-	\item 主程序调用各个子函数, 解决``大"问题。
-\end{itemize}
-\end{frame}
-\end{comment}
 
 

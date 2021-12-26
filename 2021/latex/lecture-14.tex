@@ -9,9 +9,9 @@
 \section{指针就是指向变量存储单元(首)地址的变量}
 
 \begin{frame}[shrink,fragile]{指针就是指向变量存储单元(首)地址的变量}
-\vspace{-0.2cm}
+\vspace{-0.4cm}
 \begin{columns}[T]
-\column{0.7\textwidth}
+\column{0.87\textwidth}
 \small
 \begin{itemize}
 \item 在程序中定义的各个变量, 在对程序进行编译时，系统就会给每个变量分配一个存储单元。
@@ -61,8 +61,6 @@ printf("%d,%d,%d,%d\n",sizeof(char),sizeof(int),sizeof(float),sizeof(double));
 	& 5002 &  \\ \cline{2-2}
 	%\hline 
 	& 5003 &  \\ \cline{2-2}
-	%\hline 
-	& $\dots$ &  \\ 
 	\hline 
 \end{tabular} 
 \end{columns}
@@ -73,7 +71,7 @@ printf("%d,%d,%d,%d\n",sizeof(char),sizeof(int),sizeof(float),sizeof(double));
 
 \begin{frame}[shrink,fragile]{定义指针变量: int *p;}
 \textbf{\textcolor{blue}{指针就是指向变量存储单元(首)地址的变量。}}\\
-~\\
+\medskip
 \lstinline|数据类型 *指针变量名; //数据类型表示指针指向目标变量类型,*表示其后的变量是指针变量|
 \begin{lstlisting}
 int *pa; // 定义指向整数类型变量的指针变量pa, *表示其后的变量是指针变量
@@ -87,13 +85,11 @@ double *pd; // 定义指向双精度浮点类型变量的指针变量pd
 \end{frame}
 
 \begin{frame}[shrink,fragile]{设置指针变量指向的目标变量}
-\vspace{-0.2cm}
+\vspace{-0.4cm}
 \begin{columns}[T]
-\column{0.7\textwidth}
+\column{0.8\textwidth}
 \textbf{\textcolor{blue}{地址运算符\&, 可获得变量在内存中的(首)地址。}}
 \begin{lstlisting}
-// 定义指针变量时, 初始化它指向的目标变量
-
 // 定义指针变量pa, 并初始化pa指向变量a
 int a=20,*pa=&a; 
 // 定义指针变量pc, 并初始化pc指向变量c
@@ -106,12 +102,9 @@ double d=20.8,*pd=&d;
 int b=30,*p; 
 
 // 根据需要，可以随时设置指针指向的目标变量
-
-// p前无'*', 此时p已经是指针变量了，仅是设置它的指向
 p=&b; 
 // 改变pa的指向
-pa=p; // 或
-pa=&b;
+pa=p; // 或 pa=&b;
 \end{lstlisting}
 \column{0.3\textwidth}
 \small
@@ -145,9 +138,7 @@ pa=&b;
 	%\hline 
 	& & 5002 &  \\ \cline{3-3}
 	%\hline 
-	& & 5003 &  \\ \cline{3-3}
-	%\hline 
-	& & $\dots$ &  \\ 
+	& & 5003 &  \\ 
 	\hline 
 \end{tabular} 
 \end{columns}
@@ -157,8 +148,9 @@ pa=&b;
 \section{变量的直接访问与间接访问}
 
 \begin{frame}[shrink,fragile]{变量的直接访问}
+\vspace{-0.4cm}
 \begin{columns}[T]
-\column{0.7\textwidth}
+\column{0.85\textwidth}
 \begin{itemize}
 	\item \textbf{\textcolor{blue}{直接访问:}} 通过变量名访问(读写)存储单元的内容(变量的值)
 	\item 此前的程序, 均采用直接访问的形式, 读写变量的值。
@@ -209,9 +201,7 @@ printf("%c,%d,%f,%lf\n",c,a,f,d);
 	%\hline 
 	& 5002 &  \\ \cline{2-2}
 	%\hline 
-	& 5003 &  \\ \cline{2-2}
-	%\hline 
-	& $\dots$ &  \\ 
+	& 5003 &  \\ 
 	\hline 
 \end{tabular} 
 \end{columns}
@@ -219,12 +209,14 @@ printf("%c,%d,%f,%lf\n",c,a,f,d);
 \end{frame}
 
 \begin{frame}[shrink,fragile]{变量的间接访问}
+\vspace{-0.4cm}
 \begin{columns}[T]
-\column{0.7\textwidth}
+\column{0.85\textwidth}
 \begin{itemize}
 	\item \textbf{\textcolor{blue}{间接访问:}} 通过变量的(首)地址访问(读写)存储单元的内容(变量的值)
 	\item *指针变量, \textbf{\textcolor{blue}{间接访问运算符*}}, 表示读写指针的目标变量值
 \end{itemize}
+\vspace{-0.2cm}
 \begin{lstlisting}
 // 定义指针变量，并初始化， 指向特定的变量地址
 char c, *pc=&c; //pc是指向char类型变量的指针变量
@@ -272,9 +264,7 @@ printf("%c,%d,%f,%lf\n",*pc,*pa,*pf,*pd);
 	%\hline 
 	& & 5002 &  \\ \cline{3-3}
 	%\hline 
-	& & 5003 &  \\ \cline{3-3}
-	%\hline 
-	& & $\dots$ &  \\ 
+	& & 5003 &  \\ 
 	\hline 
 \end{tabular} 
 \end{columns}
@@ -282,6 +272,7 @@ printf("%c,%d,%f,%lf\n",*pc,*pa,*pf,*pd);
 \end{frame}
 
 \begin{frame}[shrink,fragile]{指针变量使用(间接访问)前，必须有指向。}
+\vspace{-0.4cm}
 \begin{lstlisting}
 // 注意: 指针变量使用前，必须有指向
 float *p;
@@ -301,6 +292,7 @@ printf("%d,%d\n",a,*pa); // 输出相同的值
 \end{frame}
 
 \begin{frame}[shrink,fragile]{例: 交换两个指针变量的值(地址, 指向)}
+\vspace{-0.4cm}
 \begin{lstlisting}
 int a=10, *pa=&a, b=20, *pb=&b;
 int *tmp;
@@ -325,66 +317,18 @@ printf("%d,%d,%d,%d\n",a,b,*pa,*pb); // 10,20,20,10
 \section{地址传递与值传递}
 
 \begin{frame}[shrink,fragile]{\small 指针变量作为函数参数(地址传递, 形参和实参指向同一存储单元)}
-\begin{columns}[T]
-\column{0.6\textwidth}
+\begin{tikzpicture}
+\node[fill=green] (a) {形参实参地址相同。函数内对指针目标变量的改变, 就是改变实参的内容。};
+\node[anchor=north west,text width=.6\textwidth] (b) at(a.west) {
 \begin{lstlisting}
-void swap(int *p1, int *p2);
-int main()
-{
-    int a=10, *pa=&a, b=20, *pb=&b;
-    if(a<b) swap(pa,pb); //地址传递
-    //if(a<b) swap(&a,&b); //等效, 地址传递
-    printf("%d,%d,%d,%d\n",a,b,*pa,*pb); 
-    // 20,10,20,10
-    return 0;
-}
 // 交换p1,p2指向的内容, 注意不是交换p1,p2本身
 void swap(int *p1, int *p2)
 {
-   int tmp;
-   tmp=*p1;
-   *p1=*p2;
-   *p2=tmp;
+	int tmp;
+	tmp=*p1;
+	*p1=*p2;
+	*p2=tmp;
 }
-\end{lstlisting}
-\column{0.42\textwidth}
-main函数: 调用swap前
-\begin{tabular}{|>{\raggedleft\arraybackslash}p{1.5cm}|c|c|}
-	\hline 
-	\textbf{实参指针} &\textbf{地址} & \textbf{内容} \\ 
-	\hline 
-	pa=\&a $\to$ & \textcolor{blue}{3000} & \multirow{2}{*}{10} \\ \cline{2-2}  
-	& 3001 &  \\ 
-	\hline 
-	pb=\&b $\to$ & \textcolor{blue}{4000} & \multirow{2}{*}{20} \\ \cline{2-2}  
-	& 4001 &  \\ 
-	\hline 
-\end{tabular}\\
-\medskip
-swap函数: p1,p2指向内容交换前\\
-\begin{tabular}{|>{\raggedleft\arraybackslash}p{1.5cm}|c|c|}
-	\hline 
-	\textbf{形参指针} & \textbf{地址} & \textbf{内容} \\ 
-	\hline 
-	p1 $\to$ & \textcolor{blue}{3000} & \multirow{2}{*}{10} \\ \cline{2-2}  
-	& 3001 &  \\ 
-	\hline 
-	p2 $\to$ & \textcolor{blue}{4000} & \multirow{2}{*}{20} \\ \cline{2-2}  
-	& 4001 &  \\ 
-	\hline 
-\end{tabular}\\
-~\\
-\textbf{\textcolor{blue}{形参实参地址相同。}}
-\end{columns}
-\medskip
-\end{frame}
-
-\begin{frame}[shrink,fragile]{\small 指针变量作为函数参数(地址传递, 形参和实参指向同一存储单元)}
-\textbf{\textcolor{blue}{形参实参地址相同。函数内对指针目标变量的改变, 就是改变实参的内容。}}
-\begin{columns}[T]
-\column{0.6\textwidth}
-\begin{lstlisting}
-void swap(int *p1, int *p2);
 int main()
 {
   int a=10, *pa=&a, b=20, *pb=&b;
@@ -394,16 +338,10 @@ int main()
   // 20,10,20,10
   return 0;
 }
-// 交换p1,p2指向的内容, 注意不是交换p1,p2本身
-void swap(int *p1, int *p2)
-{
-  int tmp;
-  tmp=*p1;
-  *p1=*p2;
-  *p2=tmp;
-}
 \end{lstlisting}
-\column{0.42\textwidth}
+};
+
+\node[right,text width=0.45\textwidth] at(b.east){
 main函数: 调用swap后
 \begin{tabular}{|>{\raggedleft\arraybackslash}p{1.5cm}|c|c|}
 	\hline 
@@ -429,15 +367,22 @@ swap函数: p1,p2指向内容交换后\\
 	& 4001 &  \\ 
 	\hline 
 \end{tabular}
-\end{columns}
-\medskip
+};
+\end{tikzpicture}
 \end{frame}
 
 \begin{frame}[shrink,fragile]{\small 普通变量作为函数参数(值传递, 形参和实参处于不同存储单元)}
-\begin{columns}[T]
-\column{0.6\textwidth}
+\begin{tikzpicture}
+\node[anchor=north west,text width=.6\textwidth] (a) {
 \begin{lstlisting}
-void swap(int p1, int p2);
+// 对形参的改变不会引起实参的改变
+void swap(int p1, int p2)
+{
+	int tmp;
+	tmp=p1;
+	p1=p2;
+	p2=tmp;
+}
 int main()
 {
   int a=10, *pa=&a, b=20, *pb=&b;
@@ -446,16 +391,9 @@ int main()
   // 10,20,10,20
   return 0;
 }
-// 对形参的改变不会引起实参的改变
-void swap(int p1, int p2)
-{
-  int tmp;
-  tmp=p1;
-  p1=p2;
-  p2=tmp;
-}
 \end{lstlisting}
-\column{0.4\textwidth}
+};
+\node[right,text width=0.5\textwidth] at(a.east){
 main函数: 调用swap前后
 \begin{tabular}{|c|c|c|}
 	\hline 
@@ -484,8 +422,8 @@ swap函数: 形参是局部变量, \\
 \end{tabular}\\
 ~\\
 \textbf{\textcolor{blue}{形参实参地址``不同"。}}
-\end{columns}
-\medskip
+};
+\end{tikzpicture}
 \end{frame}
 
 \begin{frame}[shrink,fragile]{地址传递与值传递小结}
@@ -552,29 +490,28 @@ void swap(int *p1, int *p2)
 \medskip
 \end{frame}
 
-\begin{frame}[shrink,fragile]{借用地址传递, 使函数``返回"多个值}
+\begin{frame}[shrink,fragile]{重点: 借用地址传递, 使函数``返回"多个值}
 \begin{columns}[T]
-\column{0.5\textwidth}
+\column{0.55\textwidth}
 \begin{lstlisting}
-int fun(float *p1, float *p2, int *p3);
-int main()
+//对指针指向内容的改变, "返回"给调用者
+int fun(float *p1, float *p2, int *p3)
 {
-  float a=10,b=20; int c=30;
-  int r=fun(&a,&b,&c);
-  printf("%d,%f,%f,%d\n",r,a,b,c);
-  // 4,1.0,2.0,3
-  return 0;
+	*p1=1.0;
+	*p2=2.0;
+	*p3=3;
+	return 4;
 }
 \end{lstlisting}
 \column{0.5\textwidth}
 \begin{lstlisting}[frame=leftline]
-//对指针指向内容的改变, "返回"给调用者
-int fun(float *p1, float *p2, int *p3)
+int main()
 {
-  *p1=1.0;
-  *p2=2.0;
-  *p3=3;
-  return 4;
+	float a=10,b=20; int c=30;
+	int r=fun(&a,&b,&c);
+	printf("%d,%f,%f,%d\n",r,a,b,c);
+	// 4,1.0,2.0,3
+	return 0;
 }
 \end{lstlisting}
 \end{columns}
@@ -746,7 +683,7 @@ s3="1234"; // 正确, 指针是变量
 \begin{frame}[shrink,fragile]{例: 实现自己的字符串拷贝函数}
 \vspace{-0.5cm}
 \begin{columns}[T]
-\column{0.5\textwidth}
+\column{0.55\textwidth}
 \begin{lstlisting}
 void copy(char to[], char from[]);
 int main()
@@ -793,17 +730,17 @@ void copy(char *to, char *from)
 \begin{frame}[shrink,fragile]{字符串数组}
 \begin{lstlisting}
 #define N 100
-char name[N][81]; // N个字符串
+char name[N][81]; // N个字符串, 每行表示一个字符串
 int n=10,i; // n是实际字符串个数
 
 for(i=0;i<n;i++) // 输入n个字符串
 {
-   gets(name[i]); 
+   gets(name[i]); // 输入第i个字符串
 }
 
 for(i=0;i<n;i++) // 输出
 {
-   puts(name[i]);
+   puts(name[i]); // 输出第i个字符串
 }
 \end{lstlisting}
 \end{frame}
@@ -811,7 +748,7 @@ for(i=0;i<n;i++) // 输出
 \begin{frame}[shrink,fragile]{例: 选择法排序字符串数组}
 \vspace{-0.5cm}
 \begin{columns}[T]
-\column{0.45\textwidth}
+\column{0.5\textwidth}
 \begin{lstlisting}
 #define N 100
 void sort(char name[][81],int n);
@@ -856,7 +793,7 @@ void sort(char name[][81],int n)
 ~\\
 \end{frame}
 
-\begin{frame}[shrink,fragile]{例: 输入二进制字符串, 求其表示的整数值, 简单实现}
+\begin{frame}[shrink,fragile]{\small 例: 输入二进制字符串, 求其表示的整数值. 按字符接收}
 e.g., 输入: 10101, 输出: 21; \quad 输入101, 输出:  5
 \begin{lstlisting}
 #include<stdio.h>
@@ -877,7 +814,7 @@ int main()
 \end{lstlisting}
 \end{frame}
 
-\begin{frame}[fragile]{例: 输入二进制字符串, 求其表示的整数值, 字符串数组实现}
+\begin{frame}[fragile]{\small 例: 输入二进制字符串, 求其表示的整数值, 字符串数组实现}
 \begin{lstlisting}
 #define N 31 // 估计最大数组大小, 预留'\0'
 char ch[N];
@@ -891,7 +828,7 @@ printf("%d\n",sum);
 \end{lstlisting}
 \end{frame}
 
-\begin{frame}[fragile]{输入二进制字符串, 求其表示的整数值, 指针实现}
+\begin{frame}[fragile]{\small 例: 输入二进制字符串, 求其表示的整数值, 指针实现}
 \begin{lstlisting}
 #define N 31 // 估计最大数组大小, 预留'\0'
 char ch[N], *p=ch;

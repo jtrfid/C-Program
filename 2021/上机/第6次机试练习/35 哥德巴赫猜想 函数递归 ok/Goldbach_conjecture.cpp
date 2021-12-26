@@ -34,8 +34,32 @@ int isPrime(int n)
     return 1; // n是素数 
 }
 
+// 递归函数, 第1个参数: i是递归可能的素数(第一个可能的素数是big_even-1), 第2个参数: big_even是大偶数 
+void  recursiveComputing(int i, int big_even)
+{
+	if(isPrime(i) && isPrime(big_even-i)) // 两个素数和是big_even
+	{
+		// 注意, 较小的在前 
+		printf("%d %d\n",big_even - i, i); // 输出后, return; 结束递归 
+	} 
+	else // 递归 
+	{
+		recursiveComputing(i-1,big_even); // 递归调用 
+	} 
+	return; 
+} 
+
+// 调用递归计算函数 
+int main()
+{
+	int num;
+	scanf("%d",&num);
+	recursiveComputing(num-1,num);
+	return 0; 
+}
+
 // 二重循环, 从最小素数开始迭代计算，获取符合题意的两个素数 
-int main1()
+int main0()
 {
 	int j,k,num; // num大偶数 
 	int flag; // 标志变量：用于标识是否找到符合要求的素数对
@@ -126,7 +150,7 @@ int main4()
 } 
 
 // 如果要找出最接近的两个素数，如10=3+7，10=5+5，解法一 
-int main5()
+int mainXXX()
 {
 	int big_even;
 	scanf("%d",&big_even);
