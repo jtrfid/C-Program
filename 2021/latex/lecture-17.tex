@@ -374,8 +374,8 @@ void input(struct Team *teams, int n)
 {
    for(i = 0; i < n; i++)
    {
-      scanf("%s%d%d%d%d%d",teams[i].name,&teams[i].win,&teams[i].draw,&teams[i].lose,
-      		&teams[i].goalsNum,&teams[i].losesNum);
+      scanf("%s%d%d%d%d%d",teams[i].name,&teams[i].win,&teams[i].draw,
+      		&teams[i].lose,&teams[i].goalsNum,&teams[i].losesNum);
       // 根据规则填充其它数据成员
       teams[i].grades =  teams[i].win*3 + teams[i].draw*1;
       teams[i].goals = teams[i].goalsNum - teams[i].losesNum; 
@@ -408,7 +408,7 @@ void swap(struct Team *team1, struct Team *team2)
 \begin{columns}[T]
 \column{1.5\textwidth}
 \begin{lstlisting}
-void sorts(struct Team a[], int n)// 定义排序函数(选择法，降序): 按总成绩和英语单科成绩 
+void sorts(struct Team a[], int n)// 定义排序函数(选择法，降序): 按积分和净胜球排序 
 {
    int i,j,k;
    for(i = 0; i < n - 1; i++)
