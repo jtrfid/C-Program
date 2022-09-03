@@ -1,0 +1,819 @@
+%%%%%%%%%%%%%%%%%%%%% chapter.tex %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+% sample chapter
+%
+% Use this file as a template for your own input.
+%
+%%%%%%%%%%%%%%%%%%%%%%%% Springer-Verlag %%%%%%%%%%%%%%%%%%%%%%%%%%
+%\motto{Use the template \emph{chapter.tex} to style the various elements of your chapter content.}
+\chapter{第7次机试练习: 函数,数组,排序,字符串练习}
+
+\section{消除类游戏}
+消除类游戏是深受大众欢迎的一种游戏，游戏在一个包含有n行m列的游戏棋盘上进行，棋盘的每一行每一列的方格上放着一个有颜色的棋子，当一行或一列上有连续三个或更多的相同颜色的棋子时，这些棋子都被消除。当有多处可以被消除时，这些地方的棋子将同时被消除。
+
+现在给你一个n行m列的棋盘，棋盘中的每一个方格上有一个棋子，请给出经过一次消除后的棋盘。
+
+请注意：一个棋子可能在某一行和某一列同时被消除。
+
+输入格式
+
+输入的第一行包含两个整数n, m，用空格分隔，分别表示棋盘的行数和列数。
+
+接下来n行，每行m个整数，用空格分隔，分别表示每一个方格中的棋子的颜色。颜色使用1至9编号。
+
+输出格式
+
+输出n行，每行m个整数，相邻的整数之间使用一个空格分隔，表示经过一次消除后的棋盘。如果一个方格中的棋子被消除，则对应的方格输出0，否则输出棋子的颜色编号。
+
+样例输入1
+
+4 5
+
+2 2 3 1 2
+
+3 4 5 1 4
+
+2 3 2 1 3
+
+2 2 2 4 4
+
+样例输出1
+
+2 2 3 0 2
+
+3 4 5 0 4
+
+2 3 2 0 3
+
+0 0 0 4 4
+
+样例说明
+
+棋盘中第4列的1和第4行的2可以被消除，其他的方格中的棋子均保留。
+
+样例输入2
+
+4 5
+
+2 2 3 1 2
+
+3 1 1 1 1
+
+2 3 2 1 3
+
+2 2 3 3 3
+
+样例输出2
+
+2 2 3 0 2
+
+3 0 0 0 0
+
+2 3 2 0 3
+
+2 2 0 0 0
+
+样例说明
+
+棋盘中所有的1以及最后一行的3可以被同时消除，其他的方格中的棋子均保留。
+评测用例规模与约定
+
+所有的评测用例满足：$1 \le n, m \le 30$。
+
+\begin{lstlisting}
+#include <stdio.h>
+#include <math.h>
+#define M 30 // 估计数组最大长度
+
+// 扫描curRow行中可删除的元素, F: 删除标志矩阵, m: 列数 
+void delRow(int curRow, int checker[][M], int F[][M],int m)
+{
+	int i,j, current,count;
+	for(i=0;i<m;i++) 
+	{
+		// if(F[curRow][i]==1) continue; // 如果先扫描行，这就不合适了 
+		count=1; 
+		current=checker[curRow][i];
+		for(j=i+1;j<m;j++)
+		{
+			if(current==checker[curRow][j]) count++;
+			else break;
+		}
+		if(count>=3)
+		{
+			for(j=i;j<m;j++)
+			{
+				if(checker[curRow][j]==current) F[curRow][j]=1;//置删除标志
+				else break; 
+			}
+		}
+	} 
+}
+
+// 扫描curCol列中可删除的元素, F: 删除标志矩阵, n: 行数 
+void delCol(int curCol, int checker[][M], int F[][M],int n)
+{
+	int i,j, current,count;
+	for(i=0;i<n;i++) 
+	{
+		count=1; 
+		current=checker[i][curCol];
+		for(j=i+1;j<n;j++)
+		{
+			if(current==checker[j][curCol]) count++;
+			else break;
+		}
+		if(count>=3)
+		{
+			for(j=i;j<n;j++)
+			{
+				if(checker[j][curCol]==current) F[j][curCol]=1;//置删除标志
+				else break; 
+			}
+		}
+	} 
+}
+
+// 清除所有可删除的元素, F: 删除标志矩阵, n: 行数, m: 列数 
+void del(int checker[][M], int F[][M],int n, int m)
+{
+	int i,j;
+	for(i=0;i<n;i++)
+	{
+		for(j=0;j<m;j++)
+		{
+			if(F[i][j]==1) checker[i][j]=0;
+		}
+	}
+}
+
+// 读棋盘, n: 行数, m: 列数
+void Read(int checker[][M],int n, int m)
+{
+	int i,j;
+	for(i=0;i<n;i++)
+	{
+		for(j=0;j<m;j++)
+		{
+			scanf("%d",&checker[i][j]);
+		}
+	}
+}
+
+// 输出棋盘, n: 行数, m: 列数
+void output(int checker[][M],int n, int m)
+{
+	int i,j;
+	for(i=0;i<n;i++) // 行 
+	{
+		for(j=0;j<m;j++) // 列 
+		{
+			printf("%d ",checker[i][j]); 
+		}
+		printf("\n");
+	} 
+}
+
+int main()
+{
+	// 棋盘，初始化是为了便于测试 
+	int checker[M][M]={ {2,2,3,1,2},
+						{3,4,5,1,4},
+						{2,3,2,1,3},
+						{2,2,2,4,4} };
+	int n=4,m=5,i,j; // n行，m列 
+	/************
+	int checker[M][M]={ {2,2,3,1,2},
+						{3,1,1,1,1},
+						{2,3,2,1,3},
+						{2,2,3,3,3} };
+	int n=4,m=5,i,j; // n行，m列 
+	*************/
+	// 标志矩阵 
+	int F[M][M]; // 对应元素为1,则表示删除 
+	
+	scanf("%d%d",&n,&m);
+	// 读棋盘 
+	Read(checker,n,m);
+	
+	// 初始化F 
+	for(i=0;i<n;i++)
+	for(j=0;j<m;j++)
+	F[i][j]=0;
+
+	// 扫描行 
+	for(i=0;i<n;i++) // 行 
+	delRow(i, checker, F, m);
+	
+	// 扫描列 
+	for(j=0;j<m;j++) // 列 
+	delCol(j, checker, F, n);
+	
+	// 清除 
+	del(checker, F, n, m);
+	
+	// 输出棋盘 
+	output(checker,n,m); 
+	
+	return 0;																	
+} 
+\end{lstlisting}
+
+\begin{note}[要点]
+	标志矩阵，体会模块化编程思想，初始化变量的程序调试技巧。
+\end{note}
+
+\section{表达式求值}
+表达式由两个非负整数x，y和一个运算符op构成，求表达式的值。
+这两个整数和运算符的顺序是随机的，可能是``x op y", ``op x y"或者``x y op",例如, ``25 + 3"表示25加3, ``5 30 *"表示5乘以30, "/ 600 15"表示600除以15。
+
+输入说明
+
+输入为一个表达式，表达式由两个非负整数x，y和一个运算符op构成，x，y和op之间以空格分隔，但顺序不确定。
+
+x和y均不大于10000000，op可以是+, -,*, /, \%中的任意一种, 分表表示加法, 减法, 乘法, 除法和求余。
+
+除法按整数除法求值, 输入数据保证除法和求余运算的y值不为0。
+
+输出说明	
+
+输出表达式的值。
+
+输入样例
+
+样例1输入
+
+5 20 *
+
+样例2输入
+
+4 + 8
+
+样例3输入
+
+/ 8 4
+
+输出样例
+
+样例1输出
+
+100
+
+样例2输出
+
+12
+
+样例3输出
+
+2
+
+\begin{lstlisting}
+#include <stdio.h>
+// 估计字符串最大长度，存储有效字符(N-1)个，预留最后一个字符'\0' 
+#define N 20 
+
+// 根据参数，计算表达式的值 
+int compute(char op,int x,int y)
+{
+	int result = -1;
+	switch(op)
+	{
+		case '+': result = x+y; break;
+		case '-': result = x-y; break;
+		case '*': result = x*y; break;
+		case '/': if(y != 0) result = x/y; break;
+		case '%': if(y != 0) result = x%y; break;
+	}
+	return result;
+}
+
+// 数字字符串s转为int, 要求s以'\0'结尾 
+int strToInt(char *s)// int toInt(char s[]) 
+{
+	int result=0;
+	while(*s) // 等效while(*s != '\0')或while(*s!=0)
+	{
+		result=result*10+ (*s-'0');
+		s++; //移至下一字符 
+	}
+	return result;
+} 
+
+/******************************************************
+提取子串函数 
+忽略s中空格前缀，复制s中的字符串到subs中，遇空格或'\0'结束
+返回subs不含空格。 返回复制后s指针指向(地址) 
+要求s和subs以'\0'结尾。
+*******************************************************/ 
+char* getSubs(char *s, char *subs) 
+{
+	int start=0; 
+	while(*s)
+	{
+		if(*s==' ') 
+		{
+			if(start==0) s++; // 忽略s的前缀空格 
+			else break; // 是有效字符串后的一个空格 
+		}
+		else
+		{
+			start=1; // 开始复制 
+			*subs=*s;
+			s++;
+			subs++;
+		}
+	}
+	*subs='\0'; // 不要忘记结尾符 
+	return s;
+}
+
+// 解析s, 以空格为分隔符, 分解s为3个字符串 
+void parse(char *s,char result[][N])
+{
+	char *p;
+	p=getSubs(s,result[0]);
+	p=getSubs(p,result[1]);
+	p=getSubs(p,result[2]);
+}	
+
+// 如果s是操作符，返回1, 参数op返回该操作符
+// 否则, 返回0 
+int isOp(char *s, char *op)
+{
+	if(*s >= '0' && *s <= '9') // 数字
+		return 0;
+	else // 操作符
+	{
+		*op=*s;
+		return 1;
+	}
+} 
+
+int main()
+{
+	char s[N],op;
+	char s3[3][N];   
+	int x,y;
+	gets(s); 
+	
+	parse(s,s3); // s被分解为3个字符串 
+	if(isOp(s3[0],&op)) // op x y
+	{
+		x=strToInt(s3[1]);
+		y=strToInt(s3[2]);
+	}
+	else if(isOp(s3[1],&op)) // x op y
+	{
+		x=strToInt(s3[0]);
+		y=strToInt(s3[2]);
+	}
+	else if(isOp(s3[2],&op)) // x y op
+	{
+		x=strToInt(s3[0]);
+		y=strToInt(s3[1]);
+	}
+
+	printf("%d\n",compute(op,x,y)); 
+	return 0;
+}
+
+// 简单实现, 直接读取三个子串, 就不用分解了
+int main1() 
+{
+	char s[N],op;
+	char s3[3][N];   
+	int x,y;
+	scanf("%s%s%s",s3[0],s3[1],s3[2]); // 利用"%s"读字符串遇空格结束特点，直接读取3个字符串。 
+	
+	// parse(s,s3); // s被分解为3个字符串 
+	if(isOp(s3[0],&op)) // op x y
+	{
+		x=strToInt(s3[1]);
+		y=strToInt(s3[2]);
+	}
+	else if(isOp(s3[1],&op)) // x op y
+	{
+		x=strToInt(s3[0]);
+		y=strToInt(s3[2]);
+	}
+	else if(isOp(s3[2],&op)) // x y op
+	{
+		x=strToInt(s3[0]);
+		y=strToInt(s3[1]);
+	}
+	
+	printf("%d\n",compute(op,x,y)); 
+	return 0;
+}
+\end{lstlisting}
+
+\begin{note}[要点]
+	体会字符串处理, 指针应用, 模块化程序设计思想。
+\end{note}
+
+\section{排序}	
+给定N个不同的整数，要求对这N个整数按如下规则排序并输出。
+
+规则一：所有的偶数排在奇数前面。
+
+规则二：在规则一的前提下按照从大到小的顺序排序。
+
+输入说明	
+
+数据由两行构成，第一行为整数n (n<=100), 表示待排序整数的数量。第二行是n个整数，每个整数的取值区间都为$[-32768\sim32767]$，整数之间以空格间隔。
+
+输出说明
+	
+在一行输出排好序的整数，整数之间以空格间隔。
+
+输入样例	
+
+5 
+
+1 2 3 4 5
+
+输出样例
+	
+4 2 5 3 1
+
+\begin{lstlisting}
+# include <stdio.h>
+#define N 100
+
+// 选择法从大到小排序 
+int sorts(int a[],int n)
+{
+	int i,j,k,tmp;
+	for(i=0;i<n-1;i++)
+	{
+		k=i; // 未排序中较大者 
+		for(j=i+1;j<n;j++)
+		if(a[j]>a[k]) k=j;
+		if(k!=i)
+		{
+			tmp=a[i];
+			a[i]=a[k];
+			a[k]=tmp;
+		} 
+	}
+}
+
+int main()
+{
+	int even[N],odd[N],n,i,num;
+	int evenN=0, oddN=0;
+	scanf("%d",&n);
+	for(i=0;i<n;i++)
+	{
+		scanf("%d",&num);
+		if(num%2==0) // even
+		{
+			even[evenN]=num;
+			evenN++;
+		}
+		else
+		{
+			odd[oddN]=num;
+			oddN++;
+		}
+	} 
+	// 排序
+	sorts(even,evenN);
+	sorts(odd,oddN);
+	// 输出 
+	for(i=0;i<evenN;i++) printf("%d ",even[i]); 
+	for(i=0;i<oddN;i++) printf("%d ",odd[i]); 
+	printf("\n"); 
+	return 0;
+}
+\end{lstlisting}
+
+\begin{note}[要点]
+	各种形式的排序问题(整数, 字符, 字符串, 结构体)是必须掌握的重点之一。选择法排序或冒泡法排序必须信手拈来。
+\end{note}
+
+\section{等差数列}	
+请写一个程序，判断给定整数序列能否构成一个等差数列。
+
+输入说明
+	
+输入数据由两行构成，第一行只有一个整数n(n<100), 表示序列长度(该序列中整数的个数);
+
+第二行为n个整数，每个整数的取值区间都为$[-32768\sim 32767]$, 整数之间以空格间隔。
+
+输出说明	
+
+对输入数据进行判断，不能构成等差数列输出``no", 能构成等差数列输出表示数列公差(相邻两项的差)的绝对值的一个整数。
+
+输入样例
+	
+样例1输入
+
+6
+
+23 15 4 18 35 11
+
+样例2输入
+
+5
+
+2 6 8 4 10
+
+输出样例
+	
+样例1输出
+
+no
+
+样例2输出
+
+2
+
+\begin{lstlisting}
+# include <stdio.h>
+#define N 100
+
+// 选择法从大到小排序 
+int sorts(int a[],int n)
+{
+	int i,j,k,tmp;
+	for(i=0;i<n-1;i++)
+	{
+		k=i; // 未排序中较大者 
+		for(j=i+1;j<n;j++)
+		if(a[j]>a[k]) k=j;
+		if(k!=i)
+		{
+			tmp=a[i];
+			a[i]=a[k];
+			a[k]=tmp;
+		} 
+	}
+}
+
+// 排序后的a是否构成等差数列，是返回1，否则返回0
+// 若是等差数列, 指针参数tolerance返回公差的绝对值。 
+int check(int a[],int n, int *tolerance)
+{
+	int i;
+	*tolerance = a[0]-a[1]; // 大-小，不用求绝对值 
+	for(i=1;i<n-1;i++) // 注意检查数组越界问题
+	{
+		if(a[i]-a[i+1] != *tolerance) return 0;
+	} 
+	return 1;
+}
+
+int main()
+{
+	int a[N],n,i,tolerance;
+	scanf("%d",&n);
+	for(i=0;i<n;i++)
+	{
+		scanf("%d",&a[i]);
+	} 
+	// 排序
+	sorts(a,n);
+	// check
+	if(check(a,n, &tolerance)) printf("%d\n",tolerance);
+	else printf("no\n");
+	return 0;
+}
+\end{lstlisting}
+
+\begin{note}[要点]
+	数组越界问题, 排序, 地址传递, 模块化程序设计。
+\end{note}
+
+\section{0-1矩阵}	
+查找一个只包含0和1的矩阵中每行最长的连续1序列。
+
+输入说明
+	
+输入第一行为两个整数m和n (0<=m,n<=100)表示二维数组行数和列数，其后为m行数据，每行n个整数(0或1), 输入数据中不会出现同一行有两个最长1序列的情况。
+
+输出说明
+	
+找出每一行最长的连续1序列，输出其起始位置(从0开始计算)和结束位置(从0开始计算)，如果这一行没有1则输出两个-1,然后换行。
+
+输入样例 
+	
+5 6
+
+1 0 0 1 1 0
+
+0 0 0 0 0 0
+
+1 1 1 1 1 1
+
+1 1 1 0 1 1
+
+0 0 1 1 0 0
+
+输出样例
+	
+3 4
+
+-1 -1
+
+0 5
+
+0 2
+
+2 3
+
+\begin{lstlisting}
+#include <stdio.h>
+#define N 100
+
+int main()
+{
+	// 标志变量start,end, maxLen: 记录本行最长连续1总体情况
+	// 标志变量tmpStart, tmpLen: 标志是否开始连续1及连续长度 
+	int a[N][N],m,n,i,j,start,end,tmpStart,maxLen,tmpLen;
+	scanf("%d%d",&m,&n);
+	for(i=0;i<m;i++)
+		for(j=0;j<n;j++)
+			scanf("%d",&a[i][j]);
+	
+	// 遍历各行		
+	for(i=0;i<m;i++) // 行
+	{
+		start=-1; end=-1; maxLen=0; // 本行连续1总体情况
+		tmpStart=-1; tmpLen=0; // 标志是否开始连续1及连续长度
+		for(j=0;j<n;j++) // 列
+		{
+			if(a[i][j]==1) // 1开始 
+			{
+				if (tmpStart==-1) tmpStart=j; // 开始记录 
+				tmpLen++;
+			}
+			else // 遇0结算 
+			{
+				if(tmpStart!=-1 && tmpLen>maxLen) 
+				{
+					start=tmpStart;
+					end=j-1;
+					maxLen=tmpLen;
+					tmpStart=-1;
+					tmpLen=0;
+				}
+			}
+		}
+		if(tmpStart!=-1 && tmpLen>maxLen) // 末尾是1的情况 
+		{
+			start=tmpStart;
+			end=n-1;
+		}
+		printf("%d %d\n",start,end);
+	}
+	return 0;
+}
+\end{lstlisting}
+
+\begin{note}[要点]
+	合理使用标志变量, 训练自己的逻辑思维能力。
+\end{note}
+
+\section{寻找最长的行}	
+寻找若干行文本中最长的一行
+
+输入说明	
+
+输入为多个字符串(每个字符串长度不超过100个字符)，每个字符串占一行，输入的行为``***end***"时表示输入结束
+
+输出说明
+	
+输出其中最长的一行长度后换行再输出最长行的内容，如果最长行不止一个，则输出其中的第一行。
+
+输入样例
+	
+abce
+
+abdf dlfd
+
+***end***
+
+输出样例
+	
+9
+
+abdf dlfd 
+
+\begin{lstlisting}
+#include <stdio.h>
+#include <string.h> // str前缀的字符串处理函数需要此头文件 
+
+// 估计字符串长度，实际容纳(N-1)个有效字符，预留最后一个字符'\0' 
+#define N 100
+
+int main()
+{
+	char lines[N],maxLine[N];
+	
+	// 在输入的同时，即可处理，不必设置一个一维数组存储这些数。
+	while(1)
+	{
+		gets(lines);  // 不能使用scanf("%s",lines),因其遇空格结束 
+		if(strcmp(lines,"***end***") == 0) break;
+		if(strlen(lines) > strlen(maxLine)) strcpy(maxLine,lines);
+	}
+	
+	printf("%d\n%s\n",strlen(maxLine),maxLine); 
+	
+	return 0;
+} 
+\end{lstlisting}
+
+\begin{note}[要点]
+	简单处理即可, 不必用二维字符数组存储各个字符串，否则会导致超时。
+\end{note}
+
+\section{统计正整数的个数}
+统计n个正整数中每个数出现的次数。
+
+输入说明	
+
+第一行是一个整数n(5<n<30), 表示要待统计整数的个数;
+
+第二行是n个整数，每个整数均小于100000
+
+输出说明
+	
+按照整数从小到大的顺序依次输出不同的整数及其出现次数, 整数和出现次数之间用冒号$(:)$分隔。
+
+输入样例	
+
+12
+ 
+19 223 35 321 2 33 44 223 2 19 2 19
+
+输出样例
+
+2:3
+
+19:3
+
+33:1
+
+35:1
+
+44:1
+
+223:2
+
+321:1
+
+\begin{lstlisting}
+// 思路: 首先排序, 再统计每个数的个数.
+#include <stdio.h>
+int main()
+{
+	int n,num[30],i=0;
+	scanf("%d",&n);
+	while(i < n) 
+	{ 
+		scanf("%d",&num[i]);
+		i++; 
+	} 
+	
+	// 冒泡排序
+	int p,q,t;
+	for(p = 1; p <= n-1; p++)
+	{
+		for(q = 0; q < n-p; q++)
+		{
+			if(num[q] > num[q+1])
+			{
+				t = num[q];
+				num[q] = num[q+1];
+				num[q+1] = t;
+			}
+		}
+	} 
+	
+	// 判断重复数
+	int x,num_i = 0;
+	x = num[0]; 
+	for(i = 0; i < n; i++)
+	{
+		if(num[i] == x) num_i++;
+		else 
+		{
+			printf("%d:%d\n",x,num_i);
+			x = num[i]; // 新数 
+			num_i = 1;  // 至少有一个数  
+		}	
+		
+		if (i == n - 1)  // 最后一个数 
+		printf("%d:%d\n",x,num_i);
+	} 
+	
+	return 0;
+} 
+\end{lstlisting}
+
+\begin{note}[要点]
+	基本思路: 首先排序, 再统计每个数的个数.
+\end{note}
+

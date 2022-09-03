@@ -1,0 +1,271 @@
+%%%%%%%%%%%%%%%%%%%%% chapter.tex %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+% sample chapter
+%
+% Use this file as a template for your own input.
+%
+%%%%%%%%%%%%%%%%%%%%%%%% Springer-Verlag %%%%%%%%%%%%%%%%%%%%%%%%%%
+%\motto{Use the template \emph{chapter.tex} to style the various elements of your chapter content.}
+\chapter{第1次机试练习: 熟悉DEV-C++开发平台, 基本输入输出语句练习}
+
+\section{计算球体重量}
+已知铁的比重是7.86(克/立方厘米)，金的比重是19.3(克/立方厘米)。写一个程序，分别计算出给定直径的铁球与金球的质量，假定PI=3.1415926
+
+输入说明：\\
+输入两个整数，分别表示铁球与金球的直径（单位为毫米）
+
+输出说明：\\
+输出两个浮点数，分别表示铁球与金球的质量（单位为克），小数点后保留3位小数，两个浮点数之间用空格分隔
+
+输入样例：\\
+100 100
+
+输出样例：\\
+4115.486  10105.456
+
+提示: \\
+用\lstinline|scanf|输入，用\lstinline|printf|输出，保留3位小数的格式控制字符为\lstinline|%.3f|
+
+\begin{lstlisting}
+#include<stdio.h>
+#include<math.h>   // 数学库函数 
+#define PI 3.1415926       
+int main()                   
+{  
+	int a,b;
+	scanf("%d%d",&a,&b);
+	float v1= 4.0/3.0*pow(a/2.0/10,3)*PI;
+	float v2= 4.0/3.0*pow(b/2.0/10,3)*PI;
+	printf("%.3f %.3f\n",7.86*v1,19.3*v2); 
+	return 0;           
+}                   
+\end{lstlisting}
+
+\begin{note}[要点]
+	\begin{enumerate}
+		\item 整数除以整数, 结果为整数。\\
+		4.0/3.0结果是浮点数，4/3结果是整数
+		\item 化简公式会引起精度问题, 不要随意化简公式。
+		\item pow函数原型: \lstinline|double pow(double x,double y)|\\
+		当形参数是整数时, 由于精度问题，不要使用此函数计算$x^y$. 推荐使用循环语句, 易计算$x^y$。 如果必要, 可自定义函数: \lstinline|int mypow(int x,int y)|。 见课件。
+	\end{enumerate}
+\end{note}
+
+\section{温度转化}
+已知华氏温度到摄氏温度的转换公式为：摄氏温度= (华氏温度- 32)×5/9，写程序将给定的华氏温度转换为摄氏温度输出。
+
+输入说明：\\
+只有一个整数，表示输入的华氏温度
+
+输出说明：\\
+输出一个表示摄氏温度的实数，小数点后保留2位有效数字，多余部分四舍五入
+
+输入样例：\\
+50
+
+输出样例：\\
+10.00
+
+提示：\\
+用scanf输入，用printf输出，保留2位小数的格式控制字符为%.2f
+
+\begin{lstlisting}
+#include <stdio.h>
+
+int main()
+{
+	int f;
+	float c;
+	scanf("%d",&f);
+	c = (f-32)*5.0/9;     // (1)
+	//c = (f-32)*5/9;     // (2)
+	printf("%.2f\n",c);
+	return 0;
+} 
+\end{lstlisting}
+
+\begin{note}[思考]
+	为何语句(1),(2)计算结果不一致, 哪一条语句正确？
+\end{note}
+
+
+\section{整数简单运算}
+编写程序，计算用户输入的两个整数的和、差、乘积（*）和商（/）。
+
+输入格式：输入两个整数，整数之间用空格分隔。
+
+输出格式：输出四个整数结果，分别表示和、差、积和商，每输出一个结果换行。
+
+输入样例：\\
+3 4
+
+输出样例：\\
+7  \\
+-1 \\
+12 \\
+0
+
+\begin{lstlisting}
+#include<stdio.h>
+int main()                   
+{  
+	int a,b;
+	scanf("%d%d",&a,&b);
+	printf("%d\n%d\n%d\n%d\n",a+b,a-b,a*b,a/b); 
+	return 0;           
+}             
+\end{lstlisting}
+
+\begin{note}[思考]
+	b=0时如何处理?
+\end{note}
+
+\section{A+B+C}
+通过键盘输入三个整数a，b，c，求3个整数之和。
+
+输入说明：
+
+三整形数据通过键盘输入，输入的数据介于-100000和100000之间，整数之间以空格、跳格或换行分隔。 
+
+输出说明：
+
+输出3个数的和。
+
+输入样例：
+
+-6  0  39
+
+输出样例：
+
+33
+
+\begin{lstlisting}
+#include<stdio.h>  
+int main()                   
+{  
+	int a,b,c;
+	scanf("%d%d%d",&a,&b,&c);
+	printf("%d\n",a+b+c); 
+	return 0;           
+}           
+\end{lstlisting}
+
+\section{字符输入输出}
+通过键盘输入5个大写字母，输出其对应的小写字母，并在末尾加上“！”。
+
+输入说明：
+
+5个大写字母通过键盘输入，字母之间以竖线“|”分隔。
+
+输出说明：
+
+输出5个大写字母对应的小写字母，之间无分隔，并在末尾加上‘！’。
+
+输入样例：
+
+H|E|L|L|O
+
+输出样例：
+
+hello!
+
+\begin{lstlisting}
+#include<stdio.h>     
+int main()                   
+{  
+	char c1,c2,c3,c4,c5;
+	scanf("%c|%c|%c|%c|%c",&c1,&c2,&c3,&c4,&c5);
+	c1+=32; c2+=32; c3+=32; c4+=32; c5+=32;
+	printf("%c%c%c%c%c!",c1,c2,c3,c4,c5); 
+	return 0;           
+}           
+\end{lstlisting}
+
+\begin{note}[要点]
+	\lstinline|scanf("原样输入",...);|
+\end{note}
+
+\begin{note}(大小写字符转化关系)
+	小写字符ASCII码=大写字符ASCII码+32
+\end{note}
+
+\section{数字字符}
+通过键盘输入1个整数\lstinline|a(0<=a<=4)|,1个数字字符\lstinline|b('0'<=b<='5')|求a+b。
+
+输入说明：
+
+整形数据、数字字符通过键盘输入，输入的整形数据介于0和4之间，输入的数字字符介于`0'和`5'之间，二个输入数之间用``,"分隔。
+
+输出说明：
+
+分别以整数形式及字符形式输出a+b，输出的二个数之间用``,"分隔。
+
+输入样例：
+
+3,5
+
+输出样例：
+
+56,8
+
+\newpage
+
+\begin{lstlisting}
+#include<stdio.h>    
+int main()                   
+{  
+	int a;
+	char b;
+	scanf("%d,%c",&a,&b);
+	printf("%d,%c",a+b,a+b); 
+	return 0;           
+}             
+\end{lstlisting}
+
+\begin{note}(scanf函数)
+	\lstinline|scanf("原样输入",...); |
+\end{note}
+
+\begin{note}(整型数值与字符混合运算)
+	字符对应的ASCII编码参与整数运算, 其结果也是整数。注意\lstinline|'0'|与\lstinline|0|不同, 本例中输入0,0, 则\lstinline|a=0|,\lstinline|b='0'|, 变量a的值是整数0, 变量b的值是字符\lstinline|'0'|对应的ASCII编码, 即整数48。
+	
+	如果本题改为计算整数a+(字符b对应的数字), 则, \lstinline|printf("%d",a+b-'0');|
+\end{note}
+
+\section{实数运算}
+通过键盘输入长方体的长、宽、高，求长方体的体积V(单精度)。
+
+输入说明：
+
+十进制形式输入长、宽、高，输入数据间用空格分隔。
+
+输出说明：
+
+单精度形式输出长方体体积V，保留小数点后3位，左对齐。
+
+输入样例：
+
+15  8.12  6.66
+
+输出样例：
+
+811.188
+
+
+\begin{lstlisting}
+#include<stdio.h>   
+int main()                   
+{  
+	float a,b,c;
+	scanf("%f%f%f",&a,&b,&c);
+	printf("%.3f",a*b*c); 
+	return 0;           
+}                  
+\end{lstlisting}
+
+\begin{note}(精度问题)
+	32位编译器: \lstinline|a*b*c| 与 \lstinline|a*c*b| 结果一致。
+	但是在64位编译器中, 二者不一致。
+	
+	因此, 浮点数运算会存在精度问题, 不要随意改变运算顺序。
+\end{note}

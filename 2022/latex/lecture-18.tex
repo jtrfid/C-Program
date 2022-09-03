@@ -1,0 +1,109 @@
+
+\begin{frame}[fragile]{输入输出,表达式复习要点}
+\begin{itemize}
+	\item 牢记格式描述符:\lstinline|%d,%f,%c,%lf,%x,%ld|
+	\item 熟练掌握\lstinline|scanf("...",...); printf("...",...)|
+	\item \lstinline|char c; c=getchar(); putchar(c);|
+	\item \lstinline|char s[81]; scanf("%s",s); gets(s);| 注意二者的区别
+	\item 避免低级错误
+	
+	e.g., \lstinline|int a; char s[100]; scanf("%d%s",a,&s);|
+	
+	\item 保证接收键盘输入数据的正确性，特别注意字符，数字等混合输入形式，必要时要测试。
+	
+	Reference: ppt P60, 缓冲区接收字符;  Exercise 8.5 消费按键
+	
+	\item 整数运算: (整数/整数)结果为整数，\lstinline|int a; a/10*10不等于a|
+	\item \lstinline|'0','\0',0; 9='9'-'0'|
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{选择结构复习要点}
+\begin{itemize}
+	\item 熟练\lstinline|if else, switch(){ }|
+	\item 避免低级错误\lstinline|if ($\cdots$=$\cdots$)|
+	\item 数学表达式与C语言表达式的不同, \lstinline|if(20<=a<=30)|, ppt P95
+	\item 善用逻辑运算符\lstinline$&&,||,!$, 简化条件判断语句结构。参见大量相关练习题。
+	\item \lstinline!if (条件1||条件2||条件3||$\cdots$)!的截断语义
+	
+	任一条件为\lstinline|true|, 整个条件表达式为\lstinline|true|,不必进行后续条件的判断。
+	\item \lstinline|switch(整数表达式){ }|，换算区间为整数表达式是重要技巧，ppt P98
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{循环结构复习要点}
+\begin{itemize}
+	\item 熟练三种循环结构\lstinline|while(){}, do{}while(); for(;;)|
+	\item \lstinline|continue,break|的含义
+	\item 注意二重循环中,执行内层循环前的初始化问题. e.g. ppt P129
+	\item 迭代关系是循环语句的重点 --- 保证每次循环使循环变量逼近循环结束条件。
+	\item 循环结束后，检测循环变量的值是判断循环是否正常结束的技巧之一。
+	\item 上述判断的替代方法是使用标志变量。ppt 128
+	\item \lstinline|char c; while((c=getchar())!='\n') { }|
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{数组复习要点}
+\begin{itemize}
+	\item 正确定义数组: \lstinline|int n,a[100];| 估计数组的最大长度100, 实际长度用变量n表示(通过键盘输入)。
+	\item 估计的数组长度不能过大，否则会导致内存不足。按题意定义即可。
+	\item 循环语句中, 防止数组越界, e.g. \lstinline|i>=100或i>=n,会导致a[i]越界|
+	\item 牢记数组名就是地址常量, 指向数组首元素。
+	
+	\lstinline|char s[100]; scanf("%s",s);| 
+	
+	\lstinline|int a[100],i; for(i=0;i<n;i++) scanf("%d",&a[i]); | 
+	\item 熟练掌握冒泡排序或选择法排序
+	\item 二维数组表示矩阵的各种操作
+	\item 熟练掌握\lstinline|string.h|中的字符串处理函数\lstinline|strlen,strcpy,strcmp,strcat|
+	\item 牢记字符串结束字符\lstinline|'\0'|
+\end{itemize}
+\end{frame}
+
+\begin{frame}{函数复习要点}
+\begin{itemize}
+	\item 掌握三要素: 函数原型说明, 函数定义, 函数调用。
+	\item 深刻理解函数的地址传递与值传递的区别。
+	\item 理解\lstinline|return|语句的含义。
+	\item 函数是进行模块化程序设计的法宝, 大量练习题中均有体现，必须深刻理解其解决问题的思路。
+	\item 熟练编写排序函数(包括字符串，结构体的排序)。
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{指针复习要点}
+\begin{itemize}
+	\item 切记指针使用前必须有指向。
+	\item 理解指针与数组之间的关系以及指针与字符串的关系。
+	\item 牢记数组名就是地址常量, 指向数组首元素。
+	\item 体会指针作为函数参数进行地址传递的内涵。
+	\item 熟练使用指针可以简化程序设计，大量练习题中均有体现, 请认真体会其使用技巧。
+\end{itemize}
+\end{frame}
+
+\begin{frame}{结构体复习要点}
+\begin{itemize}
+	\item 正确定义结构体类型
+	\item 熟练掌握结构体类型变量, 结构体类型指针变量, 结构体类型数组
+	\item 结构体作为函数参数或返回值的应用
+	\item 一些貌似复杂的问题, 应用结构体和函数可以编写出逻辑简单, 思路清晰的程序。大量练习中均有体现, 请深刻理解其精髓。
+\end{itemize}
+\end{frame}
+
+\begin{frame}{忠告与祝愿}
+\vspace{-0.2cm}
+\begin{columns}
+	\column{0.7\linewidth}
+	\begin{itemize}
+		\item 认真复习ppt及100道练习题，确保不犯低级错误。
+		\item 认真复习ppt及100道练习题，深刻体会编程思路。
+		\item 认真复习ppt及100道练习题，注重一题多解，总结自己的编程宝典，做到遇类似问题，脑洞大开。
+		\item 善用标志变量(如, 跳一跳, 字符计数，连续1等练习题)，标志矩阵(如, 消费类游戏, 购票系统等练习题)。
+		\item 善用函数，简化程序设计。
+		\item 应用结构体和函数得到逻辑简单, 思路清晰的程序。貌似复杂的问题迎刃而解。
+		\item 代码雷同, 0分处之。 
+	\end{itemize}
+	\column{0.3\linewidth}
+	\centering\includegraphics[scale=0.2]{timg}
+\end{columns}
+\end{frame}
+

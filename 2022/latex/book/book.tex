@@ -1,0 +1,180 @@
+%%%%%%%%%%%%%%%%%%%% book.tex %%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+% sample root file for the chapters of your "monograph"
+%
+% Use this file as a template for your own input.
+%
+%%%%%%%%%%%%%%%% Springer-Verlag %%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+% RECOMMENDED %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\documentclass[graybox,envcountchap,sectrefs]{svmono}
+
+% choose options for [] as required from the list
+% in the Reference Guide
+
+\usepackage{mathptmx}
+\usepackage{helvet}
+\usepackage{courier}
+\usepackage{amsmath}
+
+\usepackage{amssymb}
+\usepackage{mathrsfs}
+\usepackage{amsfonts}
+%
+\usepackage{type1cm}
+
+\usepackage{makeidx}         % allows index generation
+\usepackage{graphicx}        % standard LaTeX graphics tool
+                             % when including figure files
+\usepackage{multicol}        % used for the two-column index
+\usepackage[bottom]{footmisc}% places footnotes at page bottom
+
+\usepackage{wrapfig}
+\usepackage{picins}
+%xxx\usepackage{custom}
+
+\usepackage{tikz}
+\usetikzlibrary{positioning,backgrounds}
+\usetikzlibrary{fadings}
+\usetikzlibrary{patterns}
+\usetikzlibrary{calc}
+\usetikzlibrary{shadings}
+\usetikzlibrary{shapes.symbols,shapes.misc,plotmarks,decorations.text,shapes.geometric} % shapes.symbols
+\usetikzlibrary{arrows,automata,matrix,arrows,graphs,shadows,calc,decorations.pathmorphing,backgrounds,positioning,fit,petri}
+
+\usetikzlibrary[intersections,mindmap,quotes,chains] %
+
+\usetikzlibrary{overlay-beamer-styles}
+
+\usetikzlibrary{fit}
+%\usegdlibray{tree,layered}
+
+\usepgfmodule{decorations}  %decorations
+\usepgflibrary{decorations.pathmorphing}
+
+\usetikzlibrary{cd} % commutative diagram
+
+\usetikzlibrary{matrix,arrows}
+
+\usepackage[justification=centering]{caption}
+\usepackage{array}
+\usepackage{multirow} 
+
+\usepackage{verbatim} % comment
+
+%中文包
+\usepackage[UTF8]{ctex}
+
+% subfigure
+\usepackage{subfigure}
+
+% figure目录
+\graphicspath{{fig/},} 
+
+
+%%%% 插入程序代码
+\definecolor{mygreen}{rgb}{0,0.6,0}
+\usepackage{listings}
+\usepackage{xcolor}
+\lstset{
+	language=C++,
+	%numbers=left, 
+	%numberstyle= \tiny, 
+	keywordstyle= \color{ blue!70},
+	%commentstyle= \color{red!50!green!50!blue!50}, 
+	commentstyle=\color{mygreen},    % comment style
+	frame=shadowbox, % 阴影效果
+	rulesepcolor= \color{ red!20!green!20!blue!20} ,
+	%escapeinside=``, % 英文分号中可写入中文
+	escapeinside={\%*}{*)},          % if you want to add LaTeX within your code
+	xleftmargin=1em,xrightmargin=1em, aboveskip=1em,
+	framexleftmargin=1em,
+	breaklines=true,  % automatic line breaking only at whitespace
+	extendedchars=false,  % 代码跨页问题
+	keepspaces=true,
+	showspaces=false,
+	tabsize=4,
+	showtabs=false,                  % 不显示tab键，不作为
+	breaklines=true,  % automatic line breaking only at whitespace
+	extendedchars=false,  % 代码跨页问题
+	%keepspaces=true,
+	mathescape=true  % 注释可以用latex math, eg. $a_{ij}$
+} 
+
+%% e.g. 如果mathescape=true, 如下输出$ \lstinline[mathescape=false]|sdfghjkla!#$0123456789@EIOQRTUWXYa|
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\usepackage[top=2cm, bottom=2cm, left=2cm, right=2cm]{geometry}  
+\usepackage{algorithm}  
+\usepackage{algorithmicx}  
+\usepackage{algpseudocode} 
+%\floatname{algorithm}{算法}  
+%\renewcommand{\algorithmicrequire}{\textbf{输入:}}  
+%\renewcommand{\algorithmicensure}{\textbf{输出:}}  
+\renewcommand{\algorithmicrequire}{\textbf{Input:}}  
+\renewcommand{\algorithmicensure}{\textbf{Output:}}  
+
+%自定义列表编号
+\usepackage{enumerate} %\begin{enumerate}[(i)]
+
+%书签
+\usepackage[breaklinks,colorlinks,linkcolor=black,citecolor=black,urlcolor=black]{hyperref}
+
+\newtheorem{convention}{Convention} 
+
+%\renewcommand{\thefootnote}{}  % footnote不编号
+
+% see the list of further useful packages
+% in the Reference Guide
+
+\usepackage{tabulary} %tabulary tries to balance the column widths so that each column has at least its natural width, without exceeding the maximum length. 
+
+\usepackage{array}
+
+\graphicspath{{../figures/},} 
+
+%%%%%%x%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{document}
+
+\author{段江涛}
+\title{ 计算机导论与程序设计[CS006001038,X07]}
+\subtitle{机试练习参考程序代码 }
+
+%\includegraphics[height=1cm]{xd.jpg}
+
+
+\date{\zhtoday}
+
+\maketitle  % 生成书名
+
+%\frontmatter
+
+% \include{dedic}    %dedication 赠言
+%%%%%%%%%%%%%\include{foreword} %foreword 前言
+
+\tableofcontents   %生成目录
+
+%%表示文章的正文部分，在生成目录后将从第一页开始
+
+\include{chapter-1}   % (课外) 第1次机试练习: 熟悉DEV-C++开发平台, 基本输入输出语句练习
+
+\include{chapter-2}   % 第2次机试练习: 选择与循环语句练习
+
+\include{chapter-3}   % 第3次机试练习: 继续分支与循环练习
+
+\include{chapter-4}   % 第4次机试练习: 继续分支与循环练习
+
+\include{chapter-5}   % 第5次机试练习: 继续练习流程控制, 简单数组应用
+
+\include{chapter-6}   % 第6次机试练习: 流程控制, 字符串, 数组
+
+\include{chapter-7}   % 第7次机试练习: 函数, 矩阵, 数组, 字符串, 排序
+
+\include{chapter-8}   % 第8次机试练习: 数组,排序,字符串练习
+
+\include{chapter-9}   % 第9次机试练习: 函数, 数组, 字符串, 结构体
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\end{document}

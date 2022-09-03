@@ -1,0 +1,705 @@
+%%%%%%%%%%%%%%%%%%%%% chapter.tex %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+% sample chapter
+%
+% Use this file as a template for your own input.
+%
+%%%%%%%%%%%%%%%%%%%%%%%% Springer-Verlag %%%%%%%%%%%%%%%%%%%%%%%%%%
+%\motto{Use the template \emph{chapter.tex} to style the various elements of your chapter content.}
+\chapter{第8次机试练习: 函数, 数组, 字符串}
+
+\section{累加和校验}
+数据传输中一种常见的校验方式是累加和校验。其实现方式是在一次通讯数据包的最后加入一个字节的校验数据。
+
+这个字节内容为前面数据包中所有数据按字节累加所得结果的最后一个字节。例如： 
+
+要传输的信息为： TEST (ASCII码为0x54,0x45,0x53,0x54)
+
+四个字节的累加和为：0x54+0x45+0x53+0x54=0x140 
+
+校验和为累加和的最后一个字节，即0x40，也就是十进制的64 
+
+现在请设计一个程序计算给出的待传输信息的累加校验和 
+
+输入说明
+
+输入为一个字符串，字符串长度不超过100个字符
+
+输出说明
+
+输出一个十进制整数，表示输入字符串的累加校验和。
+
+输入样例
+
+TEST
+
+输出样例
+
+64
+
+\begin{lstlisting}
+#include <stdio.h>
+int main()
+{
+	char s[101];
+	int i,check,sum = 0; 
+	
+	gets(s); // scanf("%s",s);  // 不能完整接收含空格的字符串 
+	for(i = 0; s[i] != '\0'; i++) sum += s[i];
+	// 计算最后一个字节值。
+	check=sum%256; // 一个字节表示256个数(0 -- 255)，recall：10进制的个位数计算, sum%10. 
+	// 或 check=sum%(0xFF+1); // 0x表示16进制, 一个字节表示0 -- FF 
+	// 或 check = (sum/16%16)*16+sum%16; // 最后一个字节就是最后两位16进制数 
+	printf("%d\n",check);
+	return 0;
+}
+\end{lstlisting}
+
+\begin{note}[要点]
+	一个字节用两位十六进制数表示，16进制分解与10进制是类似的。整数与字符类型可混合运算。
+\end{note}
+
+\section{购票系统}
+请实现一个铁路购票系统的简单座位分配算法，来处理一节车厢的座位分配。 
+假设一节车厢有20排、每一排5个座位。为方便起见，我们用1到100来给所有的座位编号，第一排是1到5号，第二排是6到10号，依次类推，第20排是96到100号。 
+购票时，一个人可能购一张或多张票，最多不超过5张。如果这几张票可以安排在同一排编号相邻的座位，则应该安排在编号最小的相邻座位。否则应该安排在编号最小的几个空座位中（不考虑是否相邻）。 
+
+假设初始时车票全部未被购买，现在给了一些购票指令，请你处理这些指令，输出购票结果。 
+
+例如：若一次购买2，5，4，2张票得到的购票结果为： 
+
+1) 购2张票，得到座位1、2。 
+
+2) 购5张票，得到座位6至10。 
+
+3) 购4张票，得到座位11至14。 
+
+4) 购2张票，得到座位3、4。 
+
+输入说明
+
+输入由两行构成。 
+
+第一行包含一个整数n，表示购票指令的数量，$1\le n\le 100$。 
+
+第二行包含n个整数，每个整数p在1到5之间，表示要购入的票数，相邻的两个整数之间使用一个空格分隔，所有购票数量之和不超过100。 
+
+输出说明
+
+输出n行，每行对应一条购票指令的处理结果。即对于购票指令p，按从小到大排序输出p张车票的编号。 
+
+输入样例
+
+4 
+
+2 5 4 2 
+
+输出样例
+
+1 2 
+
+6 7 8 9 10 
+
+11 12 13 14 
+
+3 4 
+
+\begin{lstlisting}
+#include <stdio.h>
+// 估计二维数组最大行数和列数 
+#define M 20
+#define N 5 
+
+//初始化, 二维数组seat代表座位，元素为0值，表示座位未售出, 元素为1代表对应座位已输出。m,n是seat实际的行数和列数 
+void init(int seat[][N],int m,int n)
+{
+	int i,j;
+	for(i = 0; i < m; i++)
+		for(j = 0; j < n; j++)
+			seat[i][j] = 0;	 
+}
+
+//根据购票数，查询本购票指令，首座位对应的行索引(从0开始) 
+//二维数组seat代表座位，元素为0值，表示座位未售出, 元素为1代表对应座位已输出。m,n是seat实际的行数和列数，tickets购票数  
+int search(int seat[][N],int m,int n,int tickets)
+{
+	int i,j;
+	int zeroNum; // 表示某行未售出的座位数
+	int row = 0; 
+	for(i = 0; i < m; i++)
+	{
+		zeroNum = 0;
+		for(j = 0; j < n; j++)
+		{
+			if (seat[i][j] == 0) zeroNum++;
+		}
+		if(zeroNum >= tickets) 
+		{
+			row = i;
+			break;
+		}
+	}
+	return row;
+}
+
+//售票 
+//二维数组seat代表座位，元素为0值，表示座位未售出, 元素为1代表对应座位已输出。m,n是seat实际的行数和列数，tickets购票数  
+void salse(int seat[][N],int m,int n,int tickets)
+{
+	int i,j,count = 0, flag = 0;
+	int row = search(seat,m,n,tickets); // 获取本购票指令，首座位对应的行索引(从0开始)  
+	for(i = row; i < m; i++)
+	{
+		for(j = 0; j < n; j++)
+		{
+			if (seat[i][j] == 0) 
+			{ 
+				seat[i][j] = 1;
+				printf("%d ",i*n+j+1); // 打印座位编号 
+				count++;
+				if(count >= tickets)
+				{
+					flag = 1; break;
+				}
+			} 
+		}
+		if(flag == 1) break;
+	}
+	printf("\n"); // 换行 
+}
+
+int main()
+{ 
+	int seat[M][N];  // 二维数组seat代表座位，元素为0值，表示座位未售出, 元素为1代表对应座位已输出。
+	int i, m = 20, n = 5; // m,n是seat实际的行数和列数
+	int pNum,tickets;     // 售票指令数和票数 
+	
+	// 初始化 
+	init(seat,m,n);
+	
+	scanf("%d",&pNum);
+	// 输入同时，处理售票。因此不需要使用数组存储pNum和tickets 
+	for(i = 0; i < pNum; i++)
+	{
+		scanf("%d",&tickets);
+		salse(seat,m,n,tickets);
+	}
+	
+	return 0;
+}
+\end{lstlisting}
+
+\begin{note}[要点]
+	\begin{enumerate}
+		\item 思路：使用二维数组模拟售票座位，元素为0值，表示座位未售出, 元素为1代表对应座位已输出。
+		\item 定义独立函数，根据售票指令查询待售座位；定义独立函数，模拟售票操作。 
+		\item 注意：虽然要求排序输出，但是选票过程就是按照从小到大的顺序选座位，因此并不需要编写排序函数。 
+		\item 体会模块化程序设计的优势。
+	\end{enumerate}
+\end{note}
+
+\section{查找}	
+给定一个包含n个整数的数列A0, A1, A2, \dots, An-1和一个整数k，依次输出 k在序列中出现的位置(从0开始计算)。
+
+输入说明	
+
+输入由两行构成，第一行为两个整数n和k，分别表示数列中整数个数和待查找整数k，n和k之间用空格分隔，0<n<100，0<k<10000。
+
+第二行为n个整数，表示数列中的各个整数，整数之间用空格分隔，每个整数均不超过10000。
+
+输出说明	
+
+依次输出整数k在数列中出现的位置（从0开始计算），如果k未在数列中出现，则输出-1。
+
+输入样例
+
+样例1输入
+	
+5 20
+
+10 20 30 20 5
+
+样例2输入
+
+5 20
+
+10 30 25 34 44
+
+输出样例
+	
+样例1输出
+
+1 3
+
+样例2输出
+
+-1
+
+\begin{lstlisting}
+# include <stdio.h>
+#define N 100
+int main()
+{
+	// N是估计数组a的最大长度，实际长度是n; 标志变量flag表示是否k在a数组中
+	int a[N],n,i,k,flag=0; 
+	scanf("%d%d",&n,&k);
+	for(i=0;i<n;i++)
+	{
+		scanf("%d",&a[i]);
+		if(k==a[i]) 
+		{
+			printf("%d ",i);
+			flag=1;
+		}
+	} 
+	if(flag) printf("\n");
+	else printf("-1\n");
+	return 0;
+}
+\end{lstlisting}
+
+\begin{note}[要点]
+	简单处理，不要复杂化。
+\end{note}
+
+\section{中间数}
+在一个整数序列$A_1, A_2,\dots, A_n$中，如果存在某个数，大于它的整数数量等于小于它的整数数量，则称其为中间数。
+
+在一个序列中，可能存在多个下标不相同的中间数，这些中间数的值是相同的。 
+
+给定一个整数序列，请找出这个整数序列的中间数的值。 
+
+输入说明
+
+输入的第一行包含了一个整数n，表示整数序列中数的个数，$1\le n\le 1000$。
+ 
+第二行包含$n$个正整数，依次表示$A_1, A_2, \dots, A_n,~1\le A_i\le 1000$。 
+
+输出说明
+
+如果序列的中间数存在，则输出中间数的值，否则输出-1表示不存在中间数。
+
+输入样例
+
+输入样例1 
+
+6 
+
+2 6 5 6 3 5 
+
+输入样例2 
+
+4 
+
+3 4 6 7 
+
+输出样例
+
+输出样例1 
+
+5 
+
+输出样例2 
+
+-1
+
+提示信息
+
+样例1中比5小的数有2个，比5大的数也有2个。因此中间数是5 
+
+样例2中4个数都不满足中间数的定义，因此中间数是-1
+
+\begin{lstlisting}
+#include <stdio.h>
+int main()
+{
+	int n, a[1000];
+	int i,j,larger,smaller;	// larger,smaller: 比a[i]大或小的数计数
+	scanf("%d",&n);
+	for(i = 0; i < n; i++) scanf("%d",&a[i]);
+	
+	for(i = 0; i < n; i++)
+	{
+		larger = smaller = 0;
+		for(j = 0; j < n; j++)
+		{
+			if(a[j] >= a[i]) larger++; 
+			if(a[j] <= a[i]) smaller++;
+		}
+		if(larger != 0 && larger == smaller) 
+		{
+			printf("%d ",a[i]); 
+			break;  // 最多有一个中间数，其它将与此同值。 
+		}
+	}
+	if(i == n) printf("-1\n"); // 没有中间数 
+	return 0;
+}
+\end{lstlisting}
+
+\begin{note}[要点]
+	训练自己的逻辑思维能力。
+\end{note}
+
+\section{字符统计}
+给出一个字符C和一行文字S，统计在这行文字S中字符C出现的次数。
+
+程序还需要支持大小写敏感选项：
+
+当选项打开时，表示同一个字母的大写和小写看作不同的字符;
+
+当选项关闭时，表示同一个字母的大写和小写看作相同的字符。
+
+输入说明	
+
+输入数据由两行构成。
+
+第一行包含一个字符C和一个数字n。字符C为大小或小写英文字母。数字n表示大小写敏感选项，当数字n为0时表示大小写不敏感，当数字n为1时表示大小写敏感。字符C和数字n之间用空格分隔。
+
+第二行为一个字符串S，字符串由大小写英文字母组成，不含空格和其他字符。字符串S长度不超过100。
+
+输出说明
+	
+输出字符C在字符串S中出现的次数。
+
+输入样例
+
+样例1输入
+
+L 1
+
+HELLOWorld
+
+样例2输入
+
+L 0
+
+HELLOWorld
+
+输出样例
+
+样例1输出	
+
+2
+
+样例2输出
+
+3
+
+\begin{lstlisting}
+#include <stdio.h>
+// 估计字符串长度，实际容纳(N-1)个有效字符，预留最后一个字符'\0'
+#define N 101 
+
+// 使用gets函数接收两行字符串最安全,可正确消费每行的回车键.
+int main()
+{
+	// 第一行字符串, 包括中间的空格共3个字符, 再加上字符串结尾字符'\0' 
+	char info[4]; 
+	char s[N]; // 第二行字符串 
+	int i, count=0;
+	
+	// 第一行，info[0]是待统计的字符, info[1]空格, info[2]='1'或'0'表示大小写敏感信息
+	gets(info);  
+	
+	// 大小写不敏感, 统一转为大写比较 
+	if(info[2]=='0' && info[0]>='a' && info[0]<='z') 
+	{
+		info[0] = info[0]-32; // 小写转大写 
+	} 
+	
+	gets(s); // 读取第二行字符串 
+	for(i=0; s[i]!='\0'; i++) 
+	{
+		if(info[2]=='0') // 大小写不敏感, 统一转为大写比较 
+		{
+			if(s[i]>='a' && s[i]<='z') s[i] = s[i] - 32;  // 小写转大写 
+		}
+		if(s[i] == info[0]) count++; // 计数 
+	}
+	printf("%d\n",count);
+	return 0;
+} 
+
+// scanf("%c%d",--)形式不会消费行尾的回车键 
+int main1()
+{
+	char S[N],C;
+	int n, i, count=0;
+	
+	/************ 测试, 这样的输入得不到正确的值 
+	scanf("%c%d",&C,&n); // 回车键保留在输入缓冲区, 导致下面的gets(S)仅得到一个'\0' 
+	gets(S); // 遇回车结束.
+	printf("===%c,%d,%s\n",C,n,S); // 测试输入, 错误 
+	*************/ 
+	
+	/************ 测试, 这样的输入得不到正确的值
+	scanf("%c%d%s",&C,&n,S); // S中如果有空格则接收不完整 
+	printf("===%c,%d,%s\n",C,n,S); // 测试输入, 错误 
+	*************/ 
+	
+	// 测试以下输入正确 
+	C=getchar();    // 读取C 
+	scanf("%d",&n); // 读取n 
+	getchar();      // 消费回车键 
+	gets(S);        // 读取S 
+	//printf("===%c,%d,%s\n",C,n,S); // 测试输入, 正确 
+	
+	
+	if(n == 0 && C >= 'a' && C <= 'z') // 大小写不敏感, 统一转为大写比较 
+	{
+		C = C-32; // 小写转大写 
+	} 
+	
+	for(i=0; S[i] != '\0'; i++) 
+	{
+		if(n==0) // 大小写不敏感, 统一转为大写比较 
+		{
+			if(S[i]>='a' && S[i]<='z') S[i] = S[i] - 32;  // 小写转大写 
+		}
+		if(S[i] == C) count++; // 计数 
+	}
+	printf("%d\n",count);
+	return 0;
+} 
+\end{lstlisting}
+
+\begin{note}[要点]
+	\begin{itemize}
+		\item 测试输入变量的正确值, 是调试程序的首要点, 尤其是数字, 字符, 字符串混合形式的输入。
+		\item 使用gets函数接收两行字符串最安全。
+	\end{itemize}
+	
+\end{note}
+
+\section{目录操作}
+在操作系统中，文件系统一般采用层次化的组织形式，由目录（或者文件夹）和文件构成，形成一棵树的形状。
+
+有一个特殊的目录被称为根目录，是整个文件系统形成的这棵树的根节点，在类Linux系统中用一个单独的 ``/"符号表示。
+
+因此一个目录的绝对路径可以表示为``/d2/d3"这样的形式。
+
+当前目录表示用户目前正在工作的目录。为了切换到文件系统中的某个目录，可以使用``cd"命令。
+
+假设当前目录为``/d2/d3", 下图给出了cd命令的几种形式，以及执行命令之后的当前目录。
+
+\begin{tabular}{|l|l|l|l|}
+	\hline 
+	\textbf{当前目录} & \textbf{目录切换命令} & \textbf{命令含义} & \textbf{执行命令后的当前目录} \\ 
+	\hline 
+	/d2/d3 & cd / & 切换到根目录 & / \\ 
+	\hline 
+	/d2/d3 & cd .. & 切换到当前目录的上级目录 & /d2 \\ 
+	\hline 
+	/d2/d3 & cd d4/d5 & 切换到当前目录下的某个子目录 & /d2/d3/d4/d5 \\ 
+	\hline 
+	/d2/d3 & cd /d1/d5 & 切换到某个绝对路径所指的目录 & /d1/d5 \\ 
+	\hline 
+\end{tabular} 
+
+现在给出初始时的当前目录和一系列目录操作指令，请给出操作完成后的当前目录。
+
+输入说明	
+
+第一行包含一个字符串，表示当前目录。
+
+后续若干行，每行包含一个字符串，表示需要进行的目录切换命令。
+
+最后一行为pwd命令，表示输出当前目录
+
+注意：
+
+1.	所有目录的名字只包含小写字母和数字，cd命令和pwd命令也都是小写。最长目录长度不超过200个字符。
+
+2.	当前目录已经是根目录时，cd .. 和cd /不会产生任何作用
+
+输出说明
+
+输出一个字符串，表示经过一系列目录操作后的当前目录
+
+输入样例	
+
+/d2/d3/d7
+
+cd ..
+
+cd /
+
+cd /d1/d6
+
+cd d4/d5
+
+pwd
+
+输出样例
+
+/d1/d6/d4/d5
+
+\begin{lstlisting}
+#include <stdio.h>
+#include <string.h>
+// 估计字符串最大长度，存储有效字符(N-1)个，预留最后一个字符'\0' 
+#define N 201 
+
+/******************************************************
+提取子串函数 
+忽略s中空格前缀，复制s中的字符串到subs中，遇空格或'\0'结束
+返回subs不含空格。 返回复制后s指针指向(地址) 
+要求s和subs以'\0'结尾。
+*******************************************************/ 
+char* getSubs(char *s, char *subs) 
+{
+	int start=0; 
+	while(*s)
+	{
+		if(*s==' ') 
+		{
+			if(start==0) s++; // 忽略s的前缀空格 
+			else break;       // 是有效字符串后的一个空格 
+		}
+		else
+		{
+			start=1; // 开始复制 
+			*subs=*s;
+			s++;
+			subs++;
+		}
+	}
+	*subs='\0'; // 不要忘记结尾符 
+	return s;
+}
+
+// cd .. 命令, 参数pwd返回当前目录的上一级目录
+// pwd="/a/b/c" 或 "/a" 
+void dotdot(char *pwd)
+{
+	int i,len;
+	if(strcmp(pwd,"/")==0) return; // 如果已经是根目录, 无动作 
+	len=strlen(pwd); 
+	for(i=len-1;i>=0;i--)
+	{
+		if(pwd[i] == '/')
+		{
+			if(i==0) strcpy(pwd,"/"); // "/a" --> pwd="/"  
+			else pwd[i]='\0';         // "/a/b/c"  --> pwd="/a/b" 
+			break;
+		}
+	} 
+}
+
+// 解析command, 参数pwd返回当前目录 
+void parse(char *command, char *pwd)
+{
+	char *p, str[N]; // str是cd后的字符串(不含空格) 
+	p=getSubs(command, str); // 获得"cd" 
+	getSubs(p,str); // cd后的字符串 
+	// cd / 或 cd /a/b/c 或 cd a/b/c 
+	if(strcmp(str,"/")==0) strcpy(pwd,"/");    // cd /
+	else if(strcmp(str,"..")==0)  dotdot(pwd); // cd ..
+	else if(str[0]=='/') strcpy(pwd,str);      // cd /a/b/c
+	else // cd a/b/c, pwd为pwd/str 
+	{
+		// 如果pwd最后一个字符是非'/' 
+		if(pwd[strlen(pwd)-1]!='/') strcat(pwd,"/"); 
+		strcat(pwd,str);
+	}
+} 
+
+
+int main()
+{
+	char pwd[N]; // 当前目录
+	char command[N]; // cd ..  或 cd / 或 cd /a/b/c
+	
+	gets(pwd);   // 第一行 
+	while(1)
+	{ 
+		gets(command); 
+		if(strcmp(command,"pwd")==0) break;
+		parse(command,pwd);
+	} 
+	puts(pwd);
+	return 0;
+}
+\end{lstlisting}
+
+\begin{note}[要点]
+	\begin{itemize}
+		\item 字符串处理, 指针函数参数的使用, 模块化程序设计。
+		\item 可以使用\lstinline|char s1[N], s2[N]; scanf("%s%s",s1,s2)|遇空结束特点, 获取cd及其参数两部分字符串。
+	\end{itemize}
+\end{note}
+
+\section{处理字符串}
+从键盘输入一个字符串，将该字符串按下述要求处理后输出： 
+
+将ASCII码大于原首字符的各字符按原来相互间的顺序关系集中在原首字符的左边，
+将ASCII码小于等于原首字符的各字符按升序集中在原首字符的右边。
+
+输入说明	
+
+输入一行字符串,字符串c不长度超过100.
+
+输出说明	
+
+输出处理后的一行字符串
+
+输入样例
+
+\lstinline[mathescape=false]|aQWERsdfg7654!@#$hjklTUIO3210X98aY|
+
+输出样例
+
+\lstinline[mathescape=false]|sdfghjkla!#$0123456789@EIOQRTUWXYa|
+
+
+\begin{lstlisting}
+#include <stdio.h>
+#include <string.h> // str前缀的字符串处理函数需要此头文件
+// 估计字符串长度，实际容纳(N-1)个有效字符，预留最后一个字符'\0'  
+#define N 100
+
+// 排序函数(升序) 
+void sort(char a[],int n)
+{ 
+	int i,j,t;
+	// 冒泡排序
+	for(j = 1; j <= n-1; j++) 
+	for(i = 0; i < n - j; i++)
+	if (a[i] > a[i+1]) 
+	{ t = a[i]; a[i] = a[i+1]; a[i+1] = t; }
+}
+
+
+int main()
+{
+	char s[N],left[N],right[N];
+	char *p = s;
+	int i = 0,j = 0;
+	gets(s); // 不能使用scanf("%s",lines),因其遇空格结束
+	// 使用指针处理较方便 
+	while(*p)
+	{
+		if(*p > s[0]) left[i++] = *p;
+		else if(p != s) right[j++] = *p; // 原首字符不加入到right 
+		p++; 
+	}
+	left[i++] = s[0]; // 原首字符加入到left中 
+	left[i] = '\0';   // left,right添加结束字符 
+	right[j] = '\0';
+	sort(right,strlen(right)); // 排序right 
+	
+	// 可以不必进行字符串连接操作，printf("%s%s\n",left,right); 亦可。
+	strcat(left,right); // 连接两个字符串 
+	puts(left);
+	return 0;
+} 
+\end{lstlisting}
+
+\begin{note}[要点]
+	\begin{itemize}
+		\item 借助指针进行字符串处理是常见技巧, 应深刻领会。
+		\item 且记字符串结尾字符\lstinline|'\0'|.
+	\end{itemize}
+\end{note}
+

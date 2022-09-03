@@ -1,0 +1,434 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%% lecture-9
+%\begin{frame}[shrink]
+%  \frametitle{lecture-9 主要内容}
+%  \framesubtitle{利用数组处理批量数据}
+%  \tableofcontents[hideallsubsections]
+%\end{frame}
+
+\begin{frame}[shrink,fragile]{为什么需要数组}
+\vspace{-0.2cm}
+\begin{itemize}
+	\item 记录全班50个学生一门课的成绩, 用于后续其它计算, 例如排序;
+	
+		\textcolor{red}{Recall: 用循环迭代计算平均成绩时, 并不需要记录50个成绩}. 
+	\item 用50个float型简单变量表示学生的成绩
+	\begin{itemize}
+		\item[-] \textbf{烦琐}，如果有1000名学生怎么办呢?
+		\item[-] 没有反映出这些\textcolor{blue}{数据间的内在联系}，实际上这些数据是同一个班级、同一门课程的成绩，它们具有相同的属性。
+	\end{itemize}
+\end{itemize}
+\begin{lstlisting}
+float s0,s1,s2,...,s49; // 50名学生一门课的成绩
+\end{lstlisting}
+\pause
+\begin{lstlisting}
+float s[50]; // float型数组, 记录50名学生一门课的成绩
+int i; // 表示数组下标
+for(i=0;i<50;i++) scanf("%f",&s[i]);
+\end{lstlisting}
+\vspace{-0.2cm}
+\begin{block}{数组}
+	\begin{enumerate}
+		\item 数组是一组\textcolor{blue}{有序数据}的集合。下标代表数据在数组中的序号。
+		\item 用数组名和下标即可唯一地确定数组中的元素。
+		\item 数组中的每一个元素都属于同一个数据类型。
+	\end{enumerate}
+\end{block}
+\end{frame}
+
+\section{定义数组: int a[10];}
+
+\begin{frame}[shrink,fragile]{定义数组: int a[10];}
+\vspace{-0.3cm}
+定义一维数组: \\
+\textcolor{blue}{元素类型\quad 数组名[常量表达式(表示元素个数---数组的长度)]}
+\vspace{-0.2cm}
+\begin{lstlisting}
+#define NUM 100
+float s[50]; // 50名学生一门课的成绩, 边界: s[0], s[49]
+int a[10]; // 10个元素的整型数组, 边界: a[0], a[9]
+char b[50]; // 50个元素的char型数组, 边界: b[0], b[49]
+// 好的定义, 易控制数组的边界.
+double c[NUM]; // 常量NUM个元素的double数组, 边界: c[0], c[NUM-1]
+
+\end{lstlisting}
+\vspace{-0.3cm}
+\begin{block}{Notes}
+	数组元素的下标从0开始，int a[10]; 10个整型元素，则最大下标值为9，不存在数组元素a[10]. \textcolor{blue}{定义数组常见错误: int n,a[n];}
+\end{block}
+\begin{tabular}{|c|c|c|c|c|c|c|c|c|c|}
+	\hline 
+	a[0] & a[1] & a[2] & a[3] & a[4] & a[5] & a[6] & a[7] & a[8] & a[9] \\ 
+	\hline 
+\end{tabular} 
+\end{frame}
+
+\section{引用数组}
+
+\begin{frame}[shrink,fragile]{引用数组: 读写数组a的第i个元素的值: a[i]}
+\begin{lstlisting}
+int a[10]; // 10个元素的整型数组, 边界: a[0],a[9]
+int i;
+a[0]=10; // 给a数组的第1个元素赋值(写)
+a[9]=10; // 给a数组的最后1个元素赋值(写)
+printf("%d,%d",a[0],a[9]);
+for(i=0;i<10;i++) a[i] = i+1; // 给数组的第i个元素赋值, 注意边界a[0],a[9]
+for(i=0;i<10;i++) printf("%d\t",a[i]); // 输出数组a的第i个元素(读):a[i]
+for(i=0;i<10;i++) scanf("%d",&a[i]); // 输入10个整数, 存入数组a中。注意'&'
+\end{lstlisting}
+\begin{block}{Notes}
+	数组元素的下标从0开始，int a[10]; 10个整型元素，则最大下标值为9，不存在数组元素a[10]. \textcolor{blue}{常见错误: } \lstinline|scanf("%d",a[i]);|
+\end{block}
+\end{frame}
+
+\begin{frame}[fragile]{数组定义与引用的一般范式}
+\begin{lstlisting}
+// 估计数组的最大长度
+#define N 100 
+int a[N], n, i; // 按照最大长度定义数组, 用n表示数组的实际长度.
+scanf("%d",&n); // 一般从键盘接收数组的实际长度
+// 举例输入数组各个元素, 自动按空格隔开输入数据.
+for(i=0;i<n;i++) scanf("%d",&a[i]); // 错误形式: scanf("%d ",&a[i]);
+// 举例输出数组各个元素
+for(i=0;i<n;i++) printf("%d\t",a[i]);
+printf("\n");
+\end{lstlisting}
+\end{frame}
+
+\begin{frame}[shrink,fragile]
+$[$例6.1$]$对10个字符型数组元素依次赋值为'a','b',$\cdots$。要求按逆序输出。
+\pause
+\begin{lstlisting}
+#include <stdio.h>
+#define N 10
+int main()
+{
+  char c[N]; // 边界: c[0], c[N-1]
+  int i;
+  for(i=0;i<N;i++) c[i]='a'+i; 
+  for(i=N-1;i>=0;i--) printf("%c ", c[i]);
+  printf("\n");
+  return 0;
+}
+\end{lstlisting}
+\end{frame}
+
+\section{初始化数组: int a[5]=\{1,2,3,4,5\};}
+
+\begin{frame}[shrink,fragile]{初始化数组: int a[5]=\{1,2,3,4,5\};}
+为了使程序简洁，常在定义数组的同时给各数组元素赋值，这称为数组的初始化。
+\begin{lstlisting}
+#define N 10
+int a[N]={1,2,3,4,5,6,7,8,9,10}; // 在定义数组时对全部数组元素赋予初值。
+char c[10]={'a','b'}; // 仅给数组第1,2个元素赋值。其他元素的值不确定
+double d[]={10.0,10.2,10.3}; // 等效于 double d[3]={10.0,10.2,10.3}
+
+d[2] = 20.2; // 修改第3个元素
+
+// 利用循环结构, 给各元素赋值。
+int i;
+for(i=0;i<N;i++) a[i]=0;
+\end{lstlisting}
+\end{frame}
+
+\begin{frame}[shrink,fragile]
+$[$例6.2$]$用数组来处理求Fibonacci数列问题。
+\begin{lstlisting}
+#include <stdio.h>
+#define N 20
+int main()
+{
+  int i;
+  int f[N]={1,1};  //对最前面两个元素f[0]和f[1]赋初值1
+  for(i=2;i<N;i++) // 边界f[0], f[N-1]
+     f[i]=f[i-2]+f[i-1]; //先后求出f[2]~f[N-1]的值
+  for(i=0;i<N;i++)
+  {
+     if(i%5==0) printf("\n"); //控制每输出5个数后换行
+     printf("%12d",f[i]); //输出一个数
+  }
+  printf("\n");
+  return 0;
+}
+\end{lstlisting}
+\end{frame}
+
+\section{冒泡排序}
+
+\begin{frame}[shrink,fragile]{冒泡排序(第1趟比较)}
+int a[4]=\{9,8,5,0\}; // N=4个元素, 要求从小到大顺序排列
+\begin{columns}[T]
+	\column{0.3\textwidth}
+	\begin{tabular}{|c|}
+		\hline 
+		9 \\ 
+		\hline 
+		8 \\ 
+		\hline 
+		5 \\ 
+		\hline
+		0 \\
+	    \hline 
+	\end{tabular}\\ 
+    第1趟原始数据
+	\column{0.2\textwidth}
+	\pause
+	\begin{tabular}{|c|}
+		\hline 
+		\colorbox{green}{8} \\ 
+		\hline 
+		\colorbox{green}{9} \\ 
+		\hline 
+		5 \\ 
+		\hline
+		0 \\
+		\hline  
+	\end{tabular}\\ 
+    第1趟第1次相邻两数比较
+    \column{0.2\textwidth}
+    \pause
+    \begin{tabular}{|c|}
+    	\hline 
+    	\colorbox{green}{8} \\ 
+    	\hline 
+    	\colorbox{green}{5} \\ 
+    	\hline 
+    	\colorbox{green}{9} \\ 
+    	\hline 
+    	0 \\
+    	\hline 
+    \end{tabular}\\ 
+    第1趟第2次相邻两数比较
+    \column{0.2\textwidth}
+    \pause
+    \begin{tabular}{|c|}
+    	\hline 
+    	\colorbox{green}{8} \\ 
+    	\hline 
+    	\colorbox{green}{5} \\ 
+    	\hline 
+    	\colorbox{green}{0} \\ 
+    	\hline 
+    	\colorbox{yellow}{9} \\
+    	\hline 
+    \end{tabular}\\ 
+    第1趟第3次相邻两数比较(第1个大数沉底)
+\end{columns}
+~\\
+\textcolor{blue}{第j=1趟比较,共进行N-j=3次相邻两数比较}
+\end{frame}
+
+\begin{frame}[shrink,fragile]{冒泡排序(第2趟比较)}
+int a[4]=\{9,8,5,0\}; // N=4个元素, 要求从小到大顺序排列
+\begin{columns}[T]
+	\column{0.3\textwidth}
+	\begin{tabular}{|c|}
+		\hline 
+		8 \\ 
+		\hline 
+		5 \\ 
+		\hline 
+		0 \\ 
+		\hline
+		\colorbox{yellow}{9} \\
+		\hline 
+	\end{tabular}\\ 
+	第2趟原始数据
+	\column{0.2\textwidth}
+	\pause
+	\begin{tabular}{|c|}
+		\hline 
+		\colorbox{green}{5} \\ 
+		\hline 
+		\colorbox{green}{8} \\ 
+		\hline 
+		0 \\ 
+		\hline
+		\colorbox{yellow}{9} \\
+		\hline  
+	\end{tabular}\\ 
+	第2趟第1次相邻两数比较
+	\column{0.2\textwidth}
+	\pause
+	\begin{tabular}{|c|}
+		\hline 
+		\colorbox{green}{5} \\ 
+		\hline 
+		\colorbox{green}{0} \\ 
+		\hline 
+		\colorbox{yellow}{8} \\ 
+		\hline 
+		\colorbox{yellow}{9} \\
+		\hline 
+	\end{tabular}\\ 
+	第2趟第2次相邻两数比较(第2大沉底)
+\end{columns}
+~\\
+\textcolor{blue}{第j=2趟比较,共进行N-j=2次相邻两数比较}
+\end{frame}
+
+\begin{frame}[shrink,fragile]{冒泡排序(第3趟比较)}
+int a[4]=\{9,8,5,0\}; // N=4个元素, 要求从小到大顺序排列
+\begin{columns}[T]
+	\column{0.3\textwidth}
+	\begin{tabular}{|c|}
+		\hline 
+		5 \\ 
+		\hline 
+		0 \\ 
+		\hline 
+		\colorbox{yellow}{8} \\ 
+		\hline
+		\colorbox{yellow}{9} \\
+		\hline 
+	\end{tabular}\\ 
+	第3趟原始数据
+	\column{0.2\textwidth}
+	\pause
+	\begin{tabular}{|c|}
+		\hline 
+		0 \\ 
+		\hline 
+		\colorbox{yellow}{5} \\ 
+		\hline 
+		\colorbox{yellow}{8} \\ 
+		\hline
+		\colorbox{yellow}{9} \\
+		\hline  
+	\end{tabular}\\ 
+	第3趟第1次相邻两数比较(第3大沉底)
+\end{columns}
+~\\
+\textcolor{blue}{第j=3趟比较,共进行N-j=1次相邻两数比较}
+
+\textcolor{red}{总结: 外层循环(j)执行(N-1)次,内层循环(i)执行(N-j)次相邻两数比较}
+\end{frame}
+
+\begin{frame}[shrink,fragile]{冒泡排序(总结)}
+\begin{tabular}{cc}
+	\multicolumn{2}{c}{\#define N 4 // 数组长度}\\
+	\lstinline|int a[N];| & 原始\\
+	a[0] & 9\\ 
+	a[1] & 8\\ 
+	a[2] & 5\\ 
+	a[3] & 0\\ 
+\end{tabular}
+\begin{tabular}{|c|c|c|}
+	\hline
+	\multicolumn{3}{|c|}{j=1}\\
+	\hline
+	i=0 & i=1 & i=2\\
+	\hline
+	\textcolor{blue}{8} & 8 				  & 8\\ 
+	\hline 
+	\textcolor{blue}{9} & \textcolor{blue}{5} & 5\\ 
+	\hline 
+	5 & \textcolor{blue}{9} & \textcolor{blue}{0}\\ 
+	\hline
+	0 & 0 & \colorbox{yellow}{\textcolor{blue}{9}}\\
+	\hline 
+\end{tabular}
+\begin{tabular}{|c|c|}
+	\hline
+	\multicolumn{2}{|c|}{j=2}\\
+	\hline
+	i=0 & i=1\\
+	\hline
+	\textcolor{blue}{5} & 5\\ 
+	\hline 
+	\textcolor{blue}{8} & 0\\ 
+	\hline 
+	0 & \colorbox{yellow}{\textcolor{blue}{8}}\\ 
+	\hline
+	9 & \colorbox{yellow}{\textcolor{blue}{9}}\\
+	\hline 
+\end{tabular}
+\begin{tabular}{|c|}
+	\hline
+	j=3\\
+	\hline
+	i=0\\
+	\hline
+	\textcolor{blue}{0}\\ 
+	\hline 
+	\colorbox{yellow}{\textcolor{blue}{5}}\\ 
+	\hline 
+	\colorbox{yellow}{8}\\ 
+	\hline
+	\colorbox{yellow}{9}\\
+	\hline 
+\end{tabular}\\ 
+\begin{lstlisting}
+for(j=1;j<=N-1;j++) // N-1次循环
+{
+	for(i=0;i<=N-1-j;i++) // N-j次比较相邻元素比较
+	{ 比较 a[i], a[i+1]	}
+}
+\end{lstlisting}
+\vspace{-0.4cm}
+\begin{itemize}
+	%\setlength{\itemsep}{.5cm}
+	%\item \#define N 4 // 数组长度
+	\item $(N-1)$趟外层循环, $(j=1,2,\cdots,N-1)$, 表示第$j$趟比较。
+	\item $(N-j)$次内层循环, $(i=0,1,\cdots, N-1-j)$相邻元素比较(\lstinline|a[i],a[i+1]|), 必要时交换。
+	\item 检查数组\underline{边界条件(i,j)两端a[i],a[i+1]}, \textcolor{blue}{不要越界, 令N=1,2,3,4. 检查a[i+1].}
+\end{itemize}
+\end{frame}
+
+\begin{frame}[shrink,fragile]{冒泡排序(核心程序)}
+\begin{lstlisting}
+#define N 10 // 估计数组的最大长度
+int a[N]={9,8,7,6,5,4,3,2,1,0},i,j,t, n; // n是数组的实际长度
+scanf("%d",&n); // 一般从键盘输入数组的实际长度
+for(j=1;j<=n-1;j++) //进行n-1次循环，实现n-1趟比较
+{
+  for(i=0;i<=n-1-j;i++) //在每一趟中进行n-j次比较相邻元素两两比较
+  {
+    if(a[i]>a[i+1]) //相邻两个数比较, 注意检查数组不要越界 
+       { t=a[i]; a[i]=a[i+1]; a[i+1]=t; } // 交换
+  }
+}
+printf("\n the sorted numbers :\n");
+for(i=0;i<n;i++) printf("%d ",a[i]);
+\end{lstlisting}
+\end{frame}
+
+\begin{frame}[shrink,fragile]{冒泡排序(优化)}
+\textcolor{blue}{优化：第$j$趟排序中, 没有进行相邻元素的交换，表示数据已经排序好, 没有必要进行此后的$(n-j)$趟排序。}
+\begin{lstlisting}
+#define N 10 // 估计数组的最大长度
+int a[N]={9,8,7,6,5,4,3,2,1,0},i,j,t, n; // n是数组的实际长度
+scanf("%d",&n); // 一般从键盘输入数组的实际长度
+for(j=1;j<=n-1;j++) //进行n-1次循环，实现n-1趟比较
+{
+   flag = 0; // 每趟排序，初始化flag，表示未进行交换
+   for(i=0;i<=n-1-j;i++) //在每一趟中进行n-j次相邻元素两两比较
+   {
+     if(a[i]>a[i+1]) //相邻两个数比较, 注意检查数组不要越界 
+       { t=a[i]; a[i]=a[i+1]; a[i+1]=t; flag=1; } // 交换, 设置标志变量
+   }
+   if(!flag) break; // 表示第j趟未交换，排序好了!
+}
+printf("\n the sorted numbers :\n");
+for(i=0;i<n;i++) printf("%d ",a[i]);
+\end{lstlisting}
+\end{frame}
+
+\begin{frame}[shrink,fragile]{冒泡排序(输出每趟排序的结果, 检查排序中间过程.)}
+\begin{lstlisting}
+for(j=1;j<=n-1;j++) //进行n-1次循环，实现n-1趟比较
+{
+   flag = 0; // 每趟排序，初始化flag，表示未进行交换
+   for(i=0;i<=n-1-j;i++) //在每一趟中进行n-j次相邻元素两两比较
+   {
+      if(a[i]>a[i+1]) //相邻两个数比较, 注意检查数组不要越界 
+       { t=a[i]; a[i]=a[i+1]; a[i+1]=t; flag=1; } // 交换, 设置标志变量
+   }
+   printf("\n 第%d趟排序: \n", j);
+   for(t=0;t<N;t++) printf("%d ",a[t]); // 临时变量t的复用
+   if(!flag) break; // 表示第j趟未交换，排序好了!
+}
+printf("\n the sorted numbers :\n");
+for(i=0;i<n;i++) printf("%d ",a[i]);
+\end{lstlisting}
+\end{frame}
