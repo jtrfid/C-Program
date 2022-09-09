@@ -268,20 +268,64 @@ $(+77)_{\text{补}}+(-77)_{\text{补}}=0100~1101+1011~0011=0000~0000$
 \note{ 1B = $2^3$b (8位), 1KB = $2\times 2^8$ = $2^10$ B}
 
 \begin{frame}[shrink,fragile]{整型数据输出printf(``\%d,\%x'', -25, -25);}
-\begin{lstlisting}
-#include<stdio.h>            // standard input/output编译预处理指令
-int main()                   
-{                            
-	int a=-25,b=102;    // 定义变量a, b为整型数值, 定义变量时，可以指定变量的初值
-	
-	printf("a=%d,b=%d,a=%x,b=%x\n",a,b,a,b); 
-	printf("%d,%d,%x,%x\n",-25,-25,102,102); 
-	printf("%d,%d,%x,%x,%X\n", 77,-77,77,-77,-77);
+\vspace{-0.7cm}
+\begin{center}
+\begin{tikzpicture}
+\node[text width=1.0\textwidth] (p) {
+	\begin{lstlisting}[framextopmargin=1mm]
+	#include<stdio.h>            // standard input/output编译预处理指令
+	int main()                   
+	{                            
+		int a=-25,b=102;    // 定义变量a, b为整型数值, 定义变量时，可以指定变量的初值
+		printf("a=%d,b=%d,a=%x,b=%x\n",a,b,a,b); 
+		printf("%d,%d,%x,%x\n",-25,102,-25,102); 
+		printf("%d,%d,%x,%x,%X\n", 77,-77,77,-77,-77);
+		return 0;                
+	}                            
+	\end{lstlisting}
+};
+
+\node[anchor=north west,text width=.5\textwidth,draw,rounded corners,fill=black,white] (r) at(p.south west) {
 	// 编译运行, 解释输出结果。
-	return 0;                
-}                            
-\end{lstlisting}
+	\begin{verbatim*}
+	a=-25,b=102,a=ffffffe7,b=66
+	-25,102,fffffe7,66
+	77,-77,4d,ffffffb3,FFFFFFB3
+	\end{verbatim*}
+};
+
+\node[anchor=north west,text width=.5\textwidth,draw,rounded corners,fill=green] at(r.north east) {
+	$[-25]_{\text{补}}=(1110~0111)_2=\text{E7H (0XE7)}$
+	
+	$[-77]_{\text{补}}= (1011~0011)_2=\text{B3H (0XB3)}$
+	
+	$66\text{H}=6\times 16^1+6\times 16^0=102$
+	
+	$4\text{DH}=4\times 16^1+13\times 16^0=77$
+};
+\end{tikzpicture}
+\end{center}
 \end{frame}
+
+%\begin{frame}[fragile]{bbb}
+%%\begin{center}
+%	\begin{tikzpicture}[outer xsep=5pt]
+%	\node[draw,text width=0.5\textwidth]{ \begin{lstlisting}
+%		aa
+%		\end{lstlisting}
+%	};
+%	\end{tikzpicture}
+%	
+%%\end{center}
+%\end{frame}
+
+
+\note{
+	\begin{lstlisting}
+	printf("%d,%x,%X\n",-25,-25,-25); // -25,ffffffe7,FFFFFFE7
+	printf("%d,%x,%X\n",-77,-77,-77); // -77,ffffffb3,FFFFFFB3}
+	\end{lstlisting}
+}
 
 \begin{frame}{ASCII编码表$B_6B_5B_4B_3B_2B_1B_0$}
 \begin{columns}

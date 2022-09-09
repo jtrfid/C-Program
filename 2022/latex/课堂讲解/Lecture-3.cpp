@@ -41,7 +41,7 @@ int main2() // 主函数，程序开始
 	return 0;
 }
 
-int main() // 主函数，程序开始 
+int main3() // 主函数，程序开始 
 {
 	int a,b;
 	char op; // 字符类型 
@@ -52,3 +52,12 @@ int main() // 主函数，程序开始
 	//printf("c1=%c,%d,====c2=%c,%d\n",c1,c1,c2,c2); // 输出变量的值 
 	return 0;
 }
+
+int main()
+{
+    int a=-25,b=102;
+    printf("a=%d,b=%d,a=%x,b=%x\n",a,b,a,b);
+    printf("%d,%d,%x,%x\n",-25,102,-25,102);
+    printf("%d,%d,%x,%x,%X\n",77,-77,77,-77,-77);
+	return 0;
+} 
