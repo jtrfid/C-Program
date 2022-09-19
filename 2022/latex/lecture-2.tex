@@ -46,7 +46,7 @@ int main()
 	int 3a; // 不合法的变量名
 	int break; // 不合法的变量名, 因为break是关键字, 被系统使用。
 	int Radius; // 变量名最好有含义
-	int radius; // 与Radius是不同的变量，C语言是到小写敏感的语言
+	int radius; // 与Radius是不同的变量，C语言是大小写敏感的语言
 	return 0;           
 }                            
 \end{lstlisting}
@@ -76,6 +76,7 @@ int main()                   // 主函数
 \end{frame}
 
 \begin{frame}{常用格式描述符与数据类型的对应关系}
+\centering
 \begin{tabular}{|c|c|c|}
 	\hline 
 	\textbf{格式符} & \textbf{对应的数据类型} &  \textbf{备注}\\ 
@@ -91,9 +92,8 @@ int main()                   // 主函数
 	\%.2f & float & 保留两位小数, 四舍五入。不适用于scanf()。 \\ 
 	\hline 
 	\%.2lf & double & 保留两位小数, 四舍五入。不适用于scanf()。 \\ 
-	\hline
 	\hline   
-	\%x & int & 十六进制显示 \\ 
+	\%x(\%X) & int,char & 十六进制显示(大写) \\ 
 	\hline 
 	\%ld & long int &  \\ 
 	\hline 
@@ -160,7 +160,7 @@ int main()                   // 主函数
 \end{tabular} 
 \end{frame}
 
-\begin{frame}{十进制、二进制与十六进制举例}
+\begin{frame}{十进制、二进制与十六进制数值分解举例}
 \vspace{-0.5cm}
 \begin{align*}
 (123)_{10}&=1\times 10^2+2\times 10^1+3\times 10^0; \\
@@ -173,7 +173,31 @@ int main()                   // 主函数
 \end{align*}
 \end{frame}
 
+%\begin{frame}[shrink]{数值在计算机中的表示(以8bit编码为例)}
+%\begin{itemize}
+%	\item 原码：正数的符号为0，负数的符号为1，其它位按一般的方法表示数的绝对值。
+%	\vspace{-0.5cm}
+%	\begin{align*}
+%	x=(+103)_{10}  &&[x]_{\text{原}}=(\textcolor{red}{0}1100111)_{2}\\
+%	x=(-103)_{10}  &&[x]_{\text{原}}=(\textcolor{red}{1}1100111)_{2}
+%	\end{align*}
+%	\item 反码: 正数的反码与原码相同；负数的反码是符号位不变，其他位按位取反 
+%	\item 补码: 正数的补码与其原码相同；负数的补码为其反码最末位加1. 即,
+%	
+%	\textcolor{blue}{负数补码 = 反码$+1=2^n-$该数的绝对值, $n$是编码二进制位数.}
+%\end{itemize}
+%\vspace{-0.5cm}
+%\begin{align*}
+%(77)_{10}&=(\textcolor{red}{0}100\quad 1101)_{2},\qquad (-77)_{10}=(\textcolor{red}{1}100\quad 1101)_{2}\\
+%(-77)_{\text{补}}=2^8-77&=\textcolor{red}{1}111\quad 1111 +\textcolor{red}{0}000\quad 0001 - \textcolor{red}{0}100\quad 1101\\
+%&=\underbrace{\textcolor{red}{1}111\quad 1111 - \textcolor{red}{0}100\quad 1101}_{(-77)_{\text{反}}} + ~\textcolor{red}{0}000\quad 0001\\
+%&=\underbrace{\textcolor{red}{1}011\quad 0010 }_{(-77)_{\text{反}}}+ \textcolor{red}{0}000\quad 0001=1011\quad 0011
+%\end{align*}
+%\end{frame}
+
 \begin{frame}[shrink]{数值在计算机中的表示(以8bit编码为例)}
+\begin{tikzpicture}
+\node[text width=1\textwidth] (t) {
 \begin{itemize}
 	\item 原码：正数的符号为0，负数的符号为1，其它位按一般的方法表示数的绝对值。
 	\vspace{-0.5cm}
@@ -193,6 +217,11 @@ int main()                   // 主函数
 &=\underbrace{\textcolor{red}{1}111\quad 1111 - \textcolor{red}{0}100\quad 1101}_{(-77)_{\text{反}}} + ~\textcolor{red}{0}000\quad 0001\\
 &=\underbrace{\textcolor{red}{1}011\quad 0010 }_{(-77)_{\text{反}}}+ \textcolor{red}{0}000\quad 0001=1011\quad 0011
 \end{align*}
+};
+\node[anchor=south west,text width=.4\textwidth] at($(t.south west)+(0.2cm,0.2cm)$) {
+\includegraphics[scale=0.2]{clock}
+};
+\end{tikzpicture}
 \end{frame}
 
 \begin{frame}{数值表示示例}
@@ -353,11 +382,12 @@ $(+77)_{\text{补}}+(-77)_{\text{补}}=0100~1101+1011~0011=0000~0000$
 #include<stdio.h>           
 int main()                   
 {                            
-	char c1 = 'A', c2 = 'a', c3 = '\n'; // 字符型变量
+	char c1 = 'A', c2 = 'a', c3 = '\n'; // 字符型变量, 
+	// '\n': 表示特殊字符 --- 换行符
 	printf("%c,%c,%d\n",c1,c2,c3); // A,a,10
 	// 整型变量的整数值就是ASCII编码值
 	printf("%c,0X%x,%d\n",c1,c1,c1); // A,0X41,65
-	c1 = c1 + 1; // 在表达式中, char类型看作int处理
+	c1 = c1 + 1; // 在表达式中, char类型当作int处理
 	printf("%c,0X%x,%d\n",c1,c1,c1); // B,0X42,66
 	c1 = c1 + 32;  // 转换为小写字母
 	printf("%c,0X%x,%d\n",c1,c1,c1); // b,0X62,98
@@ -377,8 +407,8 @@ int main()
 int main()                   
 {                                  
 	int a = 123; // 整型常量
-	float f = 12.2, f1=123E-1; // 实型常量
-	char c1 = 'A', c2='\n'; // 字符常量
+	float f = 12.2, f1=123E-1; // 实型常量, $123\times 10^{-1}$
+	char c1 = 'A', c2='\n'; // 字符常量, 特殊字符 --- 换行符
 	char s[50] = "boy"; // 字符串常量
 	printf("半径为%d的圆周长是%f\n",a,2*PI*a);       
 	printf("回车换行\n");
@@ -386,7 +416,7 @@ int main()
 	return 0;           
 }                            
 \end{lstlisting}
-\textcolor{blue}{转义字符, 见p40, 表3.1}
+\textcolor{blue}{转义字符(特殊字符), 见p40, 表3.1}
 \end{frame}
 
 \begin{frame}[fragile]{常量与常变量}
