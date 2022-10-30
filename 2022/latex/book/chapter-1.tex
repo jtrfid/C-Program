@@ -6,6 +6,88 @@
 %
 %%%%%%%%%%%%%%%%%%%%%%%% Springer-Verlag %%%%%%%%%%%%%%%%%%%%%%%%%%
 %\motto{Use the template \emph{chapter.tex} to style the various elements of your chapter content.}
+
+\chapter{常见问题}
+
+\begin{itemize}
+	\item 提交程序时注意选择与你的编译器对应的编程语言
+			\begin{enumerate}[(1)]
+				\item Visual C++ (对应Visual Studio)
+				\item GNU C/C++ (对应Dev C++编译器)
+			\end{enumerate}	
+		
+		Visual C++对数学库函数的调用不会对函数参数进行自动强制转换, 而GNU C/C++会自动转换。如:
+		\begin{lstlisting}[frame=none]
+		函数原型: double sqrt(double x);
+		函数调用:
+		int x,y;	
+		// Visual C++ 必须显式对参数进行强制转换
+		y=sqrt((double)x);      
+		y=(int)sqrt((double)x); 
+		
+		// GNU C/C++, 自动进行隐式转换，而Visual C++会显示编译错误
+		y=sqrt(x); // 等效于y=(int)sqrt((double)x); 
+		\end{lstlisting}
+		
+	\item 变量无初值或从未赋值就使用问题, 如
+	
+	\lstinline|int a;|
+	
+	\dots
+	
+	\lstinline|if(a>10){ ... }|
+		
+	\item 小于100分问题，往往是没有考虑全所有情况。例如, 最大公约数题(\ref{gcd}), 应该测试输入数据$a,b$所有可能的情况, 如
+	
+	0 0
+	
+	10 0
+	
+	0 10
+	
+	3 4
+	
+	10 5
+	
+	必要时, 添加一些printf语句, 输出中间执行过程, 定位问题。
+	 
+	\item 题目中给出的输入数据范围, 表示测试数据的范围, 在程序代码中不需要考虑非此范围数据处理代码，简化条件表达式。
+	
+	\begin{enumerate}[(1)]
+		\item 如题目中描述: ``输入的数据介于-100000 和100000 之间, \dots''。
+		
+		程序中不需要使用If语句过滤此条件, 如\lstinline|if(-100000<=a && a>=100000) { ... } else { .... }|
+		
+		\item 整数分析题(\ref{integer}), 不必向如下代码考虑n的范围:
+		
+		\lstinline|for(i=0,0<=n && n<=100000000; n!=0;i++)|
+		
+		\item 最大公约数题(\ref{gcd}), 输入说明 $0\le a,b\le 100000$, 不必如下, 想限定$a,b$的范围, 还没达到目的, 而增加了分析出错的复杂性.
+		
+		\lstinline|for(a>=0 && a<100000,b>=0 && b<=100000; ... ; ... )|
+		
+	\end{enumerate}
+	
+	\item 两种条件二选一时, 使用\lstinline|if(){ }else{ }|即可, 不必使用\lstinline|if(){ }else if(){ }|. 如, 角谷定理题(\ref{Valley Angle theorem})
+	
+	使用\lstinline|if(n%2==0) { } else{ }|即对n是偶数和奇数的情况做了分类。
+	
+	
+	不必使用\lstinline|if(n%2==0) { } else if(n%2!=0){ }|
+	
+	\item 变量的初始化必须是实际存在的值, 如
+	\begin{enumerate}[(1)]
+		\item 整数分析题(\ref{integer}), max=min=n的个位数。
+		\item qq选号题(\ref{qq}), \lstinline|select_qq是第一个输入的qq号|。
+	\end{enumerate}
+	
+	\item 进入内层循环前,相关变量的初始化问题。如
+	
+	完数题(\ref{perfect number}), ``求某整数的所有因子和''的内层循环前, 不要忘记sum的初始化: sum=1;
+	
+	\item 以qq选号题(\ref{qq})为例, 讲解从小问题开始, ``大事化小, 自底向上''构造程序代码的过程.
+\end{itemize}
+
 \chapter{第1次机试练习: 熟悉DEV-C++开发平台, 基本输入输出语句练习}
 
 \section{计算球体重量}
@@ -217,7 +299,8 @@ int main()
 	int a;
 	char b;
 	scanf("%d,%c",&a,&b);
-	printf("%d,%c",a+b,a+b); 
+	if((a>=0 && a<=4) && (b>='0' && b<='5'))
+		printf("%d,%c",a+b,a+b); 
 	return 0;           
 }             
 \end{lstlisting}

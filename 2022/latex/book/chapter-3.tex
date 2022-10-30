@@ -20,7 +20,8 @@
 \end{itemize}
 
 
-\section{最大公约数}	
+\section{最大公约数}	 \label{gcd}
+
 最大公约数(GCD)指某几个整数共有因子中最大的一个，最大公约数具有如下性质，
 
 gcd(a,0)=a
@@ -233,7 +234,7 @@ int main4() // 体会函数结束语句return的使用
 	预习函数及递归函数的使用。
 \end{note}
 
-\section{角谷定理}
+\section{角谷定理}\label{Valley Angle theorem}
 角谷定理定义如下：
 对于一个大于1的整数n，如果n是偶数，则n = n / 2。如果n是奇数，则n = 3 * n +1，反复操作后，n一定为1。
 
@@ -315,7 +316,7 @@ int main()
 	试着用\lstinline|do{ }while(); for(;;)|改写此程序, 执行相同功能。
 \end{note}
 
-\section{整数分析}
+\section{整数分析}\label{integer}
 给出一个整数n（0<=n<=100000000）。求出该整数的位数，以及组成该整数的所有数字中的最大数字和最小数字。
 
 输入说明
@@ -487,10 +488,14 @@ int main()
 
 13 15 17 19
 
+\section*{解法一} 
+
+从估计的第一个奇数开始，循环迭代求解。
+
 \begin{lstlisting}
 #include <stdio.h>
 // 从估计的第一个奇数开始，循环迭代求解。
-int main()
+int main() 
 {
 	int n,i,j,sum,first;
 	scanf("%d",&n);
@@ -504,30 +509,93 @@ int main()
 		sum = 0; // 每趟内层循环前，必须置0 
 		// 从first开始，n个连续奇数, i：表示连续奇数，j：计数。 
 		for(i = first,j = 1; j <= n; i += 2,j++ ) 
+			sum += i; // 从first开始连续n个奇数累加 
+		
+		if(sum == n*n*n) // first正确
 		{
-			sum += i; // 连续奇数累加 
-			if(sum == n*n*n) 
+			// 输出 
+			for(i = first,j = 1; j <= n; i += 2,j++) 
 			{
-				// 输出 
-				for(i = first,j = 1; j <= n; i += 2,j++) 
-				{
-					if (j == n)printf("%d\n",i);
-					else printf("%d ",i);
-				}
-				return 0; // 函数结束 
+				if (j == n)printf("%d\n",i);
+				else printf("%d ",i);
 			}
+			break;  
 		}
-		first += 2; 
+		else first += 2; // 否则, 测试下一个first 
 	}
 	return 0;
 } 
 \end{lstlisting}
 
+\section*{解法二}
+
+等差数列通向公式: $a_n=a_1+(n-1)d$
+
+前$n$和: $S_n=\frac{(a_1+a_n)n}{2}=a_1n+\frac{n(n-1)d}{2}$
+
+本题: $S_n=n^3, d=2$, 由此可得: $a_1=n^2-n+1$.
+
+再应用下列公式之一, 本题得解:
+
+$a_i=a_{i-1}+d,i=2,\dots,n,d=2$
+
+$a_i=a_1+(i-1)d,i=2,\dots,n,d=2$
+
+附: 相关推导
+\begin{align*}
+&n^3=a_1n+\frac{n(n-1)d}{2} &&\text{by }S_n=n^3\\
+&\Rightarrow a_1=n^2-\frac{(n-1)d}{2}\\
+&\Rightarrow a_1=n^2-n+1 &&\text{by }d=2
+\end{align*}
+
+\begin{align*}
+&a_2-a_1=d\\
+&a_3-a_2=d\\
+&a_4-a_3=d\\
+&\dots\\
+&a_{n}-a_{n-1}=d\\
+&\Rightarrow a_n-a_1=(n-1)d\Rightarrow a_n=a_1+(n-1)d
+\end{align*}
+
+\begin{lstlisting}
+#include <stdio.h>
+
+int main()
+{
+	int n,i,j,sum,a1;
+	scanf("%d",&n);
+	// $a_1=n^2-n+1$
+	a1=n*n-n+1;
+	for(i=1;i<=n;i++)
+	{   
+		// $a_i=a_{i-1}+d,i=2,\dots,n,d=2$
+		printf("%d ",a1);
+		a1=a1+2; 
+	}
+	return 0;
+} 
+
+int main1()
+{
+	int n,i,j,sum,a1;
+	scanf("%d",&n);
+	// $a_1=n^2-n+1$
+	a1=n*n-n+1;
+	for(i=1;i<=n;i++)
+	{
+		// $a_i=a_1+(i-1)d,i=2,\dots,n,d=2$
+		printf("%d ",a1+(i-1)*2);
+	}
+	return 0;
+} 
+\end{lstlisting}
+
+
 \begin{note}[要点]
 	再次强调进入内层循环前, 相关变量的初始化; 以及标志变量(如本例first)的使用技巧。
 \end{note}
 
-\section{选号程序}
+\section{选号程序}\label{qq}
 小明决定申请一个新的QQ号码，系统随机生成了若干个号码供他选择。小明的选号原则是：
 \begin{enumerate}
 	\item 选择所有号码中各位数字之和最大的号码。
@@ -623,6 +691,94 @@ int main1()
 	printf("%d",select);
 	return 0;
 } 
+\end{lstlisting}
+
+\section*{分步解析从小问题开始, ``大事化小, 自底向上''构造程序代码的过程.}
+
+\begin{lstlisting}
+// 一个qq号的各位数字之和 
+int main1()
+{
+	int qq=1234,sum=0;
+	
+	while(qq!=0)
+	{
+		sum=sum+qq%10;
+		qq=qq/10;
+	}
+	printf("%d\n",sum);
+	
+	return 0;
+}
+
+// 调试, 一个qq号的各位数字之和 
+int main2()
+{
+	int qq=1234,sum=0;
+	
+	// 添加必要的printf语句, 查看程序执行过程
+	while(qq!=0)
+	{
+		printf("===%d",qq); 
+		sum=sum+qq%10;
+		qq=qq/10;
+		printf("hhh%d",qq);
+	}
+	printf("%d\n",sum);
+	
+	return 0;
+}
+
+// 实现n个qq号的各自sum 
+int main3()
+{
+	int qq=1234,sum=0,n,i; // n是qq个数 
+	
+	scanf("%d",&n);
+	
+	for(i=0; i<n; i++)
+	{   
+		// 一个qq 
+		scanf("%d",&qq);
+		sum=0;  // 进入内层循环前的变量初始化sum
+		while(qq!=0)
+		{
+			sum=sum+qq%10;
+			qq=qq/10;
+		}
+		printf("%d\n",sum);
+	}
+	
+	return 0;
+}
+
+// 添加选择qq的两个条件, 形成最终程序
+int main4()
+{
+	int qq=1234,sum=0,n,i; // n是qq个数 
+	int select_qq=0,select_sum=0, tmp;
+	scanf("%d",&n);
+	for(i=0; i<n; i++)
+	{   
+		scanf("%d",&qq);
+		tmp=qq; // 临时变量记录qq的值。 
+		sum=0;  // 进入内层循环前的变量初始化sum 
+		while(tmp!=0) { sum=sum+tmp%10; tmp=tmp/10;	}
+			
+		// 第一个qq就是select_qq的初值, 进入下轮for循环 
+		if(i==0) {   select_qq=qq; select_sum=sum; continue;	}
+			
+		// 1. 选择所有号码中各位数字之和最大的号码。
+		// 2. 如果有多个号码各位数字之和相同则选择数值最大的号码。 
+		if(select_sum<sum) { select_qq=qq;  select_sum=sum; } 
+		else if(select_sum == sum)
+		{
+			if(select_qq<qq) { select_qq=qq;  select_sum=sum; } 
+		} 
+	}	
+	printf("%d\n",select_qq);
+	return 0;
+}
 \end{lstlisting}
 
 \begin{note}[要点]

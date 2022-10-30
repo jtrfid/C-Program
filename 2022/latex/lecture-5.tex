@@ -41,8 +41,8 @@ int main()                   // 主函数
 \end{lstlisting}
 \end{frame}
 
-\begin{frame}[shrink,fragile]
-\small [例4.1 p84] 求$ax^2+bx+c=0$方程的根。$a,b,c$由键盘输入。
+\begin{frame}[shrink,fragile]{\small [例4.1 p84] 求$ax^2+bx+c=0$方程的根。$a,b,c$由键盘输入。}
+\vspace{-0.2cm}
 \begin{lstlisting}
 #include<stdio.h>
 #include<math.h>   // 数学库函数        
@@ -63,8 +63,8 @@ int main()
 \end{lstlisting}
 \end{frame}
 
-\begin{frame}[shrink,fragile]
-\small [例4.2 p85] 输入两个实数, 按由小到大的顺序输出这两个数。
+\begin{frame}[shrink,fragile]{\small [例4.2 p85] 输入两个实数, 按由小到大的顺序输出这两个数。}
+\vspace{-0.4cm}
 \begin{columns}
 \column{0.45\textwidth}
 \begin{lstlisting}
@@ -74,11 +74,10 @@ int main()
    float a,b,t;
    scanf("%f%f",&a,&b); 
    //不好: scanf("%f,%f",&a,&b);
+   // 假定a<=b, 否则交换a,b的值
    if(a>b)
    {  // 将a和b的值互换
-      t=a;
-      a=b;
-      b=t;
+      t=a; a=b; b=t;
    }
    printf("%.2f,%.2f\n",a,b);
    return 0;           
@@ -87,22 +86,24 @@ int main()
 \column{0.55\textwidth}
 \small
 \begin{block}{两变量值互换基本技巧}
-a=b;  //把变量b的值赋给变量a，a的值等于b的值\\
-b=a;  //再把变量a的值赋给变量b，变量b值没有改变
+//把变量b的值赋给变量a，a的值等于b的值\\
+a=b;  \\
+//再把变量a的值赋给变量b，变量b值没有改变
+b=a;  \\
+\textcolor{blue}{因此, 为了实现互换, 必须借助于第三个变量。}
 \end{block}
-\textbf{因此, 为了实现互换, 必须借助于第三个变量。}
 \end{columns}                           
 \end{frame}
 
-\begin{frame}[shrink,fragile]
-\small [例4.3 p86] 输入3个数a, b, c, 要求按由小到大的顺序输出。
+\begin{frame}[shrink,fragile]{\small [例4.3 p86] 输入3个数a, b, c, 要求按由小到大的顺序输出。}
+\vspace*{-0.4cm}
 \begin{lstlisting}
 #include<stdio.h>        
 int main()                   
 {  
     float a,b,c,t;
     scanf("%f%f%f",&a,&b,&c); //不好: scanf("%f,%f,%f",&a,&b,&c);
-    if(a>b)
+    if(a>b) // 假定a<=b<=c, 否则交换。
     {
        t=a; a=b; b=t; //借助变量t，实现变量a和变量b互换值
     } //互换后，a小于或等于b     
@@ -122,7 +123,8 @@ int main()
 
 \section{if语句的一般形式}
 
-\begin{frame}[shrink,fragile]{if(条件表达式)\{ 表达式为真(非0)时执行语句; \}}
+\begin{frame}[shrink,fragile]{if语句的一般形式}
+\vspace{-0.2cm}
 \textcolor{blue}{条件表达式 $\Rightarrow$ 关系表达式; 逻辑表达式; 数值表达式。}
 \begin{columns}[t]
 \column{0.3\textwidth}
@@ -201,12 +203,13 @@ if(a=b>c)  // 相当于a=(b>c),避免==写为=
 \end{frame}
 
 \begin{frame}[shrink,fragile]{关系表达式的值, 非0即真}
+\vspace{-0.2cm}
 \begin{block}{关系表达式}
 	\small
 	\begin{itemize}
 		\item 用关系运算符将两个数值或数值表达式连接起来的式子，称为关系表达式。
 		\item 关系表达式的值是一个逻辑值，即``真''或``假''。
-		\item 在C的逻辑运算中, 以``1''代表``真''，以``0''代表``假''。	
+		\item 在C的逻辑运算中, 以``1''表示``非0'', 代表``真''; 以``0''代表``假''。	
 	\end{itemize}
 \end{block}
 \vspace{-0.5cm}
@@ -216,16 +219,20 @@ if(a=b>c)  // 相当于a=(b>c),避免==写为=
 int a=3, b=2, c=1, d1, d2; 
 d1 = a>b; // d1=(a>b), d1=1
 d2 = a>b>c;//d2=(a>b>c),d2=0
-if(d1)
-	{ printf("执行此语句") }
-if(d2) 
+if(d1)// d1=1,非0即真
+	{ printf("执行此语句"); }
+if(d2) // d2=0,条件为假
 	{ printf("不执行此语句"); }
 \end{lstlisting}
 \column{0.57\textwidth}
 \begin{lstlisting}
-if(d1 = a>b) //d1=(a>b),赋值后d1非0即真
+if(d1 = a>b) //d1=(a>b),赋值后d1=1,非0即真
 	{ printf("执行此语句"); }
-if(d2 = a>b>c)//d2=(a>b>c),赋值后d2非0即真
+if(d2 = a>b>c)//d2=(a>b>c),赋值后d2=0,即假
+	{ printf("不执行此语句"); }
+if(a>b) //表达式=1,非0即真
+	{ printf("执行此语句"); }
+if(a>b>c),表达式值=0,即假
 	{ printf("不执行此语句"); }
 \end{lstlisting}
 \end{columns}
@@ -280,7 +287,7 @@ if(year%4 == 0 && year%100 != 0)
 else if(year%100 == 0 && year%400 == 0)
 { printf("%d是闰年\n", year); }
 else
-{ printf("%d不是闰年\n", year)}
+{ printf("%d不是闰年\n", year); }
 \end{lstlisting}
 \end{frame}
 
@@ -313,7 +320,7 @@ scanf("%d",&year);
 if((year%4 == 0 && year%100 != 0)||(year%100 == 0 && year%400 == 0))
 { printf("%d是闰年\n", year); }
 else
-{ printf("%d不是闰年\n", year)}
+{ printf("%d不是闰年\n", year); }
 \end{lstlisting}
 \end{frame}
 
@@ -359,7 +366,7 @@ printf("ch=%c\n",ch);
 
 \section{数学表达式与C语言表达式的不同}
 
-\begin{frame}[shrink,fragile]{数学表达式与C语言表达式的不同}
+\begin{frame}[shrink,fragile]{特别注意: 数学表达式与C语言表达式的不同}
 \vspace{-0.3cm}
 \begin{lstlisting}
 int a = 100;
@@ -372,7 +379,7 @@ if(20 <= a <= 30)//(20<=a)<=30, 表达式为真(1), 与数学含义$(20\le a\le 
 // if(a==20) 与 if(a=20)意义不同
 if(a==20) //表达式的值是假(0), a的值没有变化
 { ... }
-if(a=20) //表达式的值是10, 非0, 表示为真, 并且a被赋值为20(赋值语句)
+if(a=20) //表达式的值是20, 非0, 表示为真, 并且a被赋值为20(赋值语句)
 {
     printf("%d\n",a); // 20 
 }
@@ -386,26 +393,26 @@ printf("%d\n",a); // 20
 
 \begin{frame}[shrink,fragile]{用switch(int或char型表达式), 实现多分支选择结构}
 \begin{tikzpicture}[outer xsep=5pt]
-\node[draw,text width=0.5\textwidth] (left) {	
+\node[draw,text width=0.5\textwidth,rounded corners] (left) {	
 	\begin{lstlisting}
 	int a;
 	scanf("%d",&a)
-	switch(a)
+	switch(a) // a必须是int或char类型
 	{
 		case 10: 多条语句1; 
-		//break表示该条件执行完毕
-		break; 
+			//break表示该条件执行完毕
+			break; 
 		case 20: 多条语句2; 
-		break;
+			break;
 		case 30: 多条语句3; 
-		break;
+			break;
 		default:
-		// 以上不满足时执行
-		多条语句4;
+			// 以上不满足时执行
+			多条语句4;
 	}
 	\end{lstlisting}
 	};
-\node[draw,right,text width=0.5\textwidth] at (left.east) {
+\node[draw,right,text width=0.5\textwidth,rounded corners] at (left.east) {
 	\begin{lstlisting}
 	// 等效于 
 	int a;
@@ -425,11 +432,11 @@ printf("%d\n",a); // 20
 
 \begin{frame}[shrink,fragile]{无break, 直接往下执行}
 \begin{tikzpicture}[outer xsep=5pt]
-\node[draw,text width=0.5\textwidth] (left) {	
+\node[draw,text width=0.5\textwidth,rounded corners] (left) {	
 	\begin{lstlisting}
-	char a; // 或 int a;
+	char a; 
 	scanf("%c",&a)
-	swach(a)
+	swach(a) // a必须是int或char类型
 	{
 		case 'A':
 		case 'a': 多条语句1; 
@@ -444,10 +451,10 @@ printf("%d\n",a); // 20
 	}
 	\end{lstlisting}
 };
-\node[draw,right,text width=0.5\textwidth] at (left.east) {
+\node[draw,right,text width=0.5\textwidth,rounded corners] at (left.east) {
 	\begin{lstlisting}	
 	// 等效于
-	char a; // 或 int a;
+	char a; 
 	scanf("%d",&a)
 	if(a == 'A' || a == 'a')
 		{ 多条语句1; } 
@@ -464,7 +471,7 @@ printf("%d\n",a); // 20
 
 \begin{frame}[shrink,fragile]
 \begin{tikzpicture}[outer xsep=2pt]
-\node[draw,text width=0.5\textwidth,font=\small] (left) {	
+\node[draw,text width=0.5\textwidth,font=\small,rounded corners] (left) {	
 [例4.10,p99]运输公司对用户计算运输费用。路程越远，运费越低。标准如下:  
 \begin{align*}
 s<250 &&\text{没有折扣}\\
@@ -475,7 +482,7 @@ s<250 &&\text{没有折扣}\\
 3000\le s  &&\text{15\%折扣}
 \end{align*}
 };
-\node[draw,right,text width=0.5\textwidth] at(left.east) {
+\node[draw,right,text width=0.5\textwidth,rounded corners] at(left.east) {
 \vspace{-0.2cm}
 \begin{lstlisting}
 int c,s; //c是分类整数, s是距离

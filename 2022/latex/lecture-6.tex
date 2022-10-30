@@ -7,6 +7,7 @@
 %\end{frame}
 
 \begin{frame}[shrink,fragile]{为什么需要循环控制}
+\vspace{-0.2cm}
 \begin{itemize}
 	\item 要向计算机输入全班50个学生的成绩;(重复50次相同的输入操作)
 	\item 分别统计全班50个学生的平均成绩;	(重复50次相同的计算操作)
@@ -64,7 +65,7 @@ while( i<=50 )   // 当i的值小于或等于50时执行花括号内的语句
 	\small
 	\begin{block}{while循环特点}
 		\small
-		每轮循环: 首先判断表达式的值, 若``真" (以非0值表示)时，就执行循环体语句；为``假" (以0表示)时，就不执行循环体语句。
+		每轮循环: 首先判断表达式的值, 若``真" (表达式值为非0)时，就执行循环体语句；为``假" (表达式值为0)时，就不执行循环体语句。
 	\end{block}
 \end{columns}
 \vspace{-0.4cm}
@@ -100,13 +101,13 @@ $[$例5.1$]$ 求$1+2+3+\cdots+100$, 即$\sum\limits_{i=1}^{100}i$
    while(i <= 100)     //当i>100，条件表达式的值为假(0)，不执行循环体
    {                   //循环体开始
       sum=sum+i;          //第1次累加后，sum的值为1
-      i++;                //加完后，i的值加1，为下次累加做准备
+      i++;                //加完后，i的值加1，为下轮累加做准备
    }                   //循环体结束
    printf("sum=%d\n",sum); //输出1+2+3…+100的累加和                
 \end{lstlisting}
 \begin{enumerate}
 	\setlength{\itemsep}{.2cm}
-	\item 循环体如果包含一个以上的语句，应该用花括号括起来，作为复合语句出现。
+	\item 循环体如果包含一个以上的语句，必须用花括号括起来，作为复合语句出现。
 	\item 不要忘记给$i$和$sum$赋初值，否则它们的值是不可预测的，结果显然不正确。
 	\item 在循环体中应有使循环趋向于结束的语句。如本例中的$i++;$语句。如果无此语句，则i的值始终不改变，循环永远不结束。
 \end{enumerate}
@@ -117,19 +118,19 @@ $[$例5.1$]$ 求$1+2+3+\cdots+100$, 即$\sum\limits_{i=1}^{100}i$
 \begin{frame}[shrink,fragile]{$do \{\cdots\} while(\text{表达式});$}
 \vspace{-0.3cm}
 \begin{columns}
-	\column{0.3\textwidth}
+	\column{0.27\textwidth}
 	\begin{lstlisting} 
     do  
     {
       // 循环体
       执行多条语句;  
-    } while( 表达式 );  
+    } while(表达式);  
     \end{lstlisting}
-	\column{0.3\textwidth}
+	\column{0.25\textwidth}
 	\includegraphics[scale=0.3]{dowhile}
-	\column{0.35\textwidth}
+	\column{0.4\textwidth}
 	\begin{block}{循环特点}
-		先无条件地执行循环体，然后判断循环条件是否成立。
+		首先无条件地执行循环体，然后判断循环条件是否成立。
 	\end{block}
 \end{columns}
 \vspace{-0.2cm}
@@ -141,7 +142,7 @@ do
 {
    // 循环体
    执行多条语句;  
-} while( 表达式 )
+} while(表达式)
 \end{lstlisting}
 \end{block}
 \column{0.45\textwidth}
@@ -150,7 +151,7 @@ do
 do  
 {
   执行多条语句;  
-  if(表达式) break; // 退出循环  
+  if(!表达式) break; // 退出循环  
 } while(1);
 \end{lstlisting}
 \end{block}
@@ -202,12 +203,15 @@ do
 printf("sum=%d\n",sum);                
 \end{lstlisting}
 \end{columns}
+
+\vspace{0.2cm}
+\qquad \textcolor{red}{如果输入101, 左边程序输出: sum=0; 右边输出: sum=101.}
 \end{frame}
 
 \section{$for(\text{表达式1;表达式2;表达式3}) \{\cdots\}$}
 
 \begin{frame}[shrink,fragile]{$for(\text{表达式1;表达式2;表达式3}) \{\cdots\}$}
-\vspace{-0.4cm}
+\vspace{-0.3cm}
 \begin{columns}
 \column{0.4\textwidth}
 \begin{lstlisting}[frame=single] 
@@ -217,6 +221,7 @@ for(表达式1;表达式2;表达式3)
    执行多条语句;  
 }
 \end{lstlisting}
+\vspace{-0.2cm}
 $\equiv$
 \begin{lstlisting}[frame=single] 
 表达式1;
@@ -309,7 +314,7 @@ for(;;)
 {
   if(i>100) break;//退出循环  
   printf("%d\n",i);
-  i++
+  i++;
 }
 \end{lstlisting}
 \end{columns}
@@ -325,102 +330,151 @@ for(;;)
 \begin{frame}{几种循环的比较}
 \begin{enumerate}
 	\item 3种循环都可以用来处理同一问题，一般情况下它们可以互相代替。
-	\item 在while循环和do…while循环中，只在while后面的括号内指定循环条件，因此为了使循环能正常结束，应在循环体中包含\textbf{使循环趋于结束的语句}(如i++等)。
+	\item 在while循环和do…while循环中，只在while后面的括号内指定循环条件，因此为了使循环能正常结束，应在循环体中包含\textcolor{blue}{使循环趋于结束的语句}(如i++等)。
 	\item for循环可以在表达式3中包含使循环趋于结束的操作，甚至可以将循环体中的操作全部放到表达式3中(逗号隔开)。因此for语句的功能更强，凡用while循环能完成的，用for循环都能实现。
-	\item 用while和do…while循环时，循环变量初始化的操作应在while和do…while语句之前完成。而for语句可以在表达式1中实现循环变量的初始化。
+	\item 用while和do…while循环时，\textcolor{blue}{循环变量初始化}的操作应在while和do…while语句之前完成。而for语句可以在表达式1中实现循环变量的初始化。
 	\item while循环、do…while循环和for循环都可以用break语句跳出循环，用continue语句结束本次循环。	
 \end{enumerate}
 \end{frame}
 
 \section{break,continue改变循环执行的状态}
 
-\begin{frame}[shrink,fragile]{break,continue改变循环执行的状态}
+\begin{frame}[shrink,fragile]{while循环中, 用break,continue改变循环执行的状态}
+\vspace{-0.2cm}
 \centering
-\includegraphics[scale=0.3]{breakContinue}
-\begin{columns}[T]
-\column{0.5\textwidth}
-\begin{lstlisting}
-while(表达式)
-{
-  printf("语句1");
-  if(条件表达式) break; //提前终止循环
-  printf("语句1");
-}
-\end{lstlisting}
-\column{0.5\textwidth}
-\begin{lstlisting}[frame=leftline]
-while(表达式)
-{
-   printf("语句1");
-   if(条件表达式) continue; //结束本次循环, 进入下轮循环
-   printf("语句1");
-}
-\end{lstlisting}
-\end{columns}
+\begin{tikzpicture}
+\node[] (aboveFig) {\includegraphics[scale=0.25]{breakContinue}};
+\node[text width=0.45\textwidth,anchor=north east,rounded corners,draw,inner ysep=0pt] (leftFig) at(aboveFig.south) {
+	\begin{lstlisting}
+	while(表达式)
+	{
+		printf("语句1\n");
+		//提前终止循环
+		if(条件表达式) break; 
+		printf("语句2\n");
+	}
+	// break后到此
+	\end{lstlisting}
+};
+\node[text width=0.45\textwidth,anchor=north west,rounded corners,draw,inner ysep=0pt] at(aboveFig.south) {
+	\begin{lstlisting}
+	while(表达式) 
+	{
+		printf("语句1\n");
+		//结束本轮循环, 进入下轮循环
+		if(条件表达式) continue;
+		// continue后到while( ) 
+		printf("语句2\n");
+	}
+	\end{lstlisting}
+};
+%\draw[dashed] (aboveFig.south) -- (aboveFig |- leftFig.south);
+\end{tikzpicture}
 \end{frame}
 
-\begin{frame}[shrink,fragile]{用break语句提前终止循环}
-$[$例5.4$]$在全系1000名学生中举行慈善募捐，当总数达到10万元时就结束，统计此时捐款的人数以及平均每人捐款的数目。
-\begin{lstlisting}
-#define SUM 100000  //指定符号常量SUM代表10万
-float amount,aver,total; 
-int i;
-for (i=1,total=0; i<=1000; i++)// 表达式1给多个变量赋初值，用逗号隔开。
-{
-  printf("please enter amount:");
-  scanf("%f",&amount);
-  total = total + amount; 
-  if(total >= SUM) break; // 终止整个循环,也不会执行for语句的表达式3 (i++)
-}
-i=(i<=1000)?i:(i-1); // 想一想,此语句为何必要?
-aver=total/i;
-printf("num=%d\naver=%10.2f\n",i,aver); 
-\end{lstlisting}
-\textbf{\textcolor{blue}{注意: break语句只能用于循环语句和switch语句之中，而不能单独使用。}}
+\begin{frame}[fragile]{while循环中, 体会break与continue的不同}
+%\vspace{-0.5cm}
+\centering
+\begin{tikzpicture}%[font=\scriptsize]
+%\node[text width=.5\textwidth,rounded corners,draw] (a) {
+\node[text width=.5\textwidth,inner ysep=0pt] (a) {
+	\begin{lstlisting}
+	int i=0;
+	while(i<4)
+	{
+		if(i==2) 
+		{
+			i++;
+			//终止本轮循环,开始下轮循环 
+			continue;
+		}
+		printf("%d,",i);//0,1,3,
+		i++;
+	}
+	printf("\n%d\n",i);//4
+	\end{lstlisting} 
+};
+\node[anchor=west,text width=.5\textwidth,inner ysep=0pt] at(a.east) (b) {
+	\begin{lstlisting}
+	int i=0;
+	while(i<4)
+	{
+		if(i==2) 
+		{
+			i++;
+			// 终止整个循环 
+			break; 
+		}
+		printf("%d,",i);//0,1, 
+		i++;
+	}
+	printf("\n%d\n",i);//3 
+	\end{lstlisting} 
+};
+\draw[red,dashed] (b.north west) -- (b.south west);
+\end{tikzpicture}
 \end{frame}
 
-\begin{frame}[shrink,fragile]{用continue语句终止本次循环, 开始下轮循环。}
-$[$例5.4$]$要求输出100$\sim$200之间的不能被3整除的数。
-\vspace{-0.3cm}
-\begin{columns}
-\column{0.75\textwidth}
-\begin{lstlisting}
-#include <stdio.h>
-int main()
-{
-  int n;
-  for (n = 100;n <= 200;n++)
-  {
-    //终止本轮循环,但会执行for语句的表达式3(n++),开始下轮循环
-    if (n%3==0) continue;
-    printf("%d ",n);
-  }
-  printf("\n");
-  return 0;
-} 
-\end{lstlisting}
-\column{0.25\textwidth}
-\includegraphics[scale=0.3]{for3}
-\end{columns}
-\end{frame}
-
-\begin{frame}{break语句和continue语句的区别}
+\begin{frame}{while循环中,break语句和continue语句的区别}
 \includegraphics[scale=0.34]{forContinue}\\
-\textbf{\textcolor{blue}{注意: continue语句只结束本次循环，而非终止整个循环。break语句结束整个循环，不再判断执行循环的条件是否成立。}}
+\textcolor{blue}{注意: continue语句只结束本次循环，而非终止整个循环。break语句结束整个循环，不再判断执行循环的条件是否成立。}
 \end{frame}
 
-\begin{frame}[shrink,fragile]{break语句和continue语句的区别}
+\begin{frame}[shrink,fragile]{ 注意: for循环的表达式3被视为下轮循环的首语句}
+\vspace{-0.2cm}
+\centering
+\begin{tikzpicture}[node distance=0.4cm,font=\scriptsize]
+\node[text width=0.75\textwidth,rounded corners,draw] (code) {
+	$[$例5.4$]$要求输出100$\sim$200之间的不能被3整除的数。
+	\begin{lstlisting}
+	#include <stdio.h>
+	int main()
+	{
+		int n;
+		for (n=100;n<=200;n++)//(表达式1;表达式2;表达式3)
+		{
+			//终止本轮循环,但会执行for语句的表达式3(n++),开始下轮循环。表达式3被视为下轮循环的首语句。
+			if (n%3==0) continue;
+			printf("%d ",n);
+		}
+		printf("\n");
+		return 0;
+	} 
+	\end{lstlisting}
+};
+\node[anchor=west,initial left,draw] (b1) at($(code.north east)+(1.6cm,0)$) {表达式1};
+\node[diamond,shape aspect=2,draw] (b2) [below= of b1] {表达式2};
+\node[draw] (b3) [below= of b2] {continue之前语句};
+\node[diamond,shape aspect=2,draw] (b4) [below=0.5cm of b3] {continue;};
+\node[draw,blue] (b5) [below=0.5cm of b4] {continue之后语句};
+\node[draw] (b6) [below= of b5] {表达式3};
+\node[draw] (b7) [below= of b6] {for循环的下一条语句};
+\node[fit=(b3) (b4) (b5),inner xsep=.5cm,xshift=0.2cm,draw=red,dashed]{};
+\path[->]
+(b1) edge[] (b2)
+(b2) edge[] node[anchor=east]{Y} (b3)
+(b3) edge[] (b4)
+(b4) edge[] node[anchor=east]{N} (b5)
+(b5) edge[] (b6)
+;
+\draw[->] (b4.east) -- +(0.5cm,0) node[anchor=south east]{Y} |- ($(b5)!.5!(b6)$);
+\draw[->] (b6.south) -- ++(0,-0.2cm) -- +(-1.6cm,0) |- (b2.west);
+\draw[->] (b2.east) -- node[anchor=south]{N} ++(1cm,0) |- (b7.east); 
+\end{tikzpicture}
+\end{frame}
+
+\begin{frame}[shrink,fragile]{for循环中, break语句和continue语句的区别}
 \small $[$例5.5$]$ 输出以下$4\times 5$的矩阵。
 \vspace{-0.5cm}
 \begin{columns}
 \column{0.5\textwidth}
 \begin{lstlisting}
-int i,j,n=0;
-for(i=1;i<=4;i++)
+int i,j,n=0; //n: 累计输出数据个数
+for(i=1;i<=4;i++) // 行
 {
-  for(j=1;j<=5;j++,n++) //n用来累计输出数据的个数
+  for(j=1;j<=5;j++,n++) //列
   {
-    if(n%5==0) printf("\n"); //控制在输出5个数据后换行
+    if(n%5==0) printf("\n");//5数换行
     if (i==3 && j==1) break;
     printf("%d\t",i*j);
   } 
@@ -430,12 +484,12 @@ printf("\n");
 \column{0.5\textwidth}
 \vspace{-0.3cm}
 \begin{lstlisting}[frame=leftline]
-int i,j,n=0;
-for(i=1;i<=4;i++)
+int i,j,n=0; //n: 累计输出数据个数
+for(i=1;i<=4;i++) // 行
 {
-   for(j=1;j<=5;j++,n++) //n用来累计输出数据的个数
+   for(j=1;j<=5;j++,n++) // 列
    {
-     if(n%5==0) printf("\n"); //控制在输出5个数据后换行
+     if(n%5==0) printf("\n");//5数换行
      if (i==3 && j==1) continue;
      printf("%d\t",i*j); // \t就是Tab键，是特殊字符，表示多个空格
    } 
@@ -445,49 +499,13 @@ printf("\n");
 \end{columns}
 \end{frame}
 
-\begin{frame}[fragile]{分析下列程序片段, 体会break与continue的不同}
+\begin{frame}[fragile]{for循环中, 体会break与continue的不同}
 \vspace{-0.5cm}
 \begin{columns}
 \column{0.52\textwidth}
 \begin{lstlisting}
 int i=0;
-while(i<4)
-{
-  if(i==2) 
-  {
-    i++;
-    continue;//终止本轮循环,开始下轮循环 
-  }
-  printf("i=%d,",i);//i=0,i=1,i=3,
-  i++;
-}
-printf("\nend i=%d\n",i);//end i=4
-\end{lstlisting} 
-\column{0.48\textwidth}
-\begin{lstlisting}[frame=leftline]
-int i=0;
-while(i<4)
-{
-  if(i==2) 
-  {
-    i++;
-    break; // 终止整个循环 
-  }
-  printf("i=%d,",i);//i=0, i=1, 
-  i++;
-}
-printf("\nend i=%d\n",i);//end i=3 
-\end{lstlisting} 
-\end{columns}
-\end{frame}
-
-\begin{frame}[fragile]{分析下列程序片段, 体会break与continue的不同}
-\vspace{-0.5cm}
-\begin{columns}
-\column{0.52\textwidth}
-\begin{lstlisting}
-int i=0;
-for(i=0;i<4;i++) //对于continue语句, 表达式3是本轮循环的一部分 
+for(i=0;i<4;i++) 
 {
   if(i==2) continue; //终止本轮循环,但会执行for语句的表达式3 (i++), 开始下轮循环 
   printf("i=%d,",i); //i=0,i=1,i=3,
@@ -498,7 +516,7 @@ printf("\nend i=%d\n",i);
 \column{0.48\textwidth}
 \begin{lstlisting}[frame=leftline]
 int i=0;
-for(i=0;i<4;i++) //对于break语句, 终止整个循环, 表达式3也不会执行 
+for(i=0;i<4;i++) 
 {
   if(i==2) break; //终止整个循环,也不会执行for语句的表达式3 (i++)
   printf("i=%d,",i); // i=0,i=1, 
@@ -509,13 +527,34 @@ printf("\nend i=%d\n",i);
 \end{columns}
 \end{frame}
 
+\begin{frame}[shrink,fragile]{for循环中, 用break语句提前终止循环示例}
+\vspace{-0.2cm}
+$[$例5.4$]$在全系1000名学生中举行慈善募捐，当总数达到10万元时就结束，统计此时捐款的人数以及平均每人捐款的数目。
+\begin{lstlisting}
+#define SUM 100000  //指定符号常量SUM代表10万
+float amount,aver,total; // 单人捐款数, 平均捐款, 捐款总量
+int i; // 捐款人数
+for (i=1,total=0; i<=1000; i++)// 表达式1给多个变量赋初值，用逗号隔开。
+{
+	printf("please enter amount:");
+	scanf("%f",&amount);
+	total = total + amount; 
+	if(total >= SUM) break; // 终止整个循环,也不会执行for语句的表达式3 (i++)
+}
+i=(i<=1000)?i:(i-1); // 技巧: 判断循环是否提前终止
+aver=total/i;
+printf("num=%d\naver=%10.2f\n",i,aver); 
+\end{lstlisting}
+\textcolor{blue}{注意: break语句只能用于循环语句和switch语句之中，而不能单独使用。}
+\end{frame}
+
 \begin{frame}{注意事项小结}
 \begin{enumerate}
 	\setlength{\itemsep}{.5cm}
 	\item while( )\{ \}; do \{ \} while( ); for(;;)\{ \}执行顺序；
 	\item 循环变量的开始和结束条件；
 	\item 循环体是复合语句时，必须用\{ \}扩起来；
-	\item 必要时，用break结束整个循环，用continue结束本次循环；
+	\item 必要时，用break结束整个循环，用continue结束本轮循环；
 	\item 关键是找出循环规律，必要时设计流程图，指导代码实现。	
 \end{enumerate}
 \end{frame}

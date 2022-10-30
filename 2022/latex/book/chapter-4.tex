@@ -11,7 +11,7 @@
 \section*{--- 特别提示 ---}
 
 \begin{itemize}
-	\item 本次练习题不必使用数组, 如果使用数组, 必须正确定义数组, 举例如下:
+	\item 本次以及前3次练习题不必使用数组, 如果使用数组, 必须正确定义数组, 举例如下:
 	\begin{lstlisting}
 	// 估计数组的最大长度
 	#define N 100 
@@ -65,7 +65,8 @@ int main()
 {
 	int n,m;
 	scanf("%d",&n);
-	m=(int)sqrt(n); // sqrt(n)计算的结果为doublel类型, 此语句表示把它转化为int类型, 自动舍去小数部分(不会四舍五入), 并赋值给m。
+	m=(int)sqrt((double)n); // Visual Studio要进行显式类型转换
+	// m=sqrt(n); // GNU C/C++ 自动进行了隐式类型转换
 	if(n==m*m) printf("%d\n",m);
 	else printf("no");
 	return 0;
@@ -76,10 +77,11 @@ int main()
 	\begin{enumerate}
 	\item 数据类型的强制转换, sqrt函数原型: \lstinline|double sqrt(double x);|
 	
-	\lstinline|m=(int)sqrt(n)|是函数调用语句, 等效于:
+	函数调用
 	\begin{lstlisting}[frame=none]
-	double y=sqrt(n); // n自动由int转化为double类型的数据, 不会损失精度
-	m=(int)y; 
+		int m,n;
+		m=(int)sqrt((double)n); // Visual Studio要进行显式类型转换
+		// m=sqrt(n); // GNU C/C++ 自动进行了隐式类型转换
 	\end{lstlisting}
 	\item 注意审题: ``输入一个整数$n, (0<=n<=1000000)$'', 因此, 0也是一个合法输入。
 \end{enumerate}
@@ -176,10 +178,6 @@ int main()
 	return 0;
 } 
 \end{lstlisting}
-
-\begin{note}[思考]
-	如何用数字分解技巧改写此题。
-\end{note}
 
 \section{工资计算}
 小明的公司每个月给小明发工资，而小明拿到的工资为交完个人所得税之后的工资。假设他一个月的税前工资为S元，则他应交的个人所得税按如下公式计算：

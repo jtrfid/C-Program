@@ -238,6 +238,8 @@ int main()                   // 主函数
 \item 补码是可逆的，即再对补码求补得到原码。
 \item 引入补码后，使减法统一为加法。
 $(+77)_{\text{补}}+(-77)_{\text{补}}=0100~1101+1011~0011=0000~0000$	
+
+\textcolor{blue}{注意: 由于采用8bit编码, 从右到左的第9位的1被舍弃。}
 \end{enumerate}
 \end{frame}
 
@@ -442,7 +444,7 @@ int main()
 {                            
 	int a = 123; // 整型变量
 	long int b = 1E+8; // 长整型变量
-	unsigned int u = 0XFF; // 无符号整型, 最高为不作为符号位处理
+	unsigned int u = 0XFF; // 无符号整型, 最高位不作为符号位处理
 	float f = 10.2; // 单精度浮点数
 	double d = 1E-8; // 双精度浮点数
 	printf("%x,%d\n",u,u); // ff, 255

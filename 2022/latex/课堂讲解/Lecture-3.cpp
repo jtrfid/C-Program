@@ -41,7 +41,7 @@ int main2() // 主函数，程序开始
 	return 0;
 }
 
-int main3() // 主函数，程序开始 
+int main() // 主函数，程序开始 
 {
 	int a,b;
 	char op; // 字符类型 
@@ -53,7 +53,7 @@ int main3() // 主函数，程序开始
 	return 0;
 }
 
-int main()
+int main4()
 {
     int a=-25,b=102;
     printf("a=%d,b=%d,a=%x,b=%x\n",a,b,a,b);
