@@ -22,7 +22,7 @@ int main() // 主函数
    int a;
    // 库函数调用
    scanf("%d",&a); 
-   a=(int)fabs(a); 
+   a=(int)fabs((double)a); 
    printf("%d\n",a);
    return 0; 
 }
@@ -116,7 +116,8 @@ int main() // 主函数
 \begin{lstlisting}
 // 通过参数a,b的值, 进行相关计算, 返回整型数据给调用者
 int add(int a,int b)
-{  return a+b; // 返回整型值 }
+{  return a+b; }  // 返回整型值
+
 // 通过参数a的值, 进行相关计算, 不需要返回数据
 void output(double a)
 {  
@@ -154,8 +155,8 @@ int main() // 主函数
 {
    int a=10,b=20,c;
    // 函数调用, 执行函数功能
-   c=add(a,b); 
-   output(10.5*c);
+   c=add(a,b); // c接收函数返回值
+   output(10.5*c); // 无返回值
    return 0; 
 }
 \end{lstlisting}
@@ -165,7 +166,7 @@ int main() // 主函数
 \begin{lstlisting}
 // 通过参数a,b的值, 进行相关计算, 返回整型数据给调用者
 int add(int a,int b)
-{  return a+b; // 返回整型值 }
+{  return a+b; }  // 返回整型值
 
 // 通过参数a的值, 进行相关计算, 不需要返回数据
 void output(double a)
@@ -198,134 +199,137 @@ void output(double a) // 无返回值函数
 \end{lstlisting}
 \end{frame}
 
-\begin{frame}[shrink,fragile]{函数调用时数据类型的隐式转换}
-\begin{lstlisting}
-int a=2,b=3,c;
-// pow函数原型: double pow(double x,double y);
-// 编译器自动把a,b"隐式"转换为double
-// 计算$a^b$的结果是double类型, 赋值语句隐式转换为int, 但是会引起警告信息
-c=pow(a,b);
-c=(int)pow(a,b); // 将函数的返回值强制转换为int, 不会有警告信息
-c=(int)pow((double)a,(double)b); // 例如vs2019等编译器要求显示强制转换
-\end{lstlisting}
-\end{frame}
-
-\begin{frame}[shrink,fragile]{整数pow函数问题}
-\vspace{-0.3cm}
-\lstinline|double pow(double x,double y);| 数学库函数真对双精度浮点数设计。用它计算整数$x^y$会有复杂的精度问题, 因此整数运算尽量不要用此函数。 
-\begin{lstlisting}
-#include<stdio.h>
-#include<math.h>   // 数学库函数
-int main()
-{
-	int x=2,y=3;
-	// 有些编译器会输出99,124, 因为转换前是99.999, 124.999 
-	printf("%d,%d\n",(int)pow(10,x),(int)pow(5,y)); 	
-	// 奇怪的是下列调用输出结果与上面有可能会输出不一致的结果 
-	printf("%d,%d\n",(int)pow(10,2),(int)pow(5,3)); 
-	return 0;
-}
-\end{lstlisting}
-\end{frame}
-
-\begin{frame}[shrink,fragile]{自定义整数pow函数}
-\vspace{-0.5cm}
-\begin{columns}[T]
-\column{0.35\linewidth}
-\begin{lstlisting}
-#include<stdio.h>
-// 自定义整数pow函数, 返回$x^y, x,y\ge 0$
-int intpow(int x, int y)
-{
-	int i,p=1;
-	// 这里规定: $0^0=1$
-	if(x==0 && y==0) 
-		return 1;
-	// 包含了$x^0=1,x>0$ 
-	// $y^0=0,y>0$和$0^0=1$
-	for(i=0;i<y;i++)p=p*x;
-	return p;
-} 
-\end{lstlisting}
-\column{0.65\linewidth}
-\begin{lstlisting}[frame=leftline]
-int main()
-{
-	int x=2,y=3;
-	
-	printf("%d,%d\n",intpow(10,x),intpow(5,y)); 
-	// 100,125
-	printf("%d,%d\n",intpow(10,2),intpow(5,3)); 
-	// 100,125
-	printf("%d,%d\n",intpow(0,2),intpow(0,0)); 
-	// 0,1 
-	
-	return 0;
-}
-\end{lstlisting}
-\end{columns}
-\end{frame}
-
-\note{递归版
-	\begin{lstlisting}
-	int intpow(int x,int y)
-	{
-		if(x==0 && y==0) return 1; // 这里规定: 0^0=1 
-		// 递归 
-		if(y==0) return 1; // x^0=1, 结束递归
-		else if(y%2) return x*intpow(x,y/2)*intpow(x,y/2);
-		return intpow(x,y/2)*intpow(x,y/2);
-	}
-    \end{lstlisting}
-}
-
 \section{实参和形参间的数据传递(值传递和地址传递)}
 
 \begin{frame}[shrink,fragile]{实参和形参间的数据传递(值传递)}
+\vspace{-0.2cm}
+\begin{tikzpicture}
+\node[text width=0.55\textwidth,rounded corners,draw=none] (a) {
 \vspace{-0.3cm}
-\begin{columns}[T]
-\column{0.55\textwidth}
 \begin{lstlisting}
 #include<stdio.h> // 库函数原型声明
 // 函数原型声明, 使编译器认识这个函数
 int max(int x,int y); 
 int main() // 主函数
 {
-   int a=10,b=20,c;
+   // a,b,c局部变量, 作用域: 本函数
+   int a=10,b=20,c; 
    scanf("%d%d",&a,&b);
    // 把此处的a,b值拷贝给函数形式参数x,y
-   c=max(a,b); // 实际参数 
-   printf("较大者=%d\n",c);//与下一句等效
+   c=max(a,b); // 实际参数a,b 
+   printf("较大者=%d\n",c); // 或
    printf("较大者=%d\n",max(a,b));
    return 0; 
 }
 \end{lstlisting}
-\column{0.45\textwidth}
-\begin{lstlisting}[frame=leftline]
+};
+
+\node[anchor=north west,text width=0.45\textwidth,rounded corners,draw=none] (b) at(a.north east) {
+\vspace{-0.3cm}
+\begin{lstlisting}
 // 定义函数求形参x,y中的较大者并返回给调用者
 int max(int x,int y) // 形式参数
 {  
-   int z;
-   z=x>y ? x : y;
+   // x,y,z局部变量,作用域: 本函数
+   int z; 
+   z = x>y ? x : y;
    return z; 
 }
 \end{lstlisting}
-\end{columns}
-\textbf{\textcolor{blue}{在调用函数过程中发生的实参与形参间的数据传递称为``虚实结合"。}}
+};
+
+\node[anchor=north,text width=0.4\textwidth,rounded corners,fill=green,align=center] (c) at($(b.south)+(0,0.2cm)$) {
+	main函数: c=max(a,b);
+};
+
+\node[anchor=north,text width=0.4\textwidth,rounded corners,fill=green,align=center] (d) at($(c.south)+(0,-1cm)$) {
+	max函数: int max(int x,int y)
+	
+	\quad\quad\{return z; \}
+};
+\path[->,line width=1pt]
+($(c.south)+(-1cm,0)$) edge[blue] node[align=left,anchor=east]{x=a的值\\y=b的值} ($(d.north)+(-1cm,0)$)
+
+($(c.south)+(1cm,0)$) edge[red,<-] node[align=left,anchor=west]{c=z的值} ($(d.north)+(1cm,0)$)
+;
+
+\draw[dashed,red] (a.north east) -- (a.south east);
+\end{tikzpicture}
+
+%\textcolor{blue}{在调用函数过程中发生的实参与形参间的数据传递称为``虚实结合"。}
 \end{frame}
 
-\begin{frame}[shrink,fragile]{实参和形参间的数据传递(地址传递)}
-例: 将数组a中n个整数按相反顺序存放。
-\begin{columns}[T]
-\column{0.6\textwidth}
+\begin{frame}[shrink,fragile]{\small 实参和形参间的数据传递(地址传递, 形参是地址:指针变量)}
+\vspace{-0.2cm}
+\begin{tikzpicture}
+\node[text width=0.55\textwidth,rounded corners,draw=none] (a) {
+	\vspace{-0.3cm}
+	\begin{lstlisting}
+	#include<stdio.h> // 库函数原型声明
+	// 函数原型声明, 使编译器认识这个函数
+	int max(int *x,int *y); // 地址传递
+	int main() // 主函数
+	{
+		int a=10,b=20,c; 
+		scanf("%d%d",&a,&b);
+		c=max(&a,&b); // 传递a,b的地址
+		printf("较大者=%d\n",c);// 或
+		printf("较大者=%d\n",max(&a,&b));
+		printf("%X,%X\n",&a,&b); //63FE14,63FE18
+		return 0; 
+	}
+	\end{lstlisting}
+};
+
+\node[anchor=south east,rounded corners,draw,blue,label=left:{\&a: 63FE14}] (a1) at($(a.south east)+(-0.5cm,0.6cm)$) {10};
+
+\node[anchor=south east,rounded corners,draw,blue,label=left:{\&b: 63FE18}] (a2) at($(a1.south east)+(0,-0.8cm)$) {20};
+
+\node[rounded corners,draw,dashed,red,fit=(a1) (a2),label=above:存储单元] {};
+
+\node[anchor=north west,text width=0.5\textwidth,rounded corners,draw=none] (b) at(a.north east) {
+	\vspace{-0.3cm}
+	\begin{lstlisting}
+	// 形参,实参共享同一存储单元
+	int max(int *x,int *y)
+	{  
+		int z; 
+		//*间接访问运算符,获取存储单元内容
+		z = *x > *y ? *x : *y;
+		printf("%X,%X\n",x,y); // 63FE14,63FE18
+		return z; 
+	}
+	\end{lstlisting}
+};
+
+\node[anchor=north,text width=0.4\textwidth,rounded corners,fill=green,align=center] (c) at(b.south) {
+	main函数: c=max(\&a,\&b);
+};
+
+\node[anchor=north,text width=0.4\textwidth,rounded corners,fill=green,align=center] (d) at($(c.south)+(0,-1cm)$) {
+	max函数: int max(int *x,int *y)
+};
+\path[->,line width=1pt]
+($(c.south)+(-1cm,0)$) edge[blue] node[align=left,anchor=east]{x=\&a\\y=\&b} ($(d.north)+(-1cm,0)$)
+
+($(c.south)+(1cm,0)$) edge[red,<-] node[align=left,anchor=west]{c=z的值} ($(d.north)+(1cm,0)$)
+;
+
+\draw[dashed,red] (a.north east) -- (a.south east);
+\end{tikzpicture}
+\end{frame}
+
+\begin{frame}[shrink,fragile]{\small 实参和形参间的数据传递(地址传递, 形参是地址:数组名), 倒置数组a的内容}
+\vspace{-0.2cm}
+\begin{tikzpicture}
+\node[text width=0.55\textwidth,rounded corners,draw=none] (a) {
+\vspace{-0.3cm}
 \begin{lstlisting}
 #include<stdio.h> 
-void inv(int x[],int n); // 要求x是地址传递
-#define N 100 
+void inv(int x[],int n); // x是地址传递
 int main() 
-{
-   int i, n, a[N]={1,2,3,4,5,6,7,8,9,10};
-   scanf("%d",&n);
+{  int i, n, a[3]={10,20,30};
+   scanf("%d",&n); // 输入3
    for(i=0; i<n; i++) scanf("%d",&a[i]);
    // 把实参a数组的地址拷贝给形参x, n的值拷贝给形式参数n
    inv(a,n); // 实参a数组的内容被改变
@@ -333,11 +337,31 @@ int main()
    return 0; 
 }
 \end{lstlisting}
-\column{0.4\textwidth}
-\begin{lstlisting}[frame=leftline]
+};
+%%%%%
+\node[anchor=south east,rounded corners,draw,blue,label=left:{a: 63FE14}] (a1) at($(a.south east)+(-2.2cm,0)$) {10};
+
+\node[anchor=south east,rounded corners,draw,blue,label=left:{63FE18}] (a2) at($(a1.south east)+(0,-0.5cm)$) {20};
+
+\node[anchor=south east,rounded corners,draw,blue,label=left:{63FE1C}] (a3) at($(a2.south east)+(0,-0.5cm)$) {30};
+
+\node[rounded corners,draw,dashed,red,fit=(a1) (a3),label=above:调用前] {};
+%%%%%
+\node[anchor=west,rounded corners,draw,blue] (b1) at($(a1.east)+(0.7cm,0)$) {30};
+
+\node[anchor=west,rounded corners,draw,blue] (b2) at($(b1.west)+(0,-0.5cm)$) {20};
+
+\node[anchor=west,rounded corners,draw,blue] (b3) at($(b2.west)+(0,-0.5cm)$) {10};
+
+\node[rounded corners,draw,dashed,red,fit=(b1) (b3),label=above:调用后] {};
+%%%%%%%%%
+\node[anchor=north west,text width=0.5\textwidth,rounded corners,draw=none] (b) at(a.north east) {
+\vspace{-0.3cm}
+\begin{lstlisting}
 // 倒置数组x的内容, n是x的长度
 // 要求x是地址传递
 void inv(int x[],int n) 
+// 编译器转换为: void inv(int *x,int n) 
 {  
    int i,temp,m=(n-1)/2;
    //以中间元素为界, 前后元素交换
@@ -350,43 +374,49 @@ void inv(int x[],int n)
    return; //可选, 函数执行完毕
 }
 \end{lstlisting}
-\end{columns}
-~\\
+};
+
+\draw[dashed,red] (a.north east) -- (a.south east |- a3.south);
+\end{tikzpicture}
 \end{frame}
 
-\begin{frame}[shrink,fragile]{值传递与地址传递的不同点}
-\vspace{-0.2cm}
+\begin{frame}[shrink,fragile]{值传递与地址传递的差异}
+\vspace{-0.3cm}
 \begin{itemize}
 	\item 值传递, 对形参值的改变不会引起实参值的改变。
-	\item 地址传递虽然不能改变实参的地址，但是对地址指向内容的改变会引起实参指向内容的改变。
+	\item 地址传递虽然不能改变实参的地址，但是对地址指向内容的改变会引起实参指向内容的改变。编译器视同指针变量和数组名均表示地址。
 	\item 数组名表示数组元素在内存中的首地址, 数组元素是连续存放的。
 	\item 用数组名作为参数传递，就是地址传递。在函数内部对数组元素的改变，就是改变实参数组元素的值。
 \end{itemize}
 \begin{tikzpicture}
-\node[text width=.5\textwidth,draw] (a) {
+\node[text width=.68\textwidth,rounded corners,draw] (a) {
 	\vspace{-0.2cm}
 	\begin{lstlisting}
-	// a是地址传递, n是值传递
-	void fun(double a[],int n) 
+	// a,b是地址传递, n是值传递
+	void fun(double a[],int *b,int n)
+	// 编译器转换为:  void fun(double *a,int *b,int n)
 	{
 		// 改变地址a指向的内容，就是改变实参数组的元素值
 		a[1]=20.5; 
+		*b=20; // 将会改变实参的值
 		// n的改变不会影响实参的值
 		n=30; 
 	}
 	\end{lstlisting}
 };
-\node[anchor=west,text width=.7\textwidth,draw] at(a.east)
+\node[anchor=west,text width=.6\textwidth,rounded corners,draw] at(a.east)
 {
 	\vspace{-0.2cm}
 	\begin{lstlisting}
 	int main()
 	{
-		double a[2]={0.8,0.3};
+		double a[2]={0.8,0.3}, int b=10;
 		int n=2;
-		// 实参a的地址拷贝给形参a,实参n的值拷贝给形参n
-		fun(a,n); 
-		printf("%d,%lf,%lf\n",n,a[0],a[1]); // 2,0.8,20.5
+		// 实参a,b地址拷贝给形参a,b,
+		// 实参n的值拷贝给形参n
+		fun(a,&b,n); 
+		printf("%d,%lf,%lf\n",n,a[0],a[1],b); 
+		// 2,0.8,20.5,20 (值传递不变, 地址传递变)
 	}
 	\end{lstlisting}
 };
@@ -394,8 +424,8 @@ void inv(int x[],int n)
 
 \end{frame}
 
-\begin{frame}[shrink,fragile]{数组名作为函数参数的注意事项}
-\vspace{-0.3cm}
+\begin{frame}[shrink,fragile]{一维数组名和二维数组名作为函数参数的注意事项}
+\vspace{-0.4cm}
 \begin{columns}[T]
 \column{0.5\textwidth}
 %\begin{beamerboxesrounded}{一维数组}
@@ -419,7 +449,7 @@ fun(x,5);//调用时仅用数组名传递x的地址
 \column{0.5\textwidth}
 %\begin{beamerboxesrounded}{二维数组}
 \begin{lstlisting}[frame=leftline]
-// 函数定义时省略第一维大小,第二维不能省略
+// 函数定义时不写第一维大小,第二维不能省略
 void fun(int a[][N],int m,int n)
 {
   int i;
@@ -431,14 +461,101 @@ void fun(int a[][N],int m,int n)
   }
 }
 // 函数调用
-int x[M][N]={{1,2},{3,4},{5,6},
-             {7,8},{9,10}};
-fun(x,5,2);//调用时仅用数组名传递x的地址
+int x[M][N]={{1,2},{3,4},{5,6}};
+fun(x,3,2);//调用时仅用数组名传递x的地址
 \end{lstlisting}
 %\end{beamerboxesrounded}
 \end{columns}
 ~\\
 \end{frame}
+
+\begin{frame}[shrink,fragile]{函数调用时数据类型的隐式转换和显式转换}
+\begin{lstlisting}
+int a=2,b=3,c;
+
+// pow函数原型: double pow(double x,double y);
+// 编译器自动把实际参数a,b的int类型"隐式"转换为形式参数要求的double类型
+// 计算$a^b$的结果是double类型, 赋值语句隐式转换为int, 但是会引起警告信息
+c=pow(a,b);  
+
+// 将函数的返回值强制转换为int, 不会有警告信息
+c=(int)pow(a,b); 
+
+// Visual Studio等编译器要求显式强制转换
+c=(int)pow((double)a,(double)b); 
+
+\end{lstlisting}
+\end{frame}
+
+\begin{frame}[shrink,fragile]{整数pow函数问题}
+\vspace{-0.3cm}
+\lstinline|double pow(double x,double y);| 数学库函数真对双精度浮点数设计。用它计算整数$x^y$会有复杂的精度问题, 因此整数运算尽量不要用此函数。 
+\begin{lstlisting}
+#include<stdio.h>
+#include<math.h>   // 数学库函数
+int main()
+{
+	int x=2,y=3;
+	
+	// 有些编译器会输出99,124, 因为转换前是99.999, 124.999 
+	printf("%d,%d\n",(int)pow(10,x),(int)pow(5,y)); 
+		
+	return 0;
+}
+\end{lstlisting}
+\end{frame}
+
+\begin{frame}[shrink,fragile]{自定义整数pow函数}
+\vspace{-0.5cm}
+\begin{columns}[T]
+\column{0.35\linewidth}
+\begin{lstlisting}
+#include<stdio.h>
+// 自定义整数pow函数, 返回$x^y$
+int intpow(int x, int y)
+{
+	int i,p=1;
+	// 实现$0^y=0$
+	if (x==0) return 0;
+	
+	for(i=0;i<y;i++) 
+		p=p*x;
+	
+	return p;//包含了$0^0=1$
+} 
+\end{lstlisting}
+\column{0.65\linewidth}
+\begin{lstlisting}[frame=leftline]
+int main()
+{
+	int x=2,y=3;
+	
+	printf("%d,%d\n",intpow(10,x),intpow(5,y)); 
+	// 100,125
+	printf("%d,%d\n",intpow(10,2),intpow(5,3)); 
+	// 100,125
+	printf("%d,%d\n",intpow(0,2),intpow(0,0)); 
+	// 0,1 
+	
+	return 0;
+}
+\end{lstlisting}
+\end{columns}
+\end{frame}
+
+\note{递归版
+\begin{lstlisting}
+int intpow(int x,int y)
+{
+	if(x==0 && y==0) return 1; // 这里规定: 0^0=1 
+	// 递归 
+	if(y==0) return 1; // x^0=1, 结束递归
+	else if(y%2) return x*intpow(x,y/2)*intpow(x,y/2);
+	return intpow(x,y/2)*intpow(x,y/2);
+}
+\end{lstlisting}
+}
+
 
 \section{程序举例}
 
@@ -464,7 +581,7 @@ PM2.5分级标准为:
 \begin{frame}[shrink,fragile]{例: PM2.5(非模块化设计)}
 \vspace{-0.2cm}
 \begin{tikzpicture}
-\node[text width=0.65\textwidth,draw] (a) {
+\node[text width=0.65\textwidth,rounded corners,draw=none] (a) {
 \vspace{-0.3cm}
 \begin{lstlisting}
 #include <stdio.h>
@@ -486,7 +603,7 @@ int main()
   } 
 \end{lstlisting}
 };
-\node[anchor=north west,text width=0.55\textwidth,draw] at(a.north east) {
+\node[anchor=north west,text width=0.55\textwidth,rounded corners,draw=none] at(a.north east) {
 \vspace{-0.3cm}
 \begin{lstlisting}
 	printf("%.2f\n",(float)sum/n);
@@ -497,13 +614,15 @@ int main()
 }
 \end{lstlisting}
 };
+
+\draw[dashed,red] (a.north east) -- (a.south east);
 \end{tikzpicture}
 \end{frame}
 
 \begin{frame}[shrink,fragile]{例: PM2.5(模块化设计, 主程序)}
 \vspace{-0.2cm}
 \begin{tikzpicture}
-\node[text width=0.5\textwidth,draw] (a) {
+\node[text width=0.5\textwidth,rounded corners,draw=none] (a) {
 \vspace{-0.3cm}
 \begin{lstlisting}
 #include <stdio.h>
@@ -522,7 +641,7 @@ int main()
 } 
 \end{lstlisting}
 };
-\node[anchor=north west,text width=0.55\textwidth,draw] at(a.north east) {
+\node[anchor=north west,text width=0.55\textwidth,rounded corners,draw=none] at(a.north east) {
 \vspace{-0.3cm}
 \begin{lstlisting}
 	 // 函数调用,并输出函数中计算的平均值
@@ -535,6 +654,8 @@ int main()
 }
 \end{lstlisting}
 };
+
+\draw[dashed,red] (a.north east) -- (a.south east);
 \end{tikzpicture}
 \end{frame}
 
@@ -568,7 +689,7 @@ float haze(int pm25[], int day[], int n, int m)
 	函数参数说明: pm25[]: PM2.5值, day[]: 不同标准对应的统计天数; n是pm25数组的长度, m是数组day的长度, 返回PM2.5平均值.
 };
 
-\node[anchor=north,text width=.5\textwidth,fill=green] at(b.south) {
+\node[anchor=north,text width=.5\textwidth,fill=green,rounded corners] at(b.south) {
 	\textcolor{blue}{要点:}
 	
 	用数组做参数, 可获得函数计算结果的多值传递;
@@ -600,8 +721,10 @@ int main()
 \end{frame}
 
 \begin{frame}[shrink,fragile]{例: 数字排序(子函数: 计算整数的各位之和, 输出)}
-\begin{columns}[T]
-	\column{0.4\textwidth}
+%\centering
+\begin{center}
+\begin{tikzpicture}
+\node[text width=0.35\textwidth] (a) {
 \begin{lstlisting}
 // 计算整数a的各位之和
 int bitsSum(int a)
@@ -615,8 +738,10 @@ int bitsSum(int a)
 	return sum;
 }
 \end{lstlisting}
-\column{0.4\textwidth}
-\begin{lstlisting}[frame=leftline]
+};
+
+\node[anchor=north west,text width=0.4\textwidth] (b) at(a.north east) {
+\begin{lstlisting}
 // 输出, n是数组长度
 void output(int a[], int n)
 {
@@ -626,13 +751,17 @@ void output(int a[], int n)
 	printf("\n");
 }
 \end{lstlisting}
-\end{columns}
+};
+
+\draw[dashed,red] (a.north east) -- (a.south east);
+\end{tikzpicture}
+\end{center}
 \end{frame}
 
 \begin{frame}[shrink,fragile]{例: 数字排序(排序子函数---方法1: 冒泡排序)}
+\vspace{-0.3cm}
 \begin{lstlisting}
-// 从大到小排序, 冒泡, n是数组长度
- void sort(int a[], int n)
+ void sort(int a[], int n) // 从大到小排序, 冒泡, n是数组长度
 {
    int i,j,flag,temp;
    for(j = 1; j <= n-1; j++) // 第j趟比较
@@ -743,8 +872,7 @@ void output(int a[], int n)
 \begin{frame}[shrink,fragile]{例: 数字排序(排序子函数---方法2: 选择法排序)}
 \vspace{-0.3cm}
 \begin{lstlisting}
-// 从大到小排序, 选择
-void sort(int a[], int n)
+void sort(int a[], int n) // 从大到小排序, 选择
 {
    int i,j,k,temp;
    for(j = 0; j <= n-2; j++) // 第j趟比较, 共n-1次循环
@@ -764,7 +892,9 @@ void sort(int a[], int n)
 \end{frame}
 
 \begin{frame}[shrink,fragile]{例: 数字排序(联动输出: 修改主程序)}
-给定n个整数，请计算每个整数各位数字和，按各位数字和从大到小的顺序输出。\textbf{要求联动输出: 整数\quad 该整数的各位之和}
+给定n个整数，请计算每个整数各位数字和，按各位数字和从大到小的顺序输出。
+
+\textcolor{blue}{要求联动输出(整数跟随其数字和的排序次序输出): 整数\quad 该整数的各位之和}
 \begin{lstlisting}
 #include <stdio.h>
 #define N 1000 // 估计的数组大小
@@ -785,9 +915,9 @@ int main()
 \end{frame}
 
 \begin{frame}[shrink,fragile]{例: 数字排序(联动输出: 修改排序子函数)}
+\vspace{-0.3cm}
 \begin{lstlisting}
-// a从大到小排序, b联动改变
-void sort(int a[], int b[],int n)
+void sort(int a[], int b[],int n) // a从大到小排序, b联动改变
 {
    int i,j,flag,temp;
    for(j = 1; j <= n-1; j++) // 第j趟比较
@@ -821,17 +951,20 @@ void output(int a[], int b[], int n)
 \end{frame}
 
 \begin{frame}[shrink,fragile]{例: 数字排序(联动输出: 修改主程序,二维数组)}
-给定n个整数，请计算每个整数各位数字和，按各位数字和从大到小的顺序输出。\textbf{要求联动输出: 整数\quad 该整数的各位之和}
+\vspace{-0.2cm}
+给定n个整数，请计算每个整数各位数字和，按各位数字和从大到小的顺序输出。
+
+\textcolor{blue}{要求联动输出(整数跟随其数字和的排序次序输出): 整数\quad 该整数的各位之和}
 \begin{lstlisting}
 #include <stdio.h>
 #define N 1000 // 估计的数组大小
 int bitsSum(int a); // 计算整数a的各位之和
-void sort(int a[][2], int n);  // 按a的第0列从大到小排序
-void output(int a[][2], int n); // 输出a
+void sort(int a[][2], int n);  // a的第0列是整数, 第1列是其各位数字之和(排序列)
+void output(int a[][2], int n); // 输出a, 第0列是整数, 第1列是其各位数字之和
 int main()
 {
    int i,n; // n是实际数组长度 
-   int num[N][2]; // 第0列表示整数, 第1列是该整数的各位数字的和  
+   int num[N][2]; // 第0列表示整数, 第1列是其各位数字的和  
    scanf("%d",&n);
    for(i=0;i<n;i++) 
    { scanf("%d",&num[i][0]); num[i][1]=bitsSum(num[i][0]); }
@@ -843,9 +976,9 @@ int main()
 \end{frame}
 
 \begin{frame}[shrink,fragile]{例: 数字排序(联动输出: 修改排序子函数,二维数组)}
+\vspace{-0.3cm}
 \begin{lstlisting}
-// 按a的第0列从大到小排序
-void sort(int a[][2],int n)
+void sort(int a[][2],int n) // a的第0列是整数, 第1列是其各位数字之和(排序列)
 {
    int i,j,flag,temp;
    for(j = 1; j <= n-1; j++) // 第j趟比较
@@ -853,7 +986,7 @@ void sort(int a[][2],int n)
       flag=0;
       for(i = 0; i < n - j; i++) // 相邻两数比较
       {
-          if (a[i][0] < a[i+1][0]) // 同时交换a的第0列和第1列
+          if (a[i][1] < a[i+1][1]) // 同时交换a的第0列和第1列
           { 
             temp = a[i][0]; a[i][0] = a[i+1]; a[i+1][0] = temp; 
             temp = a[i][1]; a[i][1] = a[i+1][1]; b[i+1][1] = temp; 
@@ -868,7 +1001,7 @@ void sort(int a[][2],int n)
 
 \begin{frame}[shrink,fragile]{例: 数字排序(联动输出: 修改输出子函数, 二维数组)}
 \begin{lstlisting}
-// 输出a
+// 输出, a的第0列是整数, 第1列是其各位数字之和(排序列)
 void output(int a[][2], int n)
 {
    int i;

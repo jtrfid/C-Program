@@ -6,574 +6,116 @@
 %
 %%%%%%%%%%%%%%%%%%%%%%%% Springer-Verlag %%%%%%%%%%%%%%%%%%%%%%%%%%
 %\motto{Use the template \emph{chapter.tex} to style the various elements of your chapter content.}
-\chapter{第6次机试练习: 函数, 流程控制, 字符串, 数组}
+\chapter{第6次机试练习: 数组,排序,字符串练习}
 
-\section{歌德巴赫猜想}
-德巴赫猜想：任意一个大偶数都能分解为两个素数的和,对于输入的一个正偶数，写一个程序来验证歌德巴赫猜想。
+\section{ISBN号码}
+每一本正式出版的图书都有一个ISBN号码与之对应，ISBN码包括9位数字、1位识别码和3位分隔符，其规定格式如"x-xxx-xxxxx-x"，
+其中符号“-”是分隔符（键盘上的减号），最后一位是识别码，例如0-670-82162-4就是一个标准的ISBN码。
 
-由于每个正偶数可能分解成多组素数和，仅输出分解值分别是最小和最大素数的一组，按从小到大顺序输出。
+ISBN码的首位数字表示书籍的出版语言，例如0代表英语；
 
-输入说明	
+第一个分隔符“-”之后的三位数字代表出版社，例如670代表维京出版社；
 
-输入一个正偶数n，1<n<1000。
+第二个分隔之后的五位数字代表该书在出版社的编号；
 
-输出说明
-	
-输出分解出的两个最小和最大素数。
+最后一位为识别码。识别码的计算方法如下：
 
-输入样例
-	
-10
+首位数字乘以1加上次位数字乘以2……以此类推，用所得的结果mod 11，所得的余数即为识别码，如果余数为10，则识别码为大写字母X。
+例如ISBN号码0-670-82162-4中的识别码4是这样得到的：
+对067082162这9个数字，从左至右，分别乘以1，2，\dots，9，再求和，即$0\times 1+6\times 2+\dots +2\times 9=158$，然后取158 mod 11的结果4作为识别码。
 
-输出样例
-	
-3 7
-
-\begin{lstlisting}
-#include <stdio.h>
-#include <math.h>
-
-// 判断参数n是否素数, 如果是返回1, 否则返回0 
-int isPrime(int n)
-{
-	int i;
-	if(n < 2) return 0; // 最小素数是2, 1不是素数也不是合数, 题意(1<n<1000)不包含1,因此此语句不是必须的 
-	//for(i = 2; i <= sqrt((double)n); i++) // vs2013编译器要求数学函数严格按原型解释
-	for(i = 2; i <= sqrt(n); i++) // 或条件表达式：i*i<=n 
-	{
-		if (n%i == 0) return 0; // n不是素数 
-	}
-	return 1; // n是素数 
-}
-
-// 解法一: 递归函数
-// 第1个参数: i是递归可能的素数(第一个可能的素数是big_even-1), 第2个参数: big_even是大偶数 
-void  recursiveComputing(int i, int big_even)
-{
-	if(isPrime(i) && isPrime(big_even-i)) // 两个素数和是big_even
-	{
-		// 注意, 较小的在前 
-		printf("%d %d\n",big_even - i, i); // 输出后, return; 结束递归 
-	} 
-	else // 递归 
-	{
-		recursiveComputing(i-1,big_even); // 递归调用 
-	} 
-	return; // 递归结束
-} 
-
-int mian()
-{
-	int num; // num大偶数
-	scanf("%d",&num);
-	recursiveComputing(num-1,num);
-	return 0; 
-}
-
-// 解法二: 二重循环, 从最小素数开始迭代计算，获取符合题意的两个素数 
-int main1()
-{
-	int j,k,num; // num大偶数 
-	int flag; // 标志变量：用于标识是否找到符合要求的素数对
-	scanf("%d",&num);
-	// 对于大偶数num，分解为两个素数 
-	for(j = 2; j < num; j++)  //  找出第一个素数(最小的) for #1 
-	{
-		if(!isPrime(j)) continue; // 如果j不是素数, 继续下一轮迭代 
-		
-		flag = 0; // 初始化，未找出素数对 
-		for(k = j + 1; k < num; k++) // //  找出第二个素数 for #2
-		{
-			if(isPrime(k) && j+k == num) // j是最小素数, k必然是最大素数
-			{
-				printf("%d %d\n",j,k);
-				flag = 1; // 找出素数对, 如果没有此设置, 将会输出多组, 例如num=2020时会有多组素数 
-				break; // break for #2
-			}
-		}
-		if(flag) break; // break for #1 
-	}
-	return 0;
-}
-
-// 解法三: 不用标志变量版本 
-int main2()
-{
-	int j,k,num; // num大偶数 
-	scanf("%d",&num);
-	// 对于大偶数num，分解为两个素数 
-	for(j = 2; j < num; j++)  //  找出第一个素数(最小的)  for #1 
-	{
-		if(!isPrime(j)) continue; // 如果j不是素数, 继续下一轮迭代 
-		
-		for(k = j + 1; k < num; k++) //  找出第二个素数 for #2
-		{
-			if(isPrime(k) && j+k == num) // j是最小素数, k必然是最大素数 
-			{
-				printf("%d %d\n",j,k);
-				return 0; // 找出素数对，结束主函数。 如果不结束, 将会输出多组 
-			}
-		}
-	}
-	return 0;
-}
-
-// 解法四: 优化，根据题意找出一组：最小素数+最大素数=偶数 
-int main3()
-{
-	int j,k,num; // num大偶数 
-	scanf("%d",&num);
-	// 对于大偶数num，分解为两个素数 
-	for(j = 2; j < num; j++)  //  找出第一个素数(最小的)  for #1 
-	{
-		if(!isPrime(j)) continue; // 如果j不是素数, 继续下一轮迭代 
-		
-		for(k = num-1; k>=2; k--) //  找出第二个素数(最大的) for #2
-		{
-			// j是最小素数, 判断k是否是最大素数并且二者之和=num 
-			if(isPrime(k) && j+k == num) 
-			{
-				printf("%d %d\n",j,k);
-				return 0; // 找出素数对，结束主函数。如果不结束, 将会输出多组 
-			}
-		}
-	}
-	return 0;
-}
-
-// 解法五: 一重循环, 从最小素数开始迭代计算，获取符合题意的两个素数 
-int main4() 
-{ 
-	int num,i;
-	scanf("%d",&num);
-	
-	for(i = 2;i < num;i++)
-	{
-		if(isPrime(i)) // i是素数 
-		{
-			if(isPrime(num-i)) // 如果num-i也是素数, 即满足题意num=i+j 
-			{
-				printf("%d %d\n",i,num-i); 
-				break;
-			} 
-		}
-	}
-	return 0; 
-} 
-\end{lstlisting}
-
-\begin{note}[要点]
-	再次体会标志变量的用法及内层循环前的初始化。仔细审题，本题要求一组输出: 最小素数+最大素数=偶数.
-	
-	如果要求找出最接近的一组素数, 因为$n=\frac{n}{2}+\frac{n}{2}$, 如果$\frac{n}{2}$是素数,即为所求。 否则，所求的两个素数在$\frac{n}{2}$附近， 分别小于和大于$\frac{n}{2}$。
-	
-	例如: 修改main4()中的\lstinline|if(isPrime(num-i))为if(isPrime(num-i) && num-i<=i)|, 则输出\lstinline|num-i,i;|即可。 
-	
-	或者: 由$i=\frac{n}{2}\to i=2$迭代, 第一个找到的素数$i$和$num-i$即为所求。
-\end{note}
-
-\section{矩阵}
-请写一个程序，对于一个m行m列$(2<m<20)$的方阵，求其每一行、每一列及主、辅对角线元素之和，然后按照从大到小的顺序依次输出这些值。
-
-注：主对角线是方阵从左上角到右下角的一条斜线，辅对角线是方阵从右上角到左下角的一条斜线。
-
-输入说明
-
-输入数据的第一行为一个正整数m;
-
-接下来为m行、每行m个整数表示方阵的元素。
-
-输出说明	
-
-从大到小排列的一行整数，每个整数后跟一个空格，最后换行。
-
-输入样例
-
-\begin{tabular}{llll}
-	4&&&\\
-	15  &~8   &~-2   &~6\\
-	31  &~24  &~18  &~71\\
-	-3  &~-9  &~27  &~13\\
-	17  &~21  &~38  &~69
-\end{tabular}
-
-输出样例
-
-159 145 144 135 81 60 44 32 28 27
-
-\begin{lstlisting}
-#include <stdio.h>
-// 估计方阵行列数 
-#define M 20
-
-// input, m是实际方阵行列数 
-void input(int matrix[][M], int m)
-{
-	int i,j; 
-	for(i = 0; i < m; i++)
-	for(j = 0; j < m; j++) 
-	scanf("%d",&matrix[i][j]);
-}
-
-// 计算主对角线之和, m是实际方阵行列数 
-int main_diagonal(int matrix[][M], int m)
-{	
-	int i,j,sum = 0; 
-	for(i = 0; i < m; i++)
-	{
-		for(j = 0; j < m; j++) 
-		{
-			if(i == j) sum += matrix[i][j];   // 主对角线 
-		}
-	}
-return sum;
-}
-
-// 计算副对角线之和, m是实际方阵行列数 
-int counter_diagonal(int matrix[][M], int m)
-{	
-	int i,j,sum = 0;
-	for(i = 0; i < m; i++)
-	{
-		for(j = 0; j < m; j++) 
-		{ 
-			if(j == m-i-1) sum += matrix[i][j]; // 副对角线之和 
-		}
-	}
-	return sum;
-}
-
-// 计算第i行之和, m是实际方阵行列数 
-int sumI(int matrix[][M], int m, int i)
-{ 
-	int j,sum = 0; 
-	for(j = 0; j < m; j++) // 遍历列 
-	{
-		sum += matrix[i][j];  // 第i行之和
-	}
-	return sum; 
-} 
-
-// 计算第j行之和, m是实际方阵行列数 
-int sumJ(int matrix[][M], int m, int j)
-{ 
-	int i,sum = 0; 
-	for(i = 0; i < m; i++) // 遍历行 
-	{
-		sum += matrix[i][j];  // 第j行之和
-	}
-	return sum;
-} 
-
-// 交换两个元素值 
-void swap(int *p1, int *p2)
-{
-	int temp;
-	temp = *p1; *p1 = *p2; *p2 = temp;
-}
-
-// 选择法排序（降序）
-void sorts(int a[], int n)
-{
-	int i,j,k;
-	for(i = 0; i < n-1; i++)
-	{
-		k = i;
-		for (j = i+1; j < n; j++)
-			if(a[j] > a[k])	k = j;
-		if (k != i) swap(&a[i],&a[k]);
-	} 
-}
-
-int main()
-{
-	int matrix[M][M],a[2*M+2]; // 以估计行列数，定义数组 
-	int i,m; 
-	scanf("%d",&m); // 实际方阵行列数 
-	
-	input(matrix,m); // input 
-	
-	// 调用各函数，装配数组a
-	int n = 0; // 记录数组a的实际长度		
-	for(i = 0; i < m; i++)
-	{
-		a[n++] = sumI(matrix,m,i); // 第i行之和
-		a[n++] = sumJ(matrix,m,i); // 第i列之和  
-	}
-	
-	a[n++] = main_diagonal(matrix,m);    // 主对角线之和 
-	a[n++] = counter_diagonal(matrix,m); // 副对角线之和  
-	
-	// 排序数组a 
-	sorts(a,n);
-	
-	// 输出 
-	for(i = 0; i < n; i++)
-		printf("%d ",a[i]);
-	
-	printf("\n");
-	
-	return 0;
-}
-\end{lstlisting}
-
-\begin{note}[要点]
-	\begin{enumerate}
-		\item 思路：定义功能单一的函数，实现简单功能，主程序调用各个函数。
-		\item 一维数组a[2*M+2]存储相关函数计算结果，排序数组a即是所求。 
-		\item 避免过多循环嵌套，不易出错，简化程序设计。 
-		\item 但是缺点是在各函数中分别循环遍历方阵，效率低。
-		\item 优化方案是不采用独立函数计算，在主函数中一次遍历方阵，计算各值。 
-		\item 二维数组表示矩阵, 是常见题型, 必须熟练掌握元素的下标规律及其遍历技巧。
-	\end{enumerate}
-\end{note}
-
-\section{回文数}
-若一个非负整数其各位数字按照正反顺序读完全相同，则称之为回文数，例如12321。
-判断输入的整数是否是回文数。若是，则输出该整数各位数字之和，否则输出no。
+编写程序判断输入的ISBN号码中识别码是否正确，如果正确，则仅输出``Right"; 如果错误，则输出正确的ISBN号码。
 
 输入说明	
 
-输入为一个整数n，0<=n<100000000。
+输入只有一行，是一个字符序列，表示一本书的ISBN号码(保证输入符合ISBN号码的格式要求)。
 
 输出说明	
 
-若该整数为回文数，则输出整数各位数字之和，否则输出no。
+输出一行，假如输入的ISBN号码的识别码正确，那么输出``Right"，否则，按照规定的格式，输出正确的ISBN号码(包括分隔符``-")。
 
-输入样例
-	
-样例1输入
+输入样例	
 
-131
+样例输入1
 
-样例2输入
+0-670-82162-4
 
-24
+样例输入2
 
-输出样例
+0-670-82162-0
 
-样例1输出
-	
-5
+输出样例	
 
-样例2输出
+样例输出1
 
-no
+Right
+
+样例输出2
+
+0-670-82162-4
 
 \begin{lstlisting}
 #include <stdio.h>
-#include <string.h>
-
-// 思路1:  求该整数的反序组成的整数，如整数1234, 其反序整数即为4321, 如果二者相等即为回文数 
-// 判断num是否是回文数，是：返回1；不是，返回0
-// 指针参数*sum，返回这个数的各位之和  
-int isPalindromic1(int num,int *sum)
+int main()
 {
-	int reverse = 0, tmp = num;
-	*sum = 0; // 初始化指针内容 
-	while(tmp)
-	{
-		reverse = reverse*10 + tmp%10;
-		*sum += tmp%10;
-		tmp /= 10;
-	}
-	if(reverse == num ) return 1;
-	else return 0;	
-}
-
-// 思路2:  构造数组reverse, 反序存储该整数各位数，按照数组下标，前后数组元素相等则为回文数 
-// 判断num是否是回文数，是：返回1；不是，返回0
-// 指针参数*sum，返回这个数的各位之和  
-int isPalindromic2(int num,int *sum)
-{
-	int reverse[9], len=0, i=0; // 依题意数组最大长度为9，最多存储9位数。实际长度用len变量表示 
+	// 按题意, 存储ISBN需要13个字符, 再加上字符串结束字符'\0'.
+	// 样例数据作为初始化，方便调试
+	char ISBN[14] = "0-670-82162-4";  // ISBN[13]='\0'
+	//char ISBN[14] = "0-670-82162-0";  
+	int i,j,sum=0,r; // r=sum % 11 
 	
-	*sum = 0; // 初始换指针内容 
-	//构造数组reverse, 反序存储该整数各位数
-	while(num)
-	{
-		reverse[i]=num%10;  
-		*sum += num%10;   // 累加各位数字 
-		num /= 10;
-		len++; // 计算数组实际长度 
-		i++; 
-	}
-	//按照数组下标，前后数组元素相等则为回文数
-	for(i=0; i<len/2;i++)
-	{
-		if(reverse[i] != reverse[len-i-1]) return 0;  // 不是回文数 
-	}
-	return 1;	// 至此，必然是回文数 
-}
-
-// 测试方法1和2的主程序
-int main12()
-{
-	int i,num,sum;
+	// 调试时，注释输入语句 
+	// 末尾自动添加'\0'.
+	scanf("%s",ISBN);  // 或 gets(ISBN);
 	
-	scanf("%d",&num); 
-	//if(isPalindromic1(num,&sum)) printf("%d\n",sum);
-	if(isPalindromic2(num,&sum)) printf("%d\n",sum);
-	else printf("no\n");
+	// 对识别码之前的数字求和, 注意边界.
+	for(i = 0,j = 1; i < 11; i++)
+	{
+		if (ISBN[i]=='-') continue;
+		sum += (ISBN[i]-'0')*j;   // 整数与单个数字字符的关系：9 = '9' -'0' 
+		j++;
+	}   
+	
+	r=sum%11;
+	
+	// 特别处理识别码 ISBN[12]
+	if (r==10)
+	{
+		if(ISBN[12]=='X') printf("Right\n");
+		else 
+		{
+			ISBN[12]='X';
+			printf("%s\n",ISBN); // 或 puts(ISBN);
+		}
+	}
+	else
+	{
+		// 数字转字符 r+'0'
+		if(ISBN[12]== r +'0') printf("Right\n");
+		else 
+		{
+			ISBN[12]= r +'0';
+			printf("%s\n",ISBN); // 或 puts(ISBN);
+		}
+	} 
+
 	return 0;
 } 
-
-// 思路3:  按照字符串处理输入的整数，前后数组元素相等则为回文数 
-int main3()
-{
-	char s[10]; // 留出'\0', 最多存储9位数。实际长度用len变量表示
-	int sum=0, len=0,i=0; 
-	
-	// 以字符串形式接收输入的整数, 末尾自动追加'\0'  
-	gets(s);
-	
-	// 计算len, 或者len=strlen(s), 同时计算各位数字之和 
-	for(len=0;s[i]!='\0';) 
-	{
-		len++;
-		sum=sum+s[i]-'0'; // 计算各位数字之和
-		i++;  
-	}
-	
-	//按照数组下标，前后数组元素相等则为回文数
-	for(i=0; i<len/2;i++)
-	{
-		if(s[i] != s[len-i-1]) // 不是回文数  
-		{
-			printf("no\n");
-			return 0;  // 主函数结束 
-		} 
-	}
-	// 至此，必然是回文数，包含一位数不进入上面的for循环的情况 
-	printf("%d\n",sum);
-	return 0;
-}
-
-// 思路4:  按照字符串处理输入的整数，前后数组元素相等则为回文数。
-// 使用指针操作 
-int main()
-{
-	char s[10]; // 留出'\0', 最多存储9位数。实际长度用len变量表示
-	int sum=0; 
-	char *p1=s,*p2=s; // 用于正序和反序遍历s数组，初始指向第一个元素 
-	
-	// 以字符串形式接收输入的整数，末尾自动追加'\0' 
-	gets(s);
-	
-	// 用p2遍历字符串,同时计算各位数字之和 
-	for(;*p2!='\0';p2++) 
-	{
-		sum=sum+(*p2)-'0'; // 计算各位数字之和
-	}
-	// 至此，p2指向最后一个元素'\0', 我们使它指向最后一个有效元素： 
-	p2--; 
-	
-	//按照数组下标，前后数组元素相等则为回文数
-	for(;p1<p2;p1++,p2--)
-	{
-		if(*p1 != *p2) // 不是回文数 
-		{
-			printf("no\n");
-			return 0;  // 主函数结束 
-		} 
-	}
-	// 至此，必然是回文数 
-	printf("%d\n",sum);
-	return 0;
-}
 \end{lstlisting}
 
 \begin{note}[要点]
-	\begin{enumerate}
-		\item 掌握函数的地址传递方法。
-		\item 使用两个指针变量p1, p2, 其中p1指向待查找子串的首字母, 另一个指向末尾, \lstinline|p1++, p2--|; 是判断字符串是否是回文的有效技巧。
-	\end{enumerate}
-\end{note}
-
-\section{马鞍点}	
-若一个矩阵中的某元素在其所在行最小而在其所在列最大，则该元素为矩阵的一个马鞍点。请写一个程序，找出给定矩阵的马鞍点。
-
-输入说明
-
-输入数据第一行只有两个整数m和n（0<m<100,0<n<100），分别表示矩阵的行数和列数;
-
-接下来的m行、每行n个整数表示矩阵元素(矩阵中的元素互不相同), 整数之间以空格间隔。
-
-输出说明
-
-在一行上输出马鞍点的行号、列号(行号和列号从0开始计数)及元素的值(用一个空格分隔), 之后换行;
-
-若不存在马鞍点，则输出一个字符串``no"后换行。
-
-输入样例
-
-\begin{tabular}{p{1cm}p{1cm}p{1cm}p{1cm}l}
-	4  &3&\\
-	11    &13    &121\\
-	407   &72    &88\\
-	23    &58    &1\\
-	134   &30    &62
-\end{tabular} 
-
-输出样例
-
-1 1 72
-
+\begin{enumerate}
+\item 仔细审题, 考虑输入的识别码, 可能是'X'的情况.
+\item 定义字符数组表示字符串时，且记给\lstinline|'\0'|留一个字符的位置, 表示字符串的结尾。
+\item \lstinline|ASCII编码(整数)=字符-'0';|
+\item \lstinline|字符=ASCII编码(整数)+'0';|
+\item 整数可以表示字符的ASCII编码(整数), 整数和字符类型可以``混用", 详见课件。
 \begin{lstlisting}
-#include <stdio.h>
-// 估计的二维数组最大行列数 
-#define M 100
-#define N 100
-
-// 判断a[row,col]是否是马鞍点, 是: 返回1; 否则返回0
-// m,n是二维数组实际行列数 
-int compute(int a[][N], int m, int n, int row, int col)
-{
-	int i,element = a[row][col]; 
-	// element在其所在行最小而在其所在列最大 
-	for(i = 0; i < n; i++)
-		if(a[row][i] < element) return 0; // 不是马鞍点，直接返回0 
-	for(i = 0; i < m; i++)
-		if(a[i][col] > element) return 0; // 不是马鞍点，直接返回0
-	return 1;	// 如果执行至此，肯定是马鞍点，直接返回0 
-}
-
-int main()
-{
-	int matrix[M][N]; // 按照估计的最大行列数定义二维数组 
-	int i,j,m,n,flag = 0; 
-	
-	scanf("%d%d",&m,&n); // 实际行列数 
-	
-	// input
-	for(i = 0; i < m; i++)
-		for(j = 0; j < n; j++) 
-			scanf("%d",&matrix[i][j]);
-	
-	// 遍历二维数组, 判断马鞍点		
-	for(i = 0; i < m; i++)
-	{
-		for(j = 0; j < n; j++) 
-		{
-			if(compute(matrix,m,n,i,j))
-			{
-				printf("%d %d %d\n",i,j,matrix[i][j]);
-				flag = 1;
-			}
-		}
-	}	
-	if (!flag) printf("no\n");
-	
-	return 0;
-}
+int a; char c='A';
+a = c+1; // c当作整数运算
+printf("%d %c %d %c\n",a,a,c,c); //66 B 65 A 
 \end{lstlisting}
-
-\begin{note}[要点]
-	\begin{enumerate}
-		\item 思路：定义函数计算单个元素a[i,j]是否是马鞍点，主程序遍历二维数组，调用此函数。
-		\item 避免过多循环嵌套，不易出错，简化程序设计。
-		\item 掌握二维数组作为函数参数的定义, 调用方式。
-	\end{enumerate}
+\end{enumerate}
 \end{note}
 
 \section{密码强度}
@@ -660,78 +202,409 @@ int main()
 	字符串处理的典型问题: \lstinline|'\0'|, 字符串相关函数\lstinline|char s1[81],s2[81]; strlen(s1), strcmp(s1,s2), strcpy(s1,s2); scanf("%s",s1), gets(s1)|的区别等, 应该充分掌握。
 \end{note}
 
+\section{排序}	
+给定N个不同的整数，要求对这N个整数按如下规则排序并输出。
 
+规则一：所有的偶数排在奇数前面。
 
-\section{数字分解排序}
-输入一个9位以内的正整数n，按数值从高到低的顺序输出n的各位数字。
+规则二：在规则一的前提下按照从大到小的顺序排序。
 
 输入说明	
 
-一个正整数n(0<n<1000000000)
+数据由两行构成，第一行为整数n (n<=100), 表示待排序整数的数量。第二行是n个整数，每个整数的取值区间都为$[-32768\sim32767]$，整数之间以空格间隔。
 
-输出说明	
-
-按数值从高到低的顺序输出n的各位数字，数字之间用空格隔开
+输出说明
+	
+在一行输出排好序的整数，整数之间以空格间隔。
 
 输入样例	
 
-564391
+5 
+
+1 2 3 4 5
 
 输出样例
-
-9 6 5 4 3 1
+	
+4 2 5 3 1
 
 \begin{lstlisting}
-#include <stdio.h>
+# include <stdio.h>
+#define N 100
 
-void order(int a[],int n);  // 排序函数说明
+// 选择法从大到小排序 
+int sorts(int a[],int n)
+{
+	int i,j,k,tmp;
+	for(i=0;i<n-1;i++)
+	{
+		k=i; // 未排序中较大者 
+		for(j=i+1;j<n;j++)
+		if(a[j]>a[k]) k=j;
+		if(k!=i)
+		{
+			tmp=a[i];
+			a[i]=a[k];
+			a[k]=tmp;
+		} 
+	}
+}
 
 int main()
 {
-	int i = 0,j,k,n,num[9];
+	int even[N],odd[N],n,i,num;
+	int evenN=0, oddN=0;
 	scanf("%d",&n);
-	k=0; // 数字个数 
-	while(n) // 构造数组num存储n的各位数字(从最低位到最高位存储)
+	for(i=0;i<n;i++)
 	{
-		num[i++] = n%10;
-		n /= 10;
-		k++;
+		scanf("%d",&num);
+		if(num%2==0) // even
+		{
+			even[evenN]=num;
+			evenN++;
+		}
+		else
+		{
+			odd[oddN]=num;
+			oddN++;
+		}
 	} 
-
-	// 输出验证，调试技巧之一。 
-	//for(j = 0; j < k; j++) printf("%d ",num[j]);
-	//   printf("\n");
-	
-	order(num,k);  // 排序函数
-	
-	// 输出
-	for(j = 0; j < k; j++) printf("%d ",num[j]);
-	
-	printf("\n");
+	// 排序
+	sorts(even,evenN);
+	sorts(odd,oddN);
+	// 输出 
+	for(i=0;i<evenN;i++) printf("%d ",even[i]); 
+	for(i=0;i<oddN;i++) printf("%d ",odd[i]); 
+	printf("\n"); 
 	return 0;
-} 
-
-// 冒泡排序函数 
-void order(int a[],int n)
-{ 
-	int i,j,t,flag; 
-	for(j = 1; j <= n-1; j++)
-	{ 
-		flag=0; // 且记! 必须在进入内层循环前初始化。
-		for(i = 0; i < n - j; i++)
-			if (a[i] < a[i+1]) 
-			{ 
-				t = a[i]; a[i] = a[i+1]; a[i+1] = t; 
-				flag=1;
-			}
-		if(!flag) break;
-	}
 }
 \end{lstlisting}
 
 \begin{note}[要点]
-	其它解法及其变种见课件。
+	各种形式的排序问题(整数, 字符, 字符串, 结构体)是必须掌握的重点之一。选择法排序或冒泡法排序必须信手拈来。
+\end{note}
+
+\section{等差数列}	
+请写一个程序，判断给定整数序列能否构成一个等差数列。
+
+输入说明
 	
-	排序函数必须掌握，注意检查数组是否越界问题。
+输入数据由两行构成，第一行只有一个整数n(n<100), 表示序列长度(该序列中整数的个数);
+
+第二行为n个整数，每个整数的取值区间都为$[-32768\sim 32767]$, 整数之间以空格间隔。
+
+输出说明	
+
+对输入数据进行判断，不能构成等差数列输出``no", 能构成等差数列输出表示数列公差(相邻两项的差)的绝对值的一个整数。
+
+输入样例
+	
+样例1输入
+
+6
+
+23 15 4 18 35 11
+
+样例2输入
+
+5
+
+2 6 8 4 10
+
+输出样例
+	
+样例1输出
+
+no
+
+样例2输出
+
+2
+
+\begin{lstlisting}
+# include <stdio.h>
+#define N 100
+
+// 选择法从大到小排序 
+int sorts(int a[],int n)
+{
+	int i,j,k,tmp;
+	for(i=0;i<n-1;i++)
+	{
+		k=i; // 未排序中较大者 
+		for(j=i+1;j<n;j++)
+		if(a[j]>a[k]) k=j;
+		if(k!=i)
+		{
+			tmp=a[i];
+			a[i]=a[k];
+			a[k]=tmp;
+		} 
+	}
+}
+
+// 排序后的a是否构成等差数列，是返回1，否则返回0
+// 若是等差数列, 指针参数tolerance返回公差的绝对值。 
+int check(int a[],int n, int *tolerance)
+{
+	int i;
+	*tolerance = a[0]-a[1]; // 大-小，不用求绝对值 
+	for(i=1;i<n-1;i++) // 注意检查数组越界问题
+	{
+		if(a[i]-a[i+1] != *tolerance) return 0;
+	} 
+	return 1;
+}
+
+int main()
+{
+	int a[N],n,i,tolerance;
+	scanf("%d",&n);
+	for(i=0;i<n;i++)
+	{
+		scanf("%d",&a[i]);
+	} 
+	// 排序
+	sorts(a,n);
+	// check
+	if(check(a,n, &tolerance)) printf("%d\n",tolerance);
+	else printf("no\n");
+	return 0;
+}
+\end{lstlisting}
+
+\begin{note}[要点]
+	数组越界问题, 排序, 地址传递, 模块化程序设计。
+\end{note}
+
+\section{0-1矩阵}	
+查找一个只包含0和1的矩阵中每行最长的连续1序列。
+
+输入说明
+	
+输入第一行为两个整数m和n (0<=m,n<=100)表示二维数组行数和列数，其后为m行数据，每行n个整数(0或1), 输入数据中不会出现同一行有两个最长1序列的情况。
+
+输出说明
+	
+找出每一行最长的连续1序列，输出其起始位置(从0开始计算)和结束位置(从0开始计算)，如果这一行没有1则输出两个-1,然后换行。
+
+输入样例 
+	
+5 6
+
+1 0 0 1 1 0
+
+0 0 0 0 0 0
+
+1 1 1 1 1 1
+
+1 1 1 0 1 1
+
+0 0 1 1 0 0
+
+输出样例
+	
+3 4
+
+-1 -1
+
+0 5
+
+0 2
+
+2 3
+
+\begin{lstlisting}
+#include <stdio.h>
+#define N 100
+
+int main()
+{
+	// 标志变量start,end, maxLen: 记录本行最长连续1总体情况
+	// 标志变量tmpStart, tmpLen: 标志是否开始连续1及连续长度 
+	int a[N][N],m,n,i,j,start,end,tmpStart,maxLen,tmpLen;
+	scanf("%d%d",&m,&n);
+	for(i=0;i<m;i++)
+		for(j=0;j<n;j++)
+			scanf("%d",&a[i][j]);
+	
+	// 遍历各行		
+	for(i=0;i<m;i++) // 行
+	{
+		start=-1; end=-1; maxLen=0; // 本行连续1总体情况
+		tmpStart=-1; tmpLen=0; // 标志是否开始连续1及连续长度
+		for(j=0;j<n;j++) // 列
+		{
+			if(a[i][j]==1) // 1开始 
+			{
+				if (tmpStart==-1) tmpStart=j; // 开始记录 
+				tmpLen++;
+			}
+			else // 遇0结算 
+			{
+				if(tmpStart!=-1 && tmpLen>maxLen) 
+				{
+					start=tmpStart;
+					end=j-1;
+					maxLen=tmpLen;
+					tmpStart=-1;
+					tmpLen=0;
+				}
+			}
+		}
+		if(tmpStart!=-1 && tmpLen>maxLen) // 末尾是1的情况 
+		{
+			start=tmpStart;
+			end=n-1;
+		}
+		printf("%d %d\n",start,end);
+	}
+	return 0;
+}
+\end{lstlisting}
+
+\begin{note}[要点]
+	合理使用标志变量, 训练自己的逻辑思维能力。
+\end{note}
+
+\section{寻找最长的行}	
+寻找若干行文本中最长的一行
+
+输入说明	
+
+输入为多个字符串(每个字符串长度不超过100个字符)，每个字符串占一行，输入的行为``***end***"时表示输入结束
+
+输出说明
+	
+输出其中最长的一行长度后换行再输出最长行的内容，如果最长行不止一个，则输出其中的第一行。
+
+输入样例
+	
+abce
+
+abdf dlfd
+
+***end***
+
+输出样例
+	
+9
+
+abdf dlfd 
+
+\begin{lstlisting}
+#include <stdio.h>
+#include <string.h> // str前缀的字符串处理函数需要此头文件 
+
+// 估计字符串长度，实际容纳(N-1)个有效字符，预留最后一个字符'\0' 
+#define N 100
+
+int main()
+{
+	char lines[N],maxLine[N];
+	
+	// 在输入的同时，即可处理，不必设置一个一维数组存储这些数。
+	while(1)
+	{
+		gets(lines);  // 不能使用scanf("%s",lines),因其遇空格结束 
+		if(strcmp(lines,"***end***") == 0) break;
+		if(strlen(lines) > strlen(maxLine)) strcpy(maxLine,lines);
+	}
+	
+	printf("%d\n%s\n",strlen(maxLine),maxLine); 
+	
+	return 0;
+} 
+\end{lstlisting}
+
+\begin{note}[要点]
+	简单处理即可, 不必用二维字符数组存储各个字符串，否则会导致超时。
+\end{note}
+
+\section{统计正整数的个数}
+统计n个正整数中每个数出现的次数。
+
+输入说明	
+
+第一行是一个整数n(5<n<30), 表示要待统计整数的个数;
+
+第二行是n个整数，每个整数均小于100000
+
+输出说明
+	
+按照整数从小到大的顺序依次输出不同的整数及其出现次数, 整数和出现次数之间用冒号$(:)$分隔。
+
+输入样例	
+
+12
+ 
+19 223 35 321 2 33 44 223 2 19 2 19
+
+输出样例
+
+2:3
+
+19:3
+
+33:1
+
+35:1
+
+44:1
+
+223:2
+
+321:1
+
+\begin{lstlisting}
+// 思路: 首先排序, 再统计每个数的个数.
+#include <stdio.h>
+int main()
+{
+	int n,num[30],i=0;
+	scanf("%d",&n);
+	while(i < n) 
+	{ 
+		scanf("%d",&num[i]);
+		i++; 
+	} 
+	
+	// 冒泡排序
+	int p,q,t;
+	for(p = 1; p <= n-1; p++)
+	{
+		for(q = 0; q < n-p; q++)
+		{
+			if(num[q] > num[q+1])
+			{
+				t = num[q];
+				num[q] = num[q+1];
+				num[q+1] = t;
+			}
+		}
+	} 
+	
+	// 判断重复数
+	int x,num_i = 0;
+	x = num[0]; 
+	for(i = 0; i < n; i++)
+	{
+		if(num[i] == x) num_i++;
+		else 
+		{
+			printf("%d:%d\n",x,num_i);
+			x = num[i]; // 新数 
+			num_i = 1;  // 至少有一个数  
+		}	
+		
+		if (i == n - 1)  // 最后一个数 
+		printf("%d:%d\n",x,num_i);
+	} 
+	
+	return 0;
+} 
+\end{lstlisting}
+
+\begin{note}[要点]
+	基本思路: 首先排序, 再统计每个数的个数.
 \end{note}
 

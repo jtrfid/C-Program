@@ -9,7 +9,7 @@
 \section{函数的嵌套调用}
 
 \begin{frame}[shrink,fragile]{函数的嵌套调用}
-\vspace{-0.3cm}
+\vspace{-0.5cm}
 \begin{columns}[T]
 \column{0.4\textwidth}
 \begin{lstlisting}
@@ -98,7 +98,7 @@ int f(int n)
 \column{0.4\textwidth}
 \includegraphics[scale=0.35]{recursion}
 \end{columns}
-程序中不应出现无终止的递归调用，而只应出现\textbf{有限次数的，有终止的递归调用}，这可以用if语句来控制，只有在某一条件成立时才继续执行递归调用；否则就不再继续。
+切记不应出现无终止的递归调用。应是\textbf{有限次数的，有终止的递归调用}，这可以用if语句来控制，只有在某一条件成立时才继续执行递归调用；否则就不再继续。
 \end{frame}
 
 \begin{frame}[shrink,fragile]{栈 --- 数据结构, push操作, 压入数据至栈顶}
@@ -638,7 +638,7 @@ int bitsSum(int a)
 \end{frame}
 
 \begin{frame}[shrink,fragile]{例: 数字处理---递归实现}
-\vspace{-0.3cm}
+\vspace{-0.4cm}
 \begin{columns}[T]
 \column{0.4\textwidth}
 \begin{lstlisting}
@@ -678,7 +678,7 @@ int bits1(int n)
 \end{frame}
 
 \begin{frame}[shrink,fragile]{例: 二进制输出(正序)}
-\vspace{-0.4cm}
+\vspace{-0.5cm}
 \begin{columns}[T]
 \column{0.6\textwidth}
 \begin{lstlisting}
@@ -691,7 +691,6 @@ void to_binary(unsigned long n)
 	// pop(后进先出FILO=先进后出FILO) 
 	putchar('0'+r);//11010010
 } 
-
 int main()
 {
   // 无符号长整型, 可赋值10进制数
@@ -744,7 +743,7 @@ pop(后进先出), 栈顶元素先出,栈底元素最后出\\
 \end{frame}
 
 \begin{frame}[shrink,fragile]{例: 二进制输出(倒序)}
-\vspace{-0.4cm}
+\vspace{-0.5cm}
 \begin{columns}[T]
 \column{0.6\textwidth}
 \begin{lstlisting}
@@ -756,7 +755,6 @@ void to_binary(unsigned long n)
 	// push(先计算的二进制位r)
 	if(n>=2) to_binary(n/2); 
 } 
-
 int main() // 与正序一致
 {
   // 无符号长整型

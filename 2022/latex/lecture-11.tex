@@ -27,7 +27,7 @@ int main()
    strcat(s1,s2); 
    
    puts(s1); // abcdef, 最后一个字符是'\0'
-   puts(s2); // cdef, 保持不变, , 最后一个字符是'\0'
+   puts(s2); // cdef, s2保持不变, 最后一个字符是'\0'
    return 0;
 }
 \end{lstlisting}
@@ -43,11 +43,11 @@ int main()
    // 连接两个字符串, 结果被放入s1中, s1数组要足够大，能够容纳两个字符串连接后的长度+1, 多一个字符长度是留给'\0'使用
    strcat(s1,s2); 
    puts(s1); // abcdef, 最后一个字符是'\0'
-   puts(s2); // cdef, 保持不变, , 最后一个字符是'\0'
+   puts(s2); // cdef, s2保持不变, 最后一个字符是'\0'
    // 把s2复制给s1, 因此s1数组也要足够大
    strcpy(s1,s2);  // s1=s2; 是错误的, 因为数组名表示地址常量
    puts(s1); // cdef, 最后一个字符是'\0'
-   puts(s2); // cdef, 保持不变, , 最后一个字符是'\0'
+   puts(s2); // cdef, s2保持不变, 最后一个字符是'\0'
    strncpy(s1,"1234",2); // 复制s2的前n个字符给s1,覆盖s1相应位置的字符, n要小于s1的数组长度
    puts(s1); // 12ef
 \end{lstlisting}
@@ -112,22 +112,44 @@ for(i=0;s2[i]!='\0';i++)
 %\subsection{统计单词数}
 
 \begin{frame}[shrink,fragile]{\small{例6.8 输入一行字符, 统计其中有多少个单词, 单词之间用空格(可能多个)分隔开。}}
-\pause
-\begin{lstlisting}
-// 定义变量
-char string[81]; // 用于存放字符串。
-int i; // 计数器，用于遍历字符串中的每个字符。
-int word=0; // 用于判断是否开始了一个新单词的标志。若word=0表示未出现新单词, 如出现了新单词, 就把word置成1。
-int num=0; //用于统计单词数。
-\end{lstlisting}
-\pause
-\begin{multicols}{3}
-	构思程序流程$\implies$\\
-	\includegraphics<3->[scale=0.45]{ex6-8}
-\end{multicols}
+\vspace{-0.4cm}
+\begin{tikzpicture}
+\node[text width=1.0\textwidth] (t)
+{
+	\begin{lstlisting}
+	// 定义变量
+	char string[81]; // 用于存放字符串。
+	int i; // 计数器，用于遍历字符串中的每个字符。
+	int word=0; // 用于判断是否开始了一个新单词的标志。若word=0表示未出现新单词, 如出现了新单词, 就把word置成1。
+	int num=0; //用于统计单词数。
+	\end{lstlisting}
+};
+
+\node[text width=0.47\textwidth,anchor=north west] (t1) at($(t.south west)+(0.4cm,0.2cm)$) {
+	 \includegraphics[scale=0.45]{ex6-8}
+};
+
+\node[anchor=west,text width=0.37\textwidth,fill=green,rounded corners] at(t1.east)
+{
+	$word=0; num=0; $
+	
+	\medskip
+	
+	$\underset{w=0}{\square}\overset{w=0}{\square}
+	\underset{\underset{\underset{n++}{w=1}}{\downarrow}}{H}ow
+	\overset{w=0}{\square}
+	\underset{\underset{\underset{n++}{w=1}}{\downarrow}}{A}re
+	\overset{w=0}{\square}
+	\underset{\underset{\underset{n++}{w=1}}{\downarrow}}{Y}ou$
+};
+\end{tikzpicture}
 \end{frame}
 
 \begin{frame}[shrink,fragile]{\small{解: 例6.8 输入一行字符, 统计其中有多少个单词, 单词之间用空格(可能多个)分隔开。}}
+\vspace{-0.4cm}
+\begin{tikzpicture}
+\node[text width=1.0\textwidth] (t)
+{
 \begin{lstlisting}
 char string[81];
 int i,num=0,word=0;
@@ -144,6 +166,21 @@ for(i=0;(c=string[i])!='\0';i++) //只要字符不是'\0'就循环,条件表达�
 }
 printf("%d words in this line.\n",num); //输出单词数
 \end{lstlisting}
+};
+\node[anchor=north east,text width=0.37\textwidth,fill=green,rounded corners] at($(t.north east)+(0,-0.3cm)$)
+{
+	$word=0; num=0;$
+	
+	\medskip
+	
+	$\underset{w=0}{\square}\overset{w=0}{\square}
+	\underset{\underset{\underset{n++}{w=1}}{\downarrow}}{H}ow
+	\overset{w=0}{\square}
+	\underset{\underset{\underset{n++}{w=1}}{\downarrow}}{A}re
+	\overset{w=0}{\square}
+	\underset{\underset{\underset{n++}{w=1}}{\downarrow}}{Y}ou$
+};
+\end{tikzpicture}
 \end{frame}
 
 %\subsection{求多个字符串中的较大者}

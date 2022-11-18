@@ -149,6 +149,7 @@ for(i=0;i<M;i++) // 行
 \end{frame}
 
 \begin{frame}[shrink,fragile]{输出每个小分队的平均工资}
+\vspace{-0.2cm}
 \begin{tikzpicture}
 \node[text width=1.0\textwidth] (left) {
 \vspace{-0.3cm}
@@ -186,17 +187,18 @@ for(i=0;i<m;i++) // 行
 %\vspace{0.01cm}
 \end{frame}
 
-\section{二维数组的初始化: int a[2][3]=\{\{1,2,3\},\{4,5,6\},\{7,8,9\} \}}
+\section{二维数组的初始化: int a[3][3]=\{\{1,2,3\},\{4,5,6\},\{7,8,9\} \}}
 
-\begin{frame}[shrink,fragile]{二维数组的初始化: int a[2][3]=\{\{1,2,3\},\{4,5,6\},\{7,8,9\} \}}
+\begin{frame}[shrink,fragile]{二维数组的初始化: int a[3][3]=\{\{1,2,3\},\{4,5,6\},\{7,8,9\} \}}
+\vspace{-0.3cm}
 \begin{lstlisting}
 #define M 3 // 行数
 #define N 3 // 列数
-int a[M][N]={{1,2,3},{4,5,6},{7,8,9}}; // 定义二维数组, 并初始化
-int b[M][N]={{1,2},{4,5},{7,8}}; // 定义二维数组, 并初始化
-int c[M][N]={{1,2},{},{7,8}}; // 定义二维数组, 并初始化
+int a[M][N]={{1,2,3},{4,5,6},{7,8,9}}; // 定义二维数组并初始化
+int b[M][N]={{1,2},{4,5},{7,8}}; // 定义二维数组并初始化, 第N-1列未赋值
+int c[M][N]={{1,2},{},{7,8}}; // 定义二维数组并初始化, 第N-1列以及第1行未赋值
 // 给未初始化的元素赋值
-b[0][N-1]=3;  b[1][N-1]=6; b[2][N-1]=9;
+b[0][N-1]=3; b[1][N-1]=6; b[2][N-1]=9;
 c[0][N-1]=3; 
 c[1][0]=4;  c[1][1]=5; c[1][N-1]=6; 
 c[2][N-1]=9;
@@ -272,7 +274,7 @@ for(i=0;i<N;i++) // 行
 #define M 2 
 #define N 3 
 int a[M][N]={{1,2,3},{4,5,6}},i,j,max,row=0,col=0;
-max=a[0][0]; // //先认为a[0][0]最大
+max=a[0][0]; // 首先认为a[0][0]最大, 这是max最好的初值
 for(i=0;i<M;i++)  // 行
 {
    for(j=0;j<N;j++) // 列
@@ -303,7 +305,7 @@ printf("max=%d,row=%d,col=%d\n",max,row,col);
 (4N-2-2.center) edge[red] node[pos=1,anchor=north east]{右对角线$i=j$} +(-45:3.3cm)
 ;
 
-\node[draw,right,text width=.33\textwidth] (r) at($(4N.east)+(0.2,0)$) {
+\node[right,text width=.33\textwidth] (r) at($(4N.east)+(0.2,0)$) {
 \vspace{-0.3cm}
 \begin{lstlisting}
 #define M 10 
@@ -319,7 +321,7 @@ for(i=0;i<M;i++) // 行
 \end{lstlisting}
 };
 
-\node[draw,anchor=north west,text width=.38\textwidth] at($(r.north east)$) {
+\node[anchor=north west,text width=.38\textwidth] at($(r.north east)$) {
 \vspace{-0.3cm}
 \begin{lstlisting}
 // 输出
@@ -330,10 +332,10 @@ for(i=0;i<M;i++) // 行
    printf("\n"); // 换行
 }
 \end{lstlisting}
-
-\vspace{1.6cm}
-~\\
 };
+
+\draw[dashed,red] (r.north west) -- (r.south west);
+\draw[dashed,red] (r.north east) -- (r.south east);
 \end{tikzpicture}
 \end{frame}
 
@@ -358,7 +360,7 @@ for(i=0;i<M;i++) // 行
 (4N-2-2.center) edge[blue] (4N-5-5.center) 
 ;
 
-\node[draw,right,text width=.6\textwidth] (r) at($(4N.east)+(0.2,0)$) {
+\node[draw,right,text width=.6\textwidth,rounded corners] (r) at($(4N.east)+(0.2,0)$) {
 	\vspace{-0.3cm}
 	\begin{lstlisting}
 	#define M 10 
@@ -423,27 +425,27 @@ for(i=0;i<M;i++) // 行
 ~\\
 两种方式初始化字符数组
 \begin{lstlisting}
-// s[0]='a', s='b', s='c', s[3]='d', s[4]以后的字符未赋值
+// s[0]='a', s[1]='b', s[2]='c', s[3]='d', s[4]以后的字符未赋值
 char s[81]={'a','b','c','d'};  // 4个有效字符
 
 // 以'\0'结尾的字符串是C语言表示字符串的标准形式. 
 // str[0]='a', str[1]='b', str[2]='c', str[3]='d', str[4]='\0'
 // 自动追加'\0', 表示字符串结束. 特别注意, 字符串结尾字符'\0'
-char str[]="abcd"; // 5个有效字符
+char str[]="abcd"; // 4个有效字符, 还有末尾str[4]='\0'
 \end{lstlisting}
 \end{frame}
 
 \begin{frame}[shrink,fragile]{使用printf函数输出字符串}
 \vspace{-0.3cm}
 \begin{lstlisting}
-// s[0]='a', s='b', s='c', s[3]='d', s[4]以后的字符未赋值
+// s[0]='a', s[1]='b', s[2]='c', s[3]='d', s[4]以后的字符未赋值
 char s[81]={'a','b','c','d'}; // 4个有效字符
 for(i=0;i<4;i++)
   printf("%c\t",s[i]); // a b c d
 
 // str[0]='a', str[1]='b', str[2]='c', str[3]='d', str[4]='\0'
 // 自动追加'\0', 表示字符串结束
-char str[]="abcd"; // 5个有效字符
+char str[]="abcd"; // 4个有效字符, 还有末尾str[4]='\0'
 for(i=0;a[i]!='\0';i++)
   printf("%c\t",str[i]); // a b c d
 

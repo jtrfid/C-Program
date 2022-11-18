@@ -61,14 +61,29 @@ no
 \begin{lstlisting}
 #include <stdio.h>
 #include <math.h>  // 数学函数头文件
+
+// 解法一
 int main()
 {
 	int n,m;
 	scanf("%d",&n);
 	m=(int)sqrt((double)n); // Visual Studio要进行显式类型转换
 	// m=sqrt(n); // GNU C/C++ 自动进行了隐式类型转换
-	if(n==m*m) printf("%d\n",m);
+	if(n==m*m) printf("%d\n",m);  // n是完全平方数 
 	else printf("no");
+	return 0;
+} 
+
+// 解法二: 暴力解法 
+int main()
+{
+	int n,i;
+	scanf("%d",&n);
+	for(i=0;i<=n;i++)
+		if(n==i*i) break;  // n是完全平方数 
+	
+	if(i<=n) printf("%d\n",i); // 提前退出循环，n是完全平方数 
+	else printf("no");  // 正常退出循环 
 	return 0;
 } 
 \end{lstlisting}
