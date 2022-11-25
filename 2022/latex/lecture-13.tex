@@ -81,7 +81,9 @@ int max4(int a,int b,int c,int d)
 \section{函数的递归调用}
 
 \begin{frame}[shrink,fragile]{函数的递归调用}
+\vspace{-0.2cm}
 在调用一个函数的过程中又出现直接或间接地调用该函数本身，称为函数的递归调用。
+\vspace{-0.4cm}
 \begin{columns}[T]
 \column{0.4\textwidth}
 \begin{lstlisting}
@@ -96,7 +98,14 @@ int f(int n)
 }
 \end{lstlisting}
 \column{0.4\textwidth}
-\includegraphics[scale=0.35]{recursion}
+\includegraphics[scale=0.3]{recursion}
+\vspace{-0.5cm}
+\begin{align*}
+f(1)&=1\\
+f(2)&=2+f(1)=2+1\\
+f(3)&=3+f(2)=3+2+1\\
+f(n)&=n+f(n-1)=n+\underbrace{n-1+\cdots+2+1}_{f(n-1)}
+\end{align*}
 \end{columns}
 切记不应出现无终止的递归调用。应是\textbf{有限次数的，有终止的递归调用}，这可以用if语句来控制，只有在某一条件成立时才继续执行递归调用；否则就不再继续。
 \end{frame}
@@ -580,7 +589,7 @@ int main()
 }                            
 \end{lstlisting}
 };
-\node[anchor=north east] at($(a.north east)+(-2.5,-2)$) {
+\node[anchor=north east,fill=green,rounded corners] at($(a.north east)+(-1.5,-1)$) {
 $\begin{cases}
 F_n=1 &(n=0,1)\\
 F_n=F_{n-1}+F_{n-2} &(n>1)
@@ -598,7 +607,7 @@ F_n=F_{n-1}+F_{n-2} &(n>1)
 输出结果为6
 \end{frame}
 
-\begin{frame}[shrink,fragile]{例: 数字处理---非递归实现}
+\begin{frame}[shrink,fragile]{例: 数字处理 --- 非递归实现}
 \vspace{-0.3cm}
 \begin{columns}[T]
 \column{0.5\textwidth}
@@ -637,7 +646,7 @@ int bitsSum(int a)
 ~\\
 \end{frame}
 
-\begin{frame}[shrink,fragile]{例: 数字处理---递归实现}
+\begin{frame}[shrink,fragile]{例: 数字处理 --- 递归实现}
 \vspace{-0.4cm}
 \begin{columns}[T]
 \column{0.4\textwidth}
@@ -661,7 +670,7 @@ int bitsSum(int a)
 {
    int sum;
    if(a==0) sum=0;  
-   else sum=bitsSum(a/10)+a%10;
+   else sum=bitsSum(a/10)+a%10; //递归
    return sum;
 }
 // 确保最后是1位数字
@@ -693,21 +702,21 @@ void to_binary(unsigned long n)
 } 
 int main()
 {
-  // 无符号长整型, 可赋值10进制数
-  unsigned long x=0XD2; //11010010
-  scanf("%x",&x); //十六进制输入
-  //等效10进制无符号长整型 
-  //scanf("%uld",&x);  
-  to_binary(x);
-  putchar('\n'); 
-  return 0;
+	// 无符号长整型, 可赋值10进制数
+	unsigned long x=0XD2; //11010010
+	scanf("%x",&x); //十六进制输入
+	//等效10进制无符号长整型 
+	//scanf("%uld",&x);  
+	to_binary(x);
+	putchar('\n'); 
+	return 0;
 }
 \end{lstlisting}
 
-\column{0.6\textwidth}
+\column{0.75\textwidth}
 ~\\
-以\lstinline|x=0XD2|为例，分析递归过程。 \\
-\lstinline|r=n%2;|\\
+以\lstinline|x=0XD2=|$(11010010)_2$为例，分析递归过程。 \\
+(1) \lstinline|r=n%2;|\\
 计算顺序$2^0,2^1,\dots,2^7$\\
 \begin{tabular}{|c|c|c|c||c|c|c|c|}
 	\hline 
@@ -716,8 +725,9 @@ int main()
 	0 & 1 & 0 & 0 & 1 & 0 & 1 & 1 \\ 
 	\hline 
 \end{tabular}
-~\\
-\lstinline|to_binary(n/2);|\\
+
+\vspace{0.5cm}
+(2) \lstinline|to_binary(n/2);|\\
 push(先计算的r),栈顶(top,最左端), 栈底(bottom,最右端)\\ 
 \begin{tabular}{|c|c|c|c||c|c|c|c|}
 	\hline 
@@ -727,8 +737,9 @@ push(先计算的r),栈顶(top,最左端), 栈底(bottom,最右端)\\
 	1 & 1 & 0 & 1 & 0 & 0 & 1 & 0 \\ 
 	\hline 
 \end{tabular}  
-~\\
-\lstinline|putchar('0'+r);|\\
+
+\vspace{0.5cm}
+(3) \lstinline|putchar('0'+r);|\\
 pop(后进先出), 栈顶元素先出,栈底元素最后出\\
 \begin{tabular}{|c|c|c|c||c|c|c|c|}
 	\hline 
@@ -757,21 +768,21 @@ void to_binary(unsigned long n)
 } 
 int main() // 与正序一致
 {
-  // 无符号长整型
-  unsigned long x=0XD2; //11010010
-  scanf("%x",&x); //十六进制输入
-  //等效10进制无符号长整型 
-  //scanf("%uld",&x); 
-  to_binary(x);
-  putchar('\n'); 
-  return 0;
+	// 无符号长整型
+	unsigned long x=0XD2; //11010010
+	scanf("%x",&x); //十六进制输入
+	//等效10进制无符号长整型 
+	//scanf("%uld",&x); 
+	to_binary(x);
+	putchar('\n'); 
+	return 0;
 }
 \end{lstlisting}
-\column{0.6\textwidth}
+\column{0.75\textwidth}
 	~\\
-	以\lstinline|x=XD2|为例，分析递归过程。 \\
-	\lstinline|r=n%2;|\\
-	计算顺序$2^0,2^1,\dots,2^7$\\
+	以\lstinline|x=0XD2=|$(11010010)_2$为例，分析递归过程。 \\
+	(1) \lstinline|r=n%2; putchar('0'+r); |\\
+	计算顺序(同输出顺序)$2^0,2^1,\dots,2^7$\\
 	\begin{tabular}{|c|c|c|c||c|c|c|c|}
 		\hline 
 		$2^0$& $2^1$ & $2^2$ & $2^3$ & $2^4$ & $2^5$ & $2^6$ & $2^7$  \\ 
@@ -779,8 +790,9 @@ int main() // 与正序一致
 		0 & 1 & 0 & 0 & 1 & 0 & 1 & 1 \\ 
 		\hline 
 	\end{tabular}
-	~\\
-	\lstinline|to_binary(n/2);|\\
+	
+	\vspace{0.5cm}
+	(2) \lstinline|to_binary(n/2);|\\
 	push(先计算的r),栈顶(top,最左端), 栈底(bottom,最右端)\\ 
 	\begin{tabular}{|c|c|c|c||c|c|c|c|}
 		\hline 
@@ -790,8 +802,9 @@ int main() // 与正序一致
 		1 & 1 & 0 & 1 & 0 & 0 & 1 & 0 \\ 
 		\hline 
 	\end{tabular}  
-	~\\
-	pop(后进先出), 栈顶元素先出,栈底元素最后出\\
+	
+	\vspace{0.5cm}
+	(3) pop(后进先出), 栈顶元素先出,栈底元素最后出\\
 	\begin{tabular}{|c|c|c|c||c|c|c|c|}
 		\hline 
 		$2^7$& $2^6$ & $2^5$ & $2^4$ & $2^3$ & $2^2$ & $2^1$ & $2^0$
@@ -804,11 +817,179 @@ int main() // 与正序一致
 ~\\
 \end{frame}
 
+\begin{frame}[shrink,fragile]{例: 生成正整数对应的二进制字符串}
+\vspace{-0.1cm}
+\begin{tikzpicture}
+\node[text width=0.75\textwidth,rounded corners,draw] (a) {
+	\vspace{-0.3cm}
+	\begin{lstlisting}
+		void to_binary(int n)
+		{
+			int r;
+			r=n%2; 
+			// push(先计算的二进制位r)
+			if(n>=2) to_binary(n/2); 
+			// pop(后进先出FILO=先进后出FILO) 
+			putchar('0'+r);//每次pop输出一位字符: 1111011
+		} 
+	    int main()
+	    {
+	    	to_binary(123);
+	    	// 测试
+	    	printf("%X\n",123) // 7B ==> $(\underbrace{111}_7\underbrace{1011}_B)_2$ 
+	    }
+	\end{lstlisting}
+};
+\node[anchor=west,text width=0.35\textwidth,rounded corners,fill=green] (b) at($(a.east)+(0.2cm,0)$) {
+	分析上例的核心代码, 由此得到设计思路:
+	
+	替换函数to\_binary的最后一条输出语句，设计函数catC(char s[], char c), 连接字符c至字符串s, 即是所求的二进制字符串。
+};
+\end{tikzpicture}
+\end{frame}
+
+\begin{frame}[shrink,fragile]{例: 生成正整数对应的二进制字符串, 设计函数catC}
+\vspace{-0.1cm}
+\begin{tikzpicture}
+%% 左上
+\node[text width=0.5\textwidth,rounded corners,draw] (a) {
+	\vspace{-0.3cm}
+	\begin{lstlisting}
+	void catC(char s[], char c)
+	{
+		int len=0;
+		for(; s[len]!='\0';len++) ;
+		s[len]=c; s[len+1]='\0';
+	}
+	\end{lstlisting}
+};
+%% 右上
+\node[anchor=north west,text width=0.5\textwidth,rounded corners,draw] (b) at(a.north east){
+	\vspace{-0.3cm}
+	\begin{lstlisting}
+	void catC(char s[], char c)
+	{
+		int i,len=0;
+		for(i=0; s[i]!='\0';i++)len++;
+		s[len]=c; s[len+1]='\0';
+	}
+	\end{lstlisting}	
+};
+%% 左下
+\node[anchor=north west,text width=0.5\textwidth,rounded corners,draw] (c) at(a.south west){
+	\vspace{-0.3cm}
+	\begin{lstlisting}
+	void catC(char s[], char c)
+	{
+		int len;
+		len=strlen(s);
+		s[len]=c; s[len+1]='\0';
+    } 
+	\end{lstlisting}	
+};
+%% 左下下
+\node[anchor=north west,text width=0.5\textwidth,rounded corners,fill=green,font=\small] at(c.south west){
+	等效的四种编码方式, 要求s以\lstinline|'\0'|结尾。
+};
+
+%% 右下
+\node[anchor=north west,text width=0.5\textwidth,rounded corners,draw] (d) at(b.south west){
+	\vspace{-0.3cm}
+	\begin{lstlisting}
+	void catC(char s[], char c)
+	{
+		char str[2];
+		// 构造以'\0'结尾的str字符串 
+		str[0]=c; str[1]='\0';
+		strcat(s,str); // 连接s,str 
+	}
+	\end{lstlisting}	
+};
+\end{tikzpicture}
+\end{frame}
+
+\begin{frame}[shrink,fragile]{例: 生成正整数对应的二进制字符串, 测试函数catC}
+\vspace{-0.1cm}
+\begin{center}
+\begin{tikzpicture}
+\node[text width=0.65\textwidth,rounded corners,draw] (a) {
+	\vspace{-0.3cm}
+	\begin{lstlisting}
+	void catC(char s[], char c)
+	{
+		int len=0;
+		for(; s[len]!='\0';len++) ;
+		s[len]=c; s[len+1]='\0';
+	}
+	int main() // 测试任意一种定义方式
+	{
+		char s[81]="";//初始化为以'\0'结尾的空字符串
+		// char s[81]={'\0'}; // 等效
+		catC(s,'1');  // 连接, s[1]='\0' 
+		puts(s); // 1
+		catC(s,'2');  // 连接, s[2]='\0'
+		puts(s); // 12 
+	} 
+	\end{lstlisting}
+};
+
+\end{tikzpicture}
+\end{center}
+\end{frame}
+
+\begin{frame}[shrink,fragile]{例: 生成正整数对应的二进制字符串, 完整代码}
+\vspace{-0.1cm}
+\begin{tikzpicture}
+\node[text width=0.55\textwidth,rounded corners] (a) {
+\vspace{-0.3cm}
+\begin{lstlisting}
+// 把字符c连接至字符串s, 要求s以'\0'结尾. 
+void catC(char s[], char c)
+{	int len=0;
+	for(; s[len]!='\0';len++) ;
+	s[len]=c; s[len+1]='\0';
+}
+// s存放n对应的二进制字符串，以'\0'结尾. 
+// 返回字符串s的长度.
+int to_binary(int n, char s[])
+{	int r;
+	r=n%2; 
+	// push(先计算的二进制位r)
+	if(n>=2) to_binary(n/2, s); 
+	// pop(后进先出FILO=先进后出FILO) 
+	catC(s,'0'+r);  // 连接
+	return strlen(s);
+} 	
+\end{lstlisting}
+};
+
+\node[anchor=north west,text width=0.65\textwidth,rounded corners] (b) at(a.north east){
+\vspace{-0.3cm}
+\begin{lstlisting}
+int main() // 测试
+{
+	char s[81]="";//初始化为以'\0'结尾的空字符串
+	// char s[81]={'\0'}; // 等效
+	int n=123;
+	//scanf("%d",&n); // 输入一个正整数
+	// 调用测试
+	printf("%d\n",to_binary(n,s)); // 7
+	puts(s); // 1111011
+	// 验证
+	printf("%X\n",123) // 7B ==> $(\underbrace{111}_7\underbrace{1011}_B)_2$ 
+} 
+\end{lstlisting}
+};
+
+\draw[dashed,red] (a.north east) -- (a.south east);
+\end{tikzpicture}
+\end{frame}
+
 \begin{frame}{例: Hanoi(汉诺)塔问题}
 \vspace{-0.4cm}
-古代有一个梵塔，塔内有3个座A,B,C。开始时A座上有64个盘子，盘子大小不等，大的在下，小的在上。有一个老和尚想把这64个盘子从A座移到C座，但规定每次只允许移动一个盘，且在移动过程中在3个座上都始终保持大盘在下，小盘在上。在移动过程中可以利用B座。\\
-要求编程序输出移动盘子的步骤。\\
+古代有一个梵塔，塔内有3个座A,B,C。开始时A座上有64个盘子，盘子大小不等，大的在下，小的在上。有一个老和尚想把这64个盘子从A座移到C座，但规定每次只允许移动一个盘，且在移动过程中在3个座上都始终保持大盘在下，小盘在上。在移动过程中可以利用B座。要求编程序输出移动盘子的步骤。\\
 ~\\
+\centering
 \includegraphics[scale=0.4]{Hanoi}
 \end{frame}
 

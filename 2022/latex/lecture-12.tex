@@ -296,13 +296,14 @@ int max(int x,int y) // 形式参数
 		int z; 
 		//*间接访问运算符,获取存储单元内容
 		z = *x > *y ? *x : *y;
+		//或按数组访问: z= x[0] > y[0] ? x[0] : y[0];
 		printf("%X,%X\n",x,y); // 63FE14,63FE18
 		return z; 
 	}
 	\end{lstlisting}
 };
 
-\node[anchor=north,text width=0.4\textwidth,rounded corners,fill=green,align=center] (c) at(b.south) {
+\node[anchor=north,text width=0.4\textwidth,rounded corners,fill=green,align=center] (c) at($(b.south)+(0.5,0.7cm)$) {
 	main函数: c=max(\&a,\&b);
 };
 
@@ -398,7 +399,7 @@ void inv(int x[],int n)
 	{
 		// 改变地址a指向的内容，就是改变实参数组的元素值
 		a[1]=20.5; 
-		*b=20; // 将会改变实参的值
+		*b=20; // 等效b[0]=20, 将会改变实参的值
 		// n的改变不会影响实参的值
 		n=30; 
 	}
@@ -432,7 +433,7 @@ void inv(int x[],int n)
 \begin{lstlisting}
 #define M 100 // 估计的数组的第一维长度
 #define N 100 // 估计的数组的第二维长度
-// 函数定义时省略第一维大小
+// 函数定义时不写第一维大小
 // a[]表示a接受地址传递，以区别于值传递
 void fun(int a[],int n)
 {
@@ -515,12 +516,12 @@ int main()
 int intpow(int x, int y)
 {
 	int i,p=1;
-	// 实现$0^y=0$
-	if (x==0) return 0;
-	
+	// 实现$0^y=0, y\ne 0$
+	if (x==0 && y!=0) 
+		return 0;
+		 
 	for(i=0;i<y;i++) 
 		p=p*x;
-	
 	return p;//包含了$0^0=1$
 } 
 \end{lstlisting}
@@ -626,11 +627,12 @@ int main()
 \vspace{-0.3cm}
 \begin{lstlisting}
 #include <stdio.h>
-// 函数声明
+// 依据分级标准计算平均值及各级天数
 float haze(int pm25[], int day[], int n, int m);
 #define N 1000 // 估计的最大值
 int main()
 {
+   // 数据录入, 完成业务逻辑。
    int i =0,n,pm25[N],day[6];
    scanf("%d",&n);
    while(i < n) 
@@ -644,9 +646,9 @@ int main()
 \node[anchor=north west,text width=0.55\textwidth,rounded corners,draw=none] at(a.north east) {
 \vspace{-0.3cm}
 \begin{lstlisting}
-	 // 函数调用,并输出函数中计算的平均值
+	// 函数调用, 计算平均值及各级天数
 	printf("%.2f\n",haze(pm25,day,n,6));
-	// 输出函数中计算的数组元素值
+	// 输出各级天数
 	for(i = 0; i < 6; i++)
 		if(i == 5) printf("%d\n",day[i]);
 		else  printf("%d ",day[i]);
@@ -664,7 +666,7 @@ int main()
 \begin{tikzpicture}
 \node[text width=.8\textwidth] (a) {
 \begin{lstlisting}
-float haze(int pm25[], int day[], int n, int m)
+float haze(int pm25[], int day[], int n, int m) 
 {
   int i=0, sum=0;
   // 初始化day数组
@@ -686,7 +688,9 @@ float haze(int pm25[], int day[], int n, int m)
 };
 
 \node[anchor=north west,text width=.5\textwidth] (b) at($(a.north east)+(-0.5,-1)$) {
-	函数参数说明: pm25[]: PM2.5值, day[]: 不同标准对应的统计天数; n是pm25数组的长度, m是数组day的长度, 返回PM2.5平均值.
+	函数功能: 依据分级标准计算平均值及各级天数。
+	
+	函数参数说明: pm25[]: 输入PM2.5值, day[]: 输出各级对应的统计天数; n是pm25数组的长度, m是数组day的长度, 返回PM2.5平均值.
 };
 
 \node[anchor=north,text width=.5\textwidth,fill=green,rounded corners] at(b.south) {
@@ -712,7 +716,8 @@ int main()
    int i,n; // n是实际数组长度 
    int num[N],sum[N]; // num表示N个整数, sum存放对应整数的各位数字的和  
    scanf("%d",&n);
-   for(i=0;i<n;i++) { scanf("%d",&num[i]);  sum[i]=bitsSum(num[i]); }
+   // 输入每个整数, 调用函数bitsSum计算其各位数字之和
+   for(i=0;i<n;i++) { scanf("%d",&num[i]);  sum[i]=bitsSum(num[i]); } 
    sort(sum,n);  // 从大到小排序
    output(sum,n); // 输出
    return 0;
@@ -891,10 +896,12 @@ void sort(int a[], int n) // 从大到小排序, 选择
 \end{lstlisting}
 \end{frame}
 
-\begin{frame}[shrink,fragile]{例: 数字排序(联动输出: 修改主程序)}
+\begin{frame}[shrink,fragile]{例: 数字排序(联动输出解法一: 修改主程序)}
+\vspace{-0.2cm}
 给定n个整数，请计算每个整数各位数字和，按各位数字和从大到小的顺序输出。
 
 \textcolor{blue}{要求联动输出(整数跟随其数字和的排序次序输出): 整数\quad 该整数的各位之和}
+\vspace{-0.2cm}
 \begin{lstlisting}
 #include <stdio.h>
 #define N 1000 // 估计的数组大小
@@ -914,7 +921,7 @@ int main()
 \end{lstlisting}
 \end{frame}
 
-\begin{frame}[shrink,fragile]{例: 数字排序(联动输出: 修改排序子函数)}
+\begin{frame}[shrink,fragile]{例: 数字排序(联动输出解法一: 修改排序子函数)}
 \vspace{-0.3cm}
 \begin{lstlisting}
 void sort(int a[], int b[],int n) // a从大到小排序, b联动改变
@@ -938,7 +945,7 @@ void sort(int a[], int b[],int n) // a从大到小排序, b联动改变
 \end{lstlisting}
 \end{frame}
 
-\begin{frame}[shrink,fragile]{例: 数字排序(联动输出: 修改输出子函数)}
+\begin{frame}[shrink,fragile]{例: 数字排序(联动输出解法一: 修改输出子函数)}
 \begin{lstlisting}
 // 输出a,b
 void output(int a[], int b[], int n)
@@ -950,11 +957,12 @@ void output(int a[], int b[], int n)
 \end{lstlisting}
 \end{frame}
 
-\begin{frame}[shrink,fragile]{例: 数字排序(联动输出: 修改主程序,二维数组)}
+\begin{frame}[shrink,fragile]{例: 数字排序(联动输出解法二: 修改主程序)}
 \vspace{-0.2cm}
 给定n个整数，请计算每个整数各位数字和，按各位数字和从大到小的顺序输出。
 
 \textcolor{blue}{要求联动输出(整数跟随其数字和的排序次序输出): 整数\quad 该整数的各位之和}
+\vspace{-0.2cm}
 \begin{lstlisting}
 #include <stdio.h>
 #define N 1000 // 估计的数组大小
@@ -975,7 +983,7 @@ int main()
 \end{lstlisting}
 \end{frame}
 
-\begin{frame}[shrink,fragile]{例: 数字排序(联动输出: 修改排序子函数,二维数组)}
+\begin{frame}[shrink,fragile]{例: 数字排序(联动输出解法二: 修改排序子函数)}
 \vspace{-0.3cm}
 \begin{lstlisting}
 void sort(int a[][2],int n) // a的第0列是整数, 第1列是其各位数字之和(排序列)
@@ -999,7 +1007,7 @@ void sort(int a[][2],int n) // a的第0列是整数, 第1列是其各位数字�
 \end{lstlisting}
 \end{frame}
 
-\begin{frame}[shrink,fragile]{例: 数字排序(联动输出: 修改输出子函数, 二维数组)}
+\begin{frame}[shrink,fragile]{例: 数字排序(联动输出解法二: 修改输出子函数)}
 \begin{lstlisting}
 // 输出, a的第0列是整数, 第1列是其各位数字之和(排序列)
 void output(int a[][2], int n)
@@ -1012,6 +1020,7 @@ void output(int a[][2], int n)
 
 \begin{block}{模块化程序设计的优点}
 	综上，程序功能的变化，仅修改相应子函数即可, 逻辑清晰。\\
+	另外, 分函数调试程序，便于定位错误。\\
 	因此，利用函数进行功能分解是进行复杂程序设计的有效手段。
 \end{block}
 \end{frame}
