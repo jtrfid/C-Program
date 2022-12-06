@@ -15,12 +15,12 @@
 %\end{frame}
 
 \begin{frame}{进一步训练程序设计逻辑思维能力}
-\begin{itemize}
-	\setlength{\itemsep}{.5cm}
+\begin{itemize}\itemsep=.5cm
+	%\setlength{\itemsep}{.5cm} % 同上
 	\item 结构体是一种``高内聚, 低耦合''的数据结构。 
-	\item 用结构体管理相互关联的数据, 使其成为结构化的整体数据, 便于统一处理。 
+	\item 用结构体管理\textcolor{red}{相互关联的数据}, 使其成为结构化的整体数据, 便于统一处理。 
 	\item 领会结构化(模块化)编程思想。
-	\item 大问题分解为小问题, 相互关联的数据组织在一起，设计函数解决小问题, 各个子函数彼此之间相互独立(便于调试, 不易出错)，又可通过参数和返回值传递数据。
+	\item 大问题分解为小问题, 相互关联的数据组织在一起，设计函数解决小问题, 各个子函数彼此之间相互独立(便于调试, 不易出错)，又可通过参数和return传递数据。
 	\item 主程序调用各个子函数, 解决``大"问题。
 \end{itemize}
 \end{frame}
@@ -42,6 +42,10 @@ struct 结构体类型名
    ... // 定义其它成员
 };
 \end{lstlisting}
+
+\textcolor{red}{Recall:}
+ 
+\textcolor{red}{int 是一种数据类型}
 \column{0.7\textwidth}<2->
 例: 定义结构体数据类型, 描述如下信息
 \begin{tabular}{|c|c|c|c|c|c|}
@@ -65,22 +69,26 @@ struct Student // 定义结构体数据类型struct Student
 \end{columns}
 \end{frame}
 
-\begin{frame}[shrink,fragile]{\small 嵌套定义结构体: 结构体的成员, 也可以是另外一个结构体变量。}
+\begin{frame}[fragile]{\small 嵌套定义结构体: 结构体的成员, 也可以是另外一个结构体变量。}
+\begin{tikzpicture}
+\node[text width=1\textwidth] (a) {
 \vspace{-0.4cm}
 \begin{lstlisting}
 struct Date // 定义结构体类型 struct Date 
 {
-   int month; // 月
-   int day;   // 日
-   int year;  // 年
+	int month; // 月
+	int day;   // 日
+	int year;  // 年
 }; 
 struct Student // 定义结构体类型 struct Student
 { 
-   int num;  char name[20];  char sex;  int age;
-   struct Date birthday; //成员birthday是struct Date类型变量
-   char addr[30]; 
+	int num;  char name[20];  char sex;  int age;
+	struct Date birthday; //成员birthday是struct Date类型变量
+	char addr[30]; 
 };
 \end{lstlisting}
+};
+\node[anchor=north west,text width=.8\textwidth] at($(a.south west)+(8mm,8mm)$) {
 \begin{tabular}{|c|c|c|c|c|c|c|c|}
 	\hline 
 	num & name & sex & age & \multicolumn{3}{c|}{birthday} & addr \\ 
@@ -88,7 +96,8 @@ struct Student // 定义结构体类型 struct Student
 	10010 & Li Fang & M & 18 & month & day & year & Xian \\ 
 	\hline 
 \end{tabular} 
-\medskip
+};
+\end{tikzpicture}
 \end{frame}
 
 \section{定义结构体类型变量: struct\, 结构体类型名\, 变量名;}
@@ -196,9 +205,9 @@ void fun()
 \end{frame}
 
 \begin{frame}[shrink,fragile]{\small 对结构体变量的成员可以像普通变量一样进行各种运算}
+\begin{tikzpicture}
+\node[text width=0.4\textwidth] (a) {
 \vspace{-0.5cm}
-\begin{columns}[T]
-\column{0.4\textwidth}
 \begin{lstlisting}
 struct Date  
 {
@@ -216,8 +225,11 @@ struct Student
   char addr[30]; 
 };
 \end{lstlisting}
-\column{0.6\textwidth}
-\begin{lstlisting}[frame=leftline]
+};
+
+\node[text width=0.6\textwidth,anchor=north west] (b) at(a.north east) {
+\vspace{-0.5cm}
+\begin{lstlisting}
 struct Student stu1,stu2;
 stu1.num=10010;
 stu1.sex='F';
@@ -230,9 +242,16 @@ scanf("%d",&stu2.num);
 gets(stu2.name); // 接受键盘输入的字符串
 stu2.sex=stu1.sex; // 同性别
 \end{lstlisting}
-\textbf{\textcolor{blue}{``."成员运算符在所有运算符中优先级最高}}, stu2.num可以当作一个整体看待。
-\end{columns}
-\medskip
+};
+
+\node[text width=0.6\textwidth,anchor=north,rounded corners,fill=green] at(b.south) {
+``."成员运算符在所有运算符中优先级最高, 
+
+\lstinline|stu2.num|可以当作一个整体看待。
+};
+
+\draw[dashed,red] (a.north east) -- (a.south east);
+\end{tikzpicture}
 \end{frame}
 
 \section{结构体指针变量和结构体数组}
@@ -313,10 +332,10 @@ strcpy(stu[0].addr,"Xian");
 
 \section{结构体编程举例}
 
-\begin{frame}[shrink,fragile]{例1: 输入学生信息并输出统计数据}
+\begin{frame}[shrink,fragile]{例1: 输入1个学生信息并输出统计数据}
 \vspace{-0.5cm}
 \begin{columns}[T]
-\column{0.4\textwidth}
+\column{0.5\textwidth}
 \begin{lstlisting}
 struct Student 
 { 
@@ -331,15 +350,14 @@ struct Student
 	
 	\lstinline|char *name;| 
 \end{block}
-\column{0.5\textwidth}
+\column{0.65\textwidth}
 \begin{lstlisting}[frame=leftline]
 int main()
 { 
   struct Student stu;
   int i; float sum=0;
   scanf("%d%s",&stu.num,stu.name);
-  for(i=0;i<5;i++) 
-     scanf("%f",&stu.score[i]); 
+  for(i=0;i<5;i++) scanf("%f",&stu.score[i]); 
   // 计算与输出
   printf("%d %s",stu.num,stu.name);
   for(i=0;i<5;i++)
@@ -358,7 +376,7 @@ int main()
 %%%%%%%%%%% \note{lstinline中\%}
 \note{指针变量name, 无法通过\lstinline|scanf("\%s",stu.name), gets(stu.name)|读入变量的值, 因为name无指向. 仅能name="Li"; 字符串常量给其赋值。}
 
-\begin{frame}[shrink,fragile]{例2: 输入学生信息并输出统计数据(函数实现)}
+\begin{frame}[shrink,fragile]{例2: 输入1个学生信息并输出统计数据(函数实现)}
 \vspace{-0.5cm}
 \begin{columns}[T]
 \column{0.54\textwidth}
@@ -573,7 +591,7 @@ void swap(struct Student *stu1, struct Student *stu2)
 \begin{frame}[shrink,fragile]{例5: 输入学生信息并输出统计数据(结构体数组), 排序}
 \vspace{-0.5cm}
 \begin{tikzpicture}
-\node[text width=0.7\textwidth] (t) {
+\node[text width=1.2\textwidth] (t) {
 \begin{lstlisting}
 void sort(struct Student stu[],int n)            
 {
@@ -586,8 +604,7 @@ void sort(struct Student stu[],int n)
        if(stu[j].aver > stu[k].aver) k=j;
        else if(stu[j].aver == stu[k].aver)
        { 
-         if(stu[j].score[0] > stu[k].score[0] || 
-            stu[j].score[1] > stu[k].score[1])
+         if(stu[j].score[0] > stu[k].score[0] || stu[j].score[1] > stu[k].score[1])
             k = j; 
        } 
     }
@@ -596,8 +613,10 @@ void sort(struct Student stu[],int n)
 }
 \end{lstlisting}
 };
-\node[anchor=west,text width=0.5\textwidth,draw] at(t.east) {
-	定义排序函数(选择法，降序): 按平均值排序，如果平均值相同，按照前2门课比较单科成绩. 
+\node[anchor=north east,text width=0.5\textwidth,rounded corners,draw] at($(t.north east)+(-1cm,-0.5cm)$) {
+	定义排序函数(选择法，降序): 
+	
+	按平均值排序，如果平均值相同，按照前2门课比较单科成绩. 
 };
 \end{tikzpicture}
 \end{frame}

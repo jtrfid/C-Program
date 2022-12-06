@@ -856,7 +856,7 @@ int main() // 与正序一致
 	\vspace{-0.3cm}
 	\begin{lstlisting}
 	void catC(char s[], char c)
-	{
+	{   // 数组操作: 访问数组元素, 下标移动
 		int len=0;
 		for(; s[len]!='\0';len++) ;
 		s[len]=c; s[len+1]='\0';
@@ -868,10 +868,10 @@ int main() // 与正序一致
 	\vspace{-0.3cm}
 	\begin{lstlisting}
 	void catC(char s[], char c)
-	{
-		int i,len=0;
-		for(i=0; s[i]!='\0';i++)len++;
-		s[len]=c; s[len+1]='\0';
+	{   // 指针操作: 间接访问, 指针移动
+		for(; *s!='\0';s++) ;
+		*s++=c; // 等效: *s=c; s++;  
+		*s='\0'; // 以'\0'结尾
 	}
 	\end{lstlisting}	
 };
@@ -880,7 +880,7 @@ int main() // 与正序一致
 	\vspace{-0.3cm}
 	\begin{lstlisting}
 	void catC(char s[], char c)
-	{
+	{// 字符串库函数 #include<string.h>
 		int len;
 		len=strlen(s);
 		s[len]=c; s[len+1]='\0';
@@ -897,7 +897,7 @@ int main() // 与正序一致
 	\vspace{-0.3cm}
 	\begin{lstlisting}
 	void catC(char s[], char c)
-	{
+	{// 字符串库函数 #include<string.h>
 		char str[2];
 		// 构造以'\0'结尾的str字符串 
 		str[0]=c; str[1]='\0';
@@ -986,41 +986,190 @@ int main() // 测试
 \end{frame}
 
 \begin{frame}{例: Hanoi(汉诺)塔问题}
-\vspace{-0.4cm}
-古代有一个梵塔，塔内有3个座A,B,C。开始时A座上有64个盘子，盘子大小不等，大的在下，小的在上。有一个老和尚想把这64个盘子从A座移到C座，但规定每次只允许移动一个盘，且在移动过程中在3个座上都始终保持大盘在下，小盘在上。在移动过程中可以利用B座。要求编程序输出移动盘子的步骤。\\
-~\\
-\centering
-\includegraphics[scale=0.4]{Hanoi}
+\begin{center}
+\begin{tikzpicture}[every node/.style={minimum height=0.8em,fill=green,inner sep=0,outer sep=0,draw},every label/.style={blue,fill=none,draw=none,font=\small}]
+%%%% 左
+%% A
+\node[minimum width=4em,fill=none] (a) { };
+\node[anchor=south,minimum width=3em,fill=none] (b) at(a.north) { };
+\node[anchor=south,minimum width=2em,fill=none] (c) at(b.north) { };
+\node[anchor=south,minimum width=1em,fill=none,label={left:$n$}] (d) at(c.north) { };
+\draw[] (a.south) -- +(0,3.5em);
+\node[fill=none,draw=none] (aa) at($(a.south)+(0,-0.3cm)$) {A};
+
+\begin{scope}[xshift=2cm]
+%% B
+\node[minimum width=4em,fill=none,draw=none] (a) { };
+\draw[] (a.south) -- +(0,3.5em);
+\draw[] (a.south west) -- (a.south east);
+\node[fill=none,draw=none] (bb) at($(a.south)+(0,-0.3cm)$) {B};
+
+%% C 
+\begin{scope}[xshift=2cm]
+\node[minimum width=4em] (a) { };
+\node[anchor=south,minimum width=3em] (b) at(a.north) { };
+\node[anchor=south,minimum width=2em] (c) at(b.north) { };
+\node[anchor=south,minimum width=1em,label={right:$n$}] (d) at(c.north) { };
+\draw[] (a.south) -- +(0,3.5em);
+\node[fill=none,draw=none] (cc) at($(a.south)+(0,-0.3cm)$) {C};
+\end{scope}
+\end{scope}
+
+\path[->,dashed]
+($(aa)+(0,1cm)$) edge[bend left] node[fill=none,draw=none,anchor=south,pos=0.7]{$n$} ($(cc)+(0,1cm)$);
+
+\node[text width=.9\textwidth,anchor=north,rounded corners,fill=none,inner sep=5pt] at($(bb)+(0,-0.7cm)$) {
+	古代有一个梵塔，塔内有3个座A,B,C。开始时A座上有64个盘子，盘子大小不等，大的在下，小的在上。有一个老和尚想把这64个盘子从A座移到C座，但规定每次只允许移动一个盘，且在移动过程中在3个座上都始终保持大盘在下，小盘在上。在移动过程中可以利用B座。要求编程序输出移动盘子的步骤。
+};
+\end{tikzpicture}
+\end{center}
 \end{frame}
 
-\begin{frame}[shrink]{例: Hanoi(汉诺)塔问题---解题思路}
-\vspace{-0.4cm}
-\begin{tikzpicture}
-\node[text width=\textwidth] (a) {
-	\begin{itemize}
-		\item 老和尚想: 假如有第2个和尚将上面63个盘子从A座移到B座。我就能将64个盘子从A座移到C座。
-			\begin{enumerate}
-			\item 命令第2个和尚将63个盘子从A座移到B座;
-			\item 自己将1个盘子(最底下的、最大的盘子)从A座移到C座;
-			\item 再命令第2个和尚将63个盘子从B座移到C座。
-			\end{enumerate}
-		\item 第2个和尚想: 假如有第3个和尚能将上面62个盘子从A座移到C座，我就能将63个盘子从A座移到B座。
-			\begin{enumerate}
-			\item 命令第3个和尚将62个盘子从A座移到C座;
-			\item 自己将1个盘子从A座移到B座;
-			\item 再命令第3个和尚将62个盘子从C座移到B座。
-			\end{enumerate}
-		\item $\cdots$
-	\end{itemize}
+\begin{frame}[shrink]{例: Hanoi(汉诺)塔问题 --- 解题思路}
+\begin{tikzpicture}[every node/.style={minimum height=0.8em,fill=green,inner sep=0,outer sep=0,draw},every label/.style={blue,fill=none,draw=none,font=\small}]
+%%%% 左
+%% A
+\node[minimum width=4em,fill=none] (a) { };
+\node[anchor=south,minimum width=3em,fill=none] (b) at(a.north) { };
+\node[anchor=south,minimum width=2em,fill=none] (c) at(b.north) { };
+\node[anchor=south,minimum width=1em,fill=none,label={left:$n$}] (d) at(c.north) { };
+\draw[] (a.south) -- +(0,3.5em);
+\node[fill=none,draw=none] (aa) at($(a.south)+(0,-0.3cm)$) {A};
+
+\begin{scope}[xshift=2cm]
+%% B
+\node[minimum width=4em,fill=none,draw=none] (a) { };
+\draw[] (a.south) -- +(0,3.5em);
+\draw[] (a.south west) -- (a.south east);
+\node[fill=none,draw=none] (bb) at($(a.south)+(0,-0.3cm)$) {B};
+
+%% C 
+\begin{scope}[xshift=2cm]
+\node[minimum width=4em] (a) { };
+\node[anchor=south,minimum width=3em] (b) at(a.north) { };
+\node[anchor=south,minimum width=2em] (c) at(b.north) { };
+\node[anchor=south,minimum width=1em,label={right:$n$}] (d) at(c.north) { };
+\draw[] (a.south) -- +(0,3.5em);
+\node[fill=none,draw=none] (cc) at($(a.south)+(0,-0.3cm)$) {C};
+\end{scope}
+\end{scope}
+
+\path[->,dashed]
+($(aa)+(0,1cm)$) edge[bend left] node[fill=none,draw=none,anchor=south,pos=0.7]{$n$} ($(cc)+(0,1cm)$);
+
+\node[text width=.45\textwidth,anchor=north,rounded corners,fill=none,inner sep=5pt] (t) at($(bb)+(0,-0.5cm)$) {
+由A至C, 移动$n$个盘子, 借助$B$. 递归实现如下:
+\vspace*{-0.2cm}
+\begin{enumerate}[1]
+\item 由A至B, 移动(n-1)个盘子, 借助C; 
+
+\item 由A至C, 移动1个盘子; 
+
+\item 由B至C, 移动(n-1)个盘子, 借助A.
+\end{enumerate}
 };
-\node[anchor=south east,text width=.25\textwidth] at(a.south east) {
-	\includegraphics[scale=0.25]{Hanoi}\\
-	\includegraphics[scale=0.3]{Hanoi-1}
+
+\node[anchor=north,fill=green,rounded corners, outer sep=5pt,inner sep=5pt,draw=none] at(t.south){
+	借助空塔, 实现另外两塔间的盘子移动。
 };
+
+%%%%%%%%%% 右
+\begin{scope}[xshift=6.5cm]
+%%% 右上
+\node[minimum width=4em,fill=none] (a) { };
+\node[anchor=south,minimum width=3em] (b) at(a.north) { };
+\node[anchor=south,minimum width=2em] (c) at(b.north) { };
+\node[anchor=south,minimum width=1em] (d) at(c.north) { };
+\draw[] (a.south) -- +(0,3.5em);
+\node[fill=none,draw=none] (aa) at($(a.south)+(0,-0.3cm)$) {A};
+
+%% 中间线
+\draw[dashed,red] ($(a.south west)+(-1.5em,3.5em)$) -- +(0,-20em);
+
+\begin{scope}[xshift=2cm]
+%% B
+\node[minimum width=3em] (a) { };
+\node[anchor=south,minimum width=2em] (b) at(a.north) { };
+\node[anchor=south,minimum width=1em,label={right:$n-1$}] (c) at(b.north) { };
+\draw[] (a.south) -- +(0,3.5em);
+\node[fill=none,draw=none] (bb) at($(a.south)+(0,-0.3cm)$) {B};
+
+%% C
+\begin{scope}[xshift=2cm]
+\node[minimum width=4em,fill=none,draw=none] (a) { };
+\draw[] (a.south) -- +(0,3.5em);
+\draw[] (a.south west) -- (a.south east);
+\node[fill=none,draw=none] (cc) at($(a.south)+(0,-0.3cm)$) {C};
+\end{scope}
+\end{scope}
+
+\path[->,dashed]
+($(aa)+(0,1cm)$) edge[bend left] node[fill=none,draw=none,anchor=south]{(1) $n-1$} ($(bb)+(0,1cm)$);
+
+%%%% 右中
+\begin{scope}[yshift=-7em]
+%% A
+\node[minimum width=4em,fill=none] (a) { };
+\draw[] (a.south) -- +(0,3.5em);
+\draw[] ($(a.south)-(2em,0)$) -- +(4em,0);
+\node[fill=none,draw=none] (aa) at($(a.south)+(0,-0.3cm)$) {A};
+
+\begin{scope}[xshift=2cm]
+%% B
+\node[minimum width=3em] (a) { };
+\node[anchor=south,minimum width=2em] (b) at(a.north) { };
+\node[anchor=south,minimum width=1em,label={right:$n-1$}] (c) at(b.north) { };
+\draw[] (a.south) -- +(0,3.5em);
+\node[fill=none,draw=none] (bb) at($(a.south)+(0,-0.3cm)$) {B};
+
+%% C
+\begin{scope}[xshift=2cm]
+\node[minimum width=4em] (a) { };
+\draw[] (a.south) -- +(0,3.5em);
+\node[fill=none,draw=none] (cc) at($(a.south)+(0,-0.3cm)$) {C};
+\end{scope}
+\end{scope}
+
+\path[->,dashed]
+($(aa)+(0,1cm)$) edge[bend left] node[fill=none,draw=none,anchor=south]{(2) $1$} ($(cc)+(0,1cm)$);
+
+%%% 右下
+\begin{scope}[yshift=-7em]
+%% A
+\node[minimum width=4em,fill=none,draw=none] (a) { };
+\draw[] (a.south) -- +(0,3.5em);
+\draw[] ($(a.south)-(2em,0)$) -- +(4em,0);
+\node[fill=none,draw=none] (aa) at($(a.south)+(0,-0.3cm)$) {A};
+
+\begin{scope}[xshift=2cm]
+%% B
+\node[minimum width=3em,fill=none] (a) { };
+\node[anchor=south,minimum width=2em,fill=none] (b) at(a.north) { };
+\node[anchor=south,minimum width=1em,fill=none,label={left:$n-1$}] (c) at(b.north) { };
+
+\node[fill=none,draw=none] (bb) at($(a.south)+(0,-0.3cm)$) {B};
+
+%% C
+\begin{scope}[xshift=2cm]
+\node[minimum width=4em,] (a) { };
+\node[anchor=south,minimum width=3em] (b) at(a.north) { };
+\node[anchor=south,minimum width=2em] (c) at(b.north) { };
+\node[anchor=south,minimum width=1em,label={right:$n$}] (d) at(c.north) { };
+\draw[] (a.south) -- +(0,3.5em);
+\node[fill=none,draw=none] (cc) at($(a.south)+(0,-0.3cm)$) {C};
+
+\end{scope}
+\end{scope}
+
+\path[->,dashed]
+($(bb)+(0,1cm)$) edge[bend left] node[fill=none,draw=none,anchor=south]{(3) $n-1$} ($(cc)+(0,1cm)$);
+\end{scope}
+\end{scope}
+\end{scope}
 \end{tikzpicture}
 \end{frame}
 
-\begin{frame}[shrink]{例: Hanoi(汉诺)塔问题---解题思路(3层)}
+\begin{frame}[shrink]{例: Hanoi(汉诺)塔问题 --- 解题思路(3层)}
 \vspace{-0.4cm}
 \begin{columns}[T]
 	\column{0.6\textwidth}
@@ -1050,7 +1199,7 @@ int main() // 测试
 ~\\
 \end{frame}
 
-\begin{frame}[shrink,fragile]{例: Hanoi(汉诺)塔问题---解}
+\begin{frame}[shrink,fragile]{例: Hanoi(汉诺)塔问题 --- 解}
 \vspace{-0.4cm}
 \begin{columns}[T]
 \column{0.4\textwidth}
@@ -1089,7 +1238,7 @@ void hanoi(int n,char one,char two,char three)
 ~\\
 \end{frame}
 
-\begin{frame}[shrink, fragile]%{例: Hanoi(汉诺)塔问题---分析代码(3层)}
+\begin{frame}[shrink, fragile]%{例: Hanoi(汉诺)塔问题 --- 分析代码(3层)}
 \vspace{-0.4cm}
 \begin{columns}[T]
 \column{0.4\textwidth}
