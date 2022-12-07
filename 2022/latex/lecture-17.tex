@@ -109,12 +109,11 @@ void swap(struct Student *stu1, struct Student *stu2)
 \end{frame}
 
 \begin{frame}[shrink,fragile]{例6: 复试赛选(结构体数组), 排序}
+\begin{tikzpicture}
+\node[text width=1.5\textwidth] (a) {
 \vspace{-0.5cm}
-%\begin{columns}[T]
-%\column{1.0\textwidth}
 \begin{lstlisting}
-// 定义排序函数(选择法，降序): 按总成绩和英语单科成绩 
-void sort(struct Student stu[],int n)            
+void sort(struct Student stu[],int n) // 定义排序函数(选择法，降序): 按总成绩和英语单科成绩            
 {
   int i,j,k;
   for(i = 0; i < n-1; i++) 
@@ -133,8 +132,14 @@ void sort(struct Student stu[],int n)
   } 
 }
 \end{lstlisting}
-%\end{columns}
-%\medskip
+};
+
+\node[anchor=north east, text width=.5\textwidth,rounded corners, fill=green] at($(a.north east)+(-50mm,-15mm)$) {
+	(条件1||条件2||$\cdots$)的截断语义:
+	
+	从左到右计算各条件的值, 如果某条件为``真'', 则不再计算其余条件。
+};
+\end{tikzpicture}
 \end{frame}
 
 \begin{frame}[shrink,fragile]{例6: 复试赛选(结构体数组),主函数}
@@ -145,13 +150,13 @@ void sort(struct Student stu[],int n)
 int main()
 {
     struct Student stus[N]; 
-    int m,n,i;
+    int m,n; // m个学生中, 前n名进入复试
     scanf("%d%d",&m,&n);
     input(stus,m); 
     // print(stus,m); // 查看输入数据是否正确
     sort(stus,m);
     // print(stus,m); // 查看排序结果是否正确
-    print(stus,n);    // 输出进入复试的n个学生信息
+    print(stus,n);    // 输出进入复试的前n个学生信息
     return 0;
 }
 \end{lstlisting}
@@ -227,7 +232,9 @@ void print(struct Rec *recs, int n) // 输出n个矩形
 \end{frame}
 
 \begin{frame}[shrink,fragile]{例7: 画图(结构体数组),计算最大矩形}
-\vspace{-0.3cm}
+\begin{tikzpicture}
+\node[text width=\textwidth] (a) {
+\vspace{-0.5cm}
 \begin{lstlisting}
 struct Rec Largest(struct Rec res[], int n)//res表示n个矩形, 返回最大矩形
 {
@@ -247,6 +254,18 @@ struct Rec Largest(struct Rec res[], int n)//res表示n个矩形, 返回最大�
    return largest; 
 } 
 \end{lstlisting}
+};
+
+\node[anchor=north east,minimum size=.1\textwidth,draw] (b) at($(a.north east)+(-20mm,-20mm)$) {};
+
+\node[anchor=south west,minimum size=.1\textwidth,draw] (c) at($(b.north east)+(-5mm,-5mm)$) {};
+
+\node[anchor=north west,minimum height=1cm,minimum width=2cm,draw] (d) at($(b.south west)+(-4mm,4mm)$) {};
+
+\node[red,dashed, inner sep=0,fit=(b) (c) (d),draw] (fit){ };
+
+\node[anchor=north east,font=\small,red] at(fit.south east) {Largest};
+\end{tikzpicture}
 \end{frame}
 
 \begin{frame}[shrink,fragile]{例7: 画图(结构体数组), 网格\lstinline$grid[N][N]$初始化与标记}
