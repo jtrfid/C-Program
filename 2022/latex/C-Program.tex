@@ -337,9 +337,9 @@
 %\includeonlylecture{part3} %循环结构程序设计
 %\includeonlylecture{part4} %数组
 %\includeonlylecture{part5} %函数
-%\includeonlylecture{part6} %指针
+%%%%\includeonlylecture{part6} %指针，分解到函数的地址传递和最后一次的习题课中
 %\includeonlylecture{part7} %结构体
-%\includeonlylecture{part8} %复习
+%\includeonlylecture{part8} %习题课
 
 \lecture{课程介绍, C语言简介, 数据输入输出, 基本数据类型与表达式}{part1}
 \part{课程介绍, C语言简介, 数据输入输出, 基本数据类型与表达式} % 使目录项不包含其他\part中的section
@@ -386,7 +386,7 @@
 \include{lecture-12} % ch7, 函数，定义，声明，调用，值传递，地址传递，模块化设计
 \include{lecture-13} % ch7, 嵌套与递归, 汉诺塔,全局变量与局部变量
 
-% 合并在函数的地址传递中讲解了
+% 概念部分合并在函数的地址传递部分, 例题移至最后一次课的习题部分
 %\lecture{指针}{part6}  
 %\part{指针}
 %\frame{\partpage}
@@ -403,11 +403,11 @@
 \include{lecture-16} %  结构体
 \include{lecture-17} % 结构体编程举例续
 
-%% 不讲了
-%\lecture{复习}{part8}
-%\part{复习}
-%\frame{\partpage}
-%\include{lecture-18}
+\lecture{习题课}{part8}  
+\part{习题课}
+\frame{\partpage}
+\frame[shrink]{\frametitle{Outlines}\tableofcontents[hideallsubsections]} 
+\include{lecture-18} 
 
 %%%%%%%%%%%%%%%%%%% last frame
 \begin{frame}[plain]{}

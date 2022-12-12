@@ -121,7 +121,7 @@ int main()
 \begin{note}[要点]
 	\begin{itemize}
 		\item 条件判断语句：善用 \lstinline$&&, ||$ 运算，简化\lstinline|if else|结构
-		\item \lstinline!if (条件1||条件2||条件3||$\cdots$)!, 任一条件为\lstinline|true|, 整个条件表达式为\lstinline|true|,不必进行后续条件的判断。称为``或''条件的截断语义。
+		\item \lstinline!if (条件1||条件2||条件3||$\cdots$)!, 从左到右计算条件表达式, 如果任一条件为\lstinline|true|, 不必进行后续条件的判断。称为``或''条件的截断语义。
 		\item 本例是结构体数组排序, 模块化程序设计的典型案例,  详见课件。 
 	\end{itemize}
 \end{note}
@@ -191,7 +191,7 @@ void grid1(struct Rec rec, int grid[][N])
 	for(i=rec.leftBottomY;i<rec.rightTopY;i++)
 	{
 		for(j=rec.leftBottomX;j<rec.rightTopX;j++)
-		grid[i][j]=1;
+			grid[i][j]=1;
 	} 
 }
 
@@ -202,7 +202,7 @@ void grid0(struct Rec largest, int grid[][N])
 	for(i=largest.leftBottomY;i<largest.rightTopY;i++)
 	{
 		for(j=largest.leftBottomX;j<largest.rightTopX;j++)
-		grid[i][j]=0;
+			grid[i][j]=0;
 	} 
 }
 
@@ -213,7 +213,7 @@ int gridNum(struct Rec largest, int grid[][N])
 	for(i=largest.leftBottomY;i<largest.rightTopY;i++)
 	{
 		for(j=largest.leftBottomX;j<largest.rightTopX;j++)
-		if(grid[i][j]) num++;
+			if(grid[i][j]) num++;
 	} 
 	return num;
 }
@@ -222,7 +222,7 @@ void input(struct Rec *recs, int n)
 {
 	int i;
 	for(i=0;i<n;i++) 
-	scanf("%d%d%d%d",&recs[i].leftBottomX,&recs[i].leftBottomY,
+		scanf("%d%d%d%d",&recs[i].leftBottomX,&recs[i].leftBottomY,
 	&recs[i].rightTopX,&recs[i].rightTopY);
 } 
 
@@ -230,7 +230,7 @@ void print(struct Rec *recs, int n)
 {
 	int i;
 	for(i=0;i<n;i++) 
-	printf("%d,%d,%d,%d\n",recs[i].leftBottomX,recs[i].leftBottomY,
+		printf("%d,%d,%d,%d\n",recs[i].leftBottomX,recs[i].leftBottomY,
 	recs[i].rightTopX,recs[i].rightTopY);
 } 
 
