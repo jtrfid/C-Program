@@ -1,0 +1,728 @@
+%%%%%%%%%%%%%%%%%%%%% chapter.tex %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+% sample chapter
+%
+% Use this file as a template for your own input.
+%
+%%%%%%%%%%%%%%%%%%%%%%%% Springer-Verlag %%%%%%%%%%%%%%%%%%%%%%%%%%
+%\motto{Use the template \emph{chapter.tex} to style the various elements of your chapter content.}
+\chapter{试点班附加题}  
+
+\section{图灵机模拟程序}
+
+\section*{描述：}
+
+写一个图灵机模拟程序，该程序输入专用图灵机指令集及用户输入，模拟执行图灵机程序，产生输出。
+
+\section*{输入说明：}
+
+输入第一行为一个整数$n$，表示专用图灵机指令集有n条指令。接下来是$n+1$行
+
+\begin{enumerate}[1)]
+	\item 前$n$行为$n$条指令，每条指令由5个部分构成，每个部分用空格分隔，如下所示：
+	
+	\textcolor{blue}{当前状态\textvisiblespace 输入符号\textvisiblespace 输出符号\textvisiblespace 纸带移动方向\textvisiblespace 新状态}
+	
+	例如：ADD\textvisiblespace 0\textvisiblespace 1\textvisiblespace L\textvisiblespace RETURN
+	
+	其中,
+	\begin{itemize}
+		\item ``当前状态''和``新状态''为一个长度不超过20个字符的字符串
+		\item ``输入符号''和``输出符号''各是一个字符，输入和输出符号有`*'，`0'，`1'三种，其中`*'表示分界符，两个`*'之内的部分是有效输入/输出。纸带其余部分填充`\#'表示空白
+		\item ``纸带移动方向''也是一个字符，有三种可能：`L'表示左移，`R'表示右移，`N'表示不动
+	\end{itemize}
+	
+	\item 最后一行为一个长度不超过100的字符串，表示图灵机输入
+	
+	该字符串由若干`\#'，两个`*'和若干`0'，`1'字符构成，`\#'表示纸带上的空白，`*'表示输入分界符，`0'和`1'表示有效输入，如下所示：
+	
+	\#\#\#\#\#*101*\#\#\#\#
+\end{enumerate}
+
+注意：有两种状态是固定字符串：``INIT''表示初始状态，``STOP''表示停机状态，图灵机一开始处于初始状态(INIT)。
+
+\section*{输出说明：}
+
+根据输入数据执行图灵机程序，在一行上打印出执行后的输出，只输出有效部分，不输出`\#'，`*'。
+
+\section*{输入样例：}
+
+12
+
+INIT * * N START
+
+START * * R ADD
+
+ADD 0 1 L RETURN
+
+ADD 1 0 R CARRY
+
+ADD * * L STOP
+
+CARRY 0 1 L RETURN
+
+CARRY 1 0 R CARRY
+
+CARRY * 1 R OVERFLOW
+
+OVERFLOW \# * L RETURN
+
+RETURN 1 1 L RETURN
+
+RETURN 0 0 L RETURN
+
+RETURN * * N STOP
+
+\#\#\#\#\#\#\#\#\#\#*101*\#\#\#\#\#\#\#\#\#\#
+
+\section*{输出样例：}
+
+$110$
+
+\section*{样例说明：}
+
+该样例为执行二进制加$1$ 操作$y=x+1$ 的专用图灵机程序，输入为$101$，输出为$110$。
+
+\section{图灵机(Turing Machine)参考资料}
+
+图灵(Alan Turing)在1936年提出图灵机的目的是为了对有效的计算过程，也就是算法，进行形式化的描述。图灵给出的基本模型包括一个有限状态机(FSM, Finite State Machine), 一条含有无限多个方格的输入纸带(input tape), 一个读写头(read/write head). 输入带可左右移动, 其中的每个方格恰能容纳一个符号 。图灵机各部分组成见图\ref{fig:TM}。
+
+每条图灵机指令(亦称作: 状态转移函数)由5个部分组成，每个部分用空格分割，如下所示:
+\begin{center}
+	\textcolor{blue}{当前状态\textvisiblespace 输入符号\textvisiblespace 输出符号\textvisiblespace 纸带移动方向\textvisiblespace 新状态}
+\end{center}
+每条指令执行以下动作：
+\begin{enumerate}[(1)]
+	\item 在当前状态下($Q$)，读入读写头指向的当前方格的输入字符($X$)。
+	\item 在读写头指向的当前方格，写入输出符号($Y$)。
+	\item 输入纸带向右($R$), 或向左($L$)移动一个方格，或不移动($N$)。
+	\item 到达新的状态($Q'$)。
+\end{enumerate}
+
+图灵机的输入字符写在各方格中。开始时，图灵机处于初始状态(INIT), 读写头指向最右端`*'所在的方格。
+
+通常, 图灵机以一个给定的初始状态(INIT)和纸带上的一些信息开始，在图灵机指令(亦称作: 状态转移函数)的控制下完成一系列动作。在这一过程中，带上任何一个方格的内容可能会被检查(读取)或修改，最后通过将图灵机引导到停止状态(STOP)使整个过程结束。
+
+输入输出符号各是一个字符。包含`*', `0', `1'三种符号，其中`*'表示分界符，两个`*'之内的部分是有效输入输出。纸带其余部分填充`\#'表示空白。
+
+\begin{figure}[H]
+	\centering
+	\begin{tikzpicture}[tape/.style={draw,anchor=west,minimum width=5mm,minimum height=5mm}]
+	\node[tape,name=A_0] {};
+	
+	\foreach \x / \y in {A_0/A_1,A_1/A_2,A_2/A_3,A_3/A_4,A_4/A_5,A_5/A_6,A_6/A_7,A_7/A_8,A_8/A_9,A_9/A_{10},A_{10}/A_{11},A_{11}/A_{12}} { \node[tape,name=\y] at(\x.east) {}; }
+	
+	\foreach \x in {A_0,A_1,A_2,A_3} { \node[] at(\x) {\#};  }
+	
+	\node[] at(A_4) {*}; \node[] at(A_5) {1}; \node[] at(A_6) {0}; \node[] at(A_7) {1}; \node[] at(A_8) {*};
+	
+	\foreach \x in {A_9,A_{10},A_{11},A_{12}} { \node[] at(\x) {\#};  }
+	
+	\node[draw,arrow box,anchor=north,arrow box arrows={north:1cm}] (fsc) at(A_6.south) {FSM};
+	
+	\node[anchor=west] at($(fsc.north east)+(-2mm,5mm)$) {read/write head};
+	
+	\node[draw,arrow box,anchor=south,arrow box arrows={east:.5cm,west:.5cm},label=east:{R},label=west:{L}] at($(A_6.north)+(0,0.2cm)$) {};
+	
+	\node[anchor=north west] at(A_0.south) {input tape};
+	
+	\draw[red,dashed] ({$(A_0)+(-5mm,0)$} |- {$(fsc)+(0,-5mm)$}) rectangle ($(A_{12})+(5mm,10mm)$); 
+	
+	\node[anchor=north west, text width=6cm] at($(A_{12})+(8mm,0)$) {
+		开始时, 读写头指向最右端的`*'所在方格.
+		
+		FSM: 有限状态机(Finite State Machine)
+    };	
+	\end{tikzpicture}
+	\caption{图灵机工作原理} \label{fig:TM}
+\end{figure}
+
+\begin{definition}
+
+图灵机(Turing machine) $M$ 是一个六元组:
+\begin{align}
+M=(Q,\Gamma,q_0,\text{\textvisiblespace},F,\delta), 
+\end{align}
+其中
+\begin{itemize}
+	\item $Q$是有限状态集合, $\forall q\in Q, q$为$M$的一个状态;
+	\item $\Gamma$是可以写在纸带上的有限符号集合;
+	\item $q_0\in Q$是$M$的开始状态;
+	\item \textvisiblespace$\in\Gamma$是空白符(blank symbol);
+	\item $F\subseteq Q$是停止状态集合;  
+	\item $\delta:Q\times\Gamma\to Q\times\Gamma\times\{L,R,N\}$是状态转移函数, 表示$M$的指令集合。
+	
+	$\delta(q,X)=(p,Y,L)$表示$M$在状态$q$读入符号$X$, 将状态改为$p$, 并在这个$X$所在的方格中改写上符号$Y$, 然后将纸带向左移动一个方格。
+	
+	$\delta(q,X)=(p,Y,R)$表示$M$在状态$q$读入符号$X$, 将状态改为$p$, 并在这个$X$所在的方格中改写上符号$Y$, 然后将纸带向右移动一个方格。
+	
+	$\delta(q,X)=(p,Y,N)$表示$M$在状态$q$读入符号$X$, 将状态改为$p$, 并在这个$X$所在的方格中改写上符号$Y$, 纸带不移动。
+\end{itemize}
+$\hfill\square$
+\end{definition}
+
+\begin{figure}[H]
+	\centering
+	\begin{tikzpicture}[shorten >=1pt,node distance=.8cm,on grid,auto, initial text=, every state/.style={minimum size=2mm},every label/.style={font=\scriptsize},my/.style={draw,shape=ellipse, minimum width=3cm,minimum height=5cm}]
+	\node[my] (e1) {};
+	\node[my] (e2) [right=4cm of e1] {};
+	\node[state,label=left:{$(q_1,\sigma_1)$}] (l1) at(e1) {};
+	\node[state,label=left:{$(q_2,\sigma_2)$}] (l2) [above right= of l1] {};
+	\node[state,label=left:{$(q_3,\sigma_3)$}] (l3) [below= of l1] {};
+	\node[state,label=left:{$(q_4,\sigma_4)$}] (l4) [above=1.5cm of l1] {};
+	\node[state,label=right:{$(p_1,\gamma_1,d_1)$}] (r1) at(e2) {};
+	\node[state,label=right:{$(p_2,\gamma_2,d_2)$}] (r2) [above=1.5cm of r1,xshift=-.2cm] {};
+	\node[state,label=right:{$(p_3,\gamma_3,d_3)$}] (r3) [below= of r1] {};
+	
+	\path[->]
+	(l1) edge[] node[]{$\delta$} (r1)
+	(l2) edge[bend left] node[pos=.4]{$\delta$} (r1)
+	(l3) edge[bend right] node[]{$\delta$} (r3)
+	(l4) edge[] node[]{$\delta$} (r2)
+	;
+	
+	\node[anchor=west,text width=7.5cm,rounded corners,dashed,draw] at($(e2.east)+(.7cm,0)$) {
+		\vspace{-.2cm}
+		\begin{itemize}
+		\item 状态转移函数是一个映射$\delta:Q\times\Gamma\to Q\times\Gamma\times\{L,R,N\}$, 即集合\{(状态, 输入符号)\}中的每一元素，都有集合\{(新状态, 输出符号, 纸带移动方向)\}中的唯一元素与之对应。
+		
+		\item 状态转移函数集合表示图灵机$M$的指令集合: 当前状态\textvisiblespace 输入符号\textvisiblespace 输出符号\textvisiblespace 纸带移动方向\textvisiblespace 新状态。
+		
+		\item 当前状态 $q_1,\dots,q_3\in Q$, 输入符号$\sigma_1,\dots,\sigma_4\in\Gamma$.
+		
+		\item 新状态 $p_1,\dots,p_3\in Q$, 输出符号$\gamma_1,\dots,\gamma_3\in\Gamma$, 纸带移动方向 $d_1,\dots,d_3\in\{L,R,N\}$.
+		\end{itemize}
+	};
+	\end{tikzpicture}
+	\caption{状态转移函数映射关系。}
+\end{figure}
+
+\begin{figure}[H]
+	\centering
+	\begin{tikzpicture}[shorten >=1pt,node distance=2cm,on grid,auto, initial text=, every state/.style={minimum size=2mm},every label/.style={font=\small},tape/.style={draw,anchor=west,minimum width=5mm,minimum height=5mm}]
+	%%%%%% at q state
+	\node[tape,name=A_0] {};
+	
+	\foreach \x / \y in {A_0/A_1,A_1/A_2,A_2/A_3,A_3/A_4,A_4/A_5,A_5/A_6,A_6/A_7,A_7/A_8,A_8/A_9,A_9/A_{10},A_{10}/A_{11},A_{11}/A_{12}} { \node[tape,name=\y] at(\x.east) {}; }
+	
+	\foreach \x in {A_0,A_1,A_2,A_3} { \node[] at(\x) {\#};  }
+	
+	\node[] at(A_4) {*}; \node[] at(A_5) {1}; \node[] at(A_6) {X}; \node[] at(A_7) {1}; \node[] at(A_8) {*};
+	
+	\foreach \x in {A_9,A_{10},A_{11},A_{12}} { \node[] at(\x) {\#};  }
+	
+	\node[draw,arrow box,anchor=north,arrow box arrows={north:1cm}] (fsc) at(A_6.south) {FSM};
+	
+	\node[anchor=west] at(fsc.east) { at $q$ state};
+	
+	\node[anchor=west] at($(fsc.north east)+(-2mm,5mm)$) {read/write head};
+	
+	\node[draw,arrow box,anchor=south,arrow box arrows={east:.5cm,west:.5cm},label=east:{R},label=west:{L}] at($(A_6.north)+(0,0.2cm)$) {};
+	
+	\node[anchor=north west] at(A_0.south) {input tape};
+	
+	\draw[red,dashed] ({$(A_0)+(-5mm,0)$} |- {$(fsc)+(0,-5mm)$}) rectangle ($(A_{12})+(5mm,10mm)$); 
+	
+	\node[] (a) at($(A_6)+(0,-2.5cm)$) {(a) 图灵机$M$ at $q$ state};
+	
+	%%%%%%%%%% at p state
+	\begin{scope}[xshift=8cm]
+	\node[tape,name=A_0] {};
+	
+	\foreach \x / \y in {A_0/A_1,A_1/A_2,A_2/A_3,A_3/A_4,A_4/A_5,A_5/A_6,A_6/A_7,A_7/A_8,A_8/A_9,A_9/A_{10},A_{10}/A_{11},A_{11}/A_{12}} { \node[tape,name=\y] at(\x.east) {}; }
+	
+	\foreach \x in {A_0,A_1,A_2,A_3} { \node[] at(\x) {\#};  }
+	
+	\node[] at(A_4) {*}; \node[] at(A_5) {1}; \node[] at(A_6) {Y}; \node[] at(A_7) {1}; \node[] at(A_8) {*};
+	
+	\foreach \x in {A_9,A_{10},A_{11},A_{12}} { \node[] at(\x) {\#};  }
+	
+	\node[draw,arrow box,anchor=north,arrow box arrows={north:1cm}] (fsc) at(A_7.south) {FSM};
+	
+	\node[anchor=west] at(fsc.east) { at $p$ state};
+	
+	\node[anchor=west] at($(fsc.north east)+(-2mm,5mm)$) {read/write head};
+	
+	\node[draw,arrow box,anchor=south,arrow box arrows={east:.5cm,west:.5cm},label=east:{R},label=west:{L}] at($(A_6.north)+(0,0.2cm)$) {};
+	
+	\node[anchor=north west] at(A_0.south) {input tape};
+	
+	\draw[red,dashed] ({$(A_0)+(-5mm,0)$} |- {$(fsc)+(0,-5mm)$}) rectangle ($(A_{12})+(5mm,10mm)$); 
+	
+	\node[] (b) at($(A_6)+(0,-2.5cm)$) {(b) 图灵机$M$ at $p$ state};
+	\end{scope}
+	
+	\node[anchor=north,text width=14cm,rounded corners, draw] (t) at($(a.south)!.5!(b.south)$) {
+		\vspace{-2mm}
+		\begin{itemize}\itemsep=8pt
+		\item 执行状态转移函数$\delta(q,X)=(p,Y,L)$表示$M$在状态$q$读入符号$X$, 将状态改为$p$, 并在这个$X$所在的方格中改写上符号$Y$, 然后将纸带向左移动一个方格。
+		
+		\item 状态转移函数$\delta(q,X)=(p,Y,L)$, 表示图灵机指令: $q\quad X\quad Y\quad L\quad p$
+		
+		\item  状态转移函数$\delta(q,X)=(p,Y,L)$, 用状态机表示为: 
+		\end{itemize}
+	};
+
+	\node[state,label=left:$q$] (q) at($(t.south west)+(8cm,0.3cm)$) {};
+	\node[state,label=right:$p$] (p) [right= of q] {};
+	\path[->]
+	(q) edge[] node[]{$X/Y\quad L$} (p)
+	;
+    
+	\end{tikzpicture}
+	\caption{执行状态转移函数$\delta(q,X)=(p,Y,L)$前后: 状态变化, 纸带内容变化, 读写头指向变化情况。}
+\end{figure}
+
+\begin{figure}[H]
+	\centering
+	\begin{tikzpicture}[shorten >=1pt,node distance=2cm,on grid,auto, initial text=, every state/.style={minimum size=2mm},every label/.style={font=\scriptsize}]
+	\node[state,initial below,label=-120:INIT] (INIT) {};
+	\node[state,label=-120:START] (START) [above= of INIT] {};
+	\node[state,label=-120:ADD] (ADD) [right= of START] {};
+	\node[state,label=-20:CARRY] (CARRY) [right= of ADD] {};
+	\node[state,accepting,label=below:STOP] (STOP) [below= of ADD] {};
+	\node[state,label=-20:RETURN] (RETURN) [below= of CARRY] {};
+	\node[state,label=-20:OVERFLOW] (OVERFLOW) [right= of CARRY] {};
+	
+	\path[->]
+	(INIT) edge[blue] node[]{*/* N} (START)
+	(START) edge[blue] node[]{*/* R} (ADD)
+	(ADD) edge[blue] node[]{1/0 R} (CARRY)
+	(ADD) edge[] node[fill=white,anchor=center]{0/1 L} (RETURN)
+	(ADD) edge[] node[swap]{*/* L} (STOP)
+	(CARRY) edge[] node[]{*/1 R} (OVERFLOW)
+	(CARRY) edge[blue] node[]{0/1 L} (RETURN)
+	(CARRY) edge[loop above] node[]{1/0 R} ()
+	(RETURN) edge[loop below] node[align=left]{\textcolor{blue}{0/0 }L\\1/1 L} ()
+	(RETURN) edge[blue] node[swap]{*/* N} (STOP)
+	;
+	
+	\draw[->] (OVERFLOW) |- (RETURN);
+	\node[anchor=west] (t) at($(OVERFLOW)!.5!(OVERFLOW |- RETURN)$) {\#/* L};
+	
+	\node[anchor=west,text width=6cm] at($(t.east)+(1cm,0)$) {
+		
+	图灵机指令集由有限状态机图描述。它是一个有向图, 其顶点由图灵机的状态组成, 边表示输入/输出符号以及纸带移动方向。
+	
+	如: ``ADD 1/0 R CARRY''表示在ADD状态读入纸带当前方格符号`1', 并改写为`0', 然后纸带向右移动一个方格, 到达CARRY状态。
+		
+	};
+	
+	\node[draw,anchor=north west,text width=8.2cm,rounded corners] at($(INIT)+(-.5cm,-1.5cm)$) (a) {
+		图灵机指令集
+		
+		当前状态\textvisiblespace 输入符号\textvisiblespace 输出符号\textvisiblespace 纸带移动方向\textvisiblespace 新状态
+		
+		INIT * * N START
+		
+		START * * R ADD
+		
+		ADD 0 1 L RETURN
+		
+		ADD 1 0 R CARRY
+		
+		ADD * * L STOP
+		
+		CARRY 0 1 L RETURN
+		
+		CARRY 1 0 R CARRY
+		
+		CARRY * 1 R OVERFLOW
+		
+		OVERFLOW \# * L RETURN
+		
+		RETURN 1 1 L RETURN
+		
+		RETURN 0 0 L RETURN
+		
+		RETURN * * N STOP
+	};
+	
+	\node[draw,anchor=west,text width=5cm,rounded corners] at($(a.east)+(5mm,0)$) {
+		\vspace*{-.2cm}
+		\begin{align*}
+		&\text{Example input} &\\
+		&\text{input} & \#\#\#\#*101*\#\#\#\#\\
+		&\text{INIT} & \#\#\#\#*101\underset{\uparrow}{*}\#\#\#\#\\
+		&\text{START} & \#\#\#\#*101\underset{\uparrow}{*}\#\#\#\#\\ 
+		&\text{ADD} & \#\#\#\#*10\underset{\uparrow}{1}*\#\#\#\#\\ 
+		&\text{CARRY} & \#\#\#\#*1\underset{\uparrow}{0}0*\#\#\#\#\\ 
+		&\text{RETURN} & \#\#\#\#*11\underset{\uparrow}{0}*\#\#\#\#\\ 
+		&\text{RETURN} & \#\#\#\#*110\underset{\uparrow}{*}\#\#\#\#\\ 
+		&\text{STOP} & \#\#\#\#*110\underset{\uparrow}{*}\#\#\#\#
+		\end{align*}	
+	};
+	\end{tikzpicture}
+	\caption{样例描述的图灵机状态图及其运行过程}
+\end{figure}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{comment}
+\section*{Reference}
+
+\section*{Definition of the turing machine}
+see \url{https://www.literateprograms.org/turing_machine_simulator__c_plus_plus__generic_programming_.html}
+
+A turing machine consists of several parts:
+\begin{itemize}
+	\item A tape which is infinite on one or both sides, and at each position contains one of a finite set of symbols.
+	\item A read/write head which can move along the tape one position at a time, read the symbol at the current position, and replace that symbol with another symbol.
+	\item A state machine, which controls the read-write head according to a table defining the actual program.
+\end{itemize}
+
+The state machine's table contains for each combination of current state and current symbol at the head's position
+\begin{itemize}
+	\item what symbol to write at that position (replacing the current symbol)
+	\item in which direction (left or right) to move the head afterwards
+	\item the next state of the state machine
+\end{itemize}
+
+see \url{https://www.literateprograms.org/turing_machine_simulator__c_.html}
+
+We define a single-tape Turing machine as 6-tuple:
+\begin{align}
+M=(Q,\Gamma,q_0,\text{\textvisiblespace},F,\delta), 
+\end{align}
+where
+\begin{itemize}
+	\item $Q$ is a finite set of states;
+	\item $\Gamma$ is the finite tape alphabet (the symbols that can occure on the tape);
+	\item $q_0\in Q$ is the initial state;
+	\item \textvisiblespace$\in\Gamma$ is the blank symbol;
+	\item $F\subseteq Q$ is the set of accepting (final) states;  
+	\item $\delta:Q\times\Gamma\to Q\times\Gamma\times\{L,R,N\}$ is the transition function which determinies the action performed at each step.
+\end{itemize}
+
+Initially the tape has the input string on it, followed by an infinite number of blank symbols (\textvisiblespace), and the head is at the left end of the tape. At each step we use the transition function to determine the next state, the symbol written on the tape just prior to moving, and the direction to move the head, left (L) or right (R). If we ever reach a final state, the machine halts.
+
+\begin{figure}[H]
+\centering
+\begin{tikzpicture}[tape/.style={draw,anchor=west,minimum width=5mm,minimum height=5mm}]
+%%%% (a)
+\node[tape,name=A_0] {};
+
+\foreach \x / \y in {A_0/A_1,A_1/A_2,A_2/A_3,A_3/A_4,A_4/A_5,A_5/A_6,A_6/A_7,A_7/A_8,A_8/A_9,A_9/A_{10},A_{10}/A_{11},A_{11}/A_{12}} { \node[tape,name=\y] at(\x.east) {}; }
+
+\foreach \x in {A_0,A_1,A_2,A_3} { \node[] at(\x) {\#};  }
+
+\node[] at(A_4) {*}; \node[] at(A_5) {1}; \node[] at(A_6) {0}; \node[] at(A_7) {1}; \node[] at(A_8) {*};
+
+\foreach \x in {A_9,A_{10},A_{11},A_{12}} { \node[] at(\x) {\#};  }
+
+\node[draw,arrow box,anchor=north,arrow box arrows={north:1cm}] (fsc) at(A_6.south) {FSM};
+
+\node[anchor=west] at($(fsc.north east)+(-2mm,5mm)$) {read/write head};
+
+\node[draw,arrow box,anchor=south,arrow box arrows={east:.5cm,west:.5cm},label=east:{R},label=west:{L}] at($(A_6.north)+(0,0.2cm)$) {};
+
+\node[anchor=north west] at(A_0.south) {input tape};
+
+\draw[red,dashed] ({$(A_0)+(-5mm,0)$} |- {$(fsc)+(0,-5mm)$}) rectangle ($(A_{12})+(5mm,10mm)$); 
+
+\node[align=center] (a) at($(fsc)+(0,-10mm)$) {
+	(a) 纸带移动.\\开始时, 读写头指向最右端的`*'所在单元格};
+
+%%%% (b)
+\begin{scope}[xshift=8.5cm]
+\node[tape,name=A_0] {};
+
+\foreach \x / \y in {A_0/A_1,A_1/A_2,A_2/A_3,A_3/A_4,A_4/A_5,A_5/A_6,A_6/A_7,A_7/A_8,A_8/A_9,A_9/A_{10},A_{10}/A_{11},A_{11}/A_{12}} { \node[tape,name=\y] at(\x.east) {}; }
+
+\foreach \x in {A_0,A_1,A_2,A_3} { \node[] at(\x) {\#};  }
+
+\node[] at(A_4) {*}; \node[] at(A_5) {1}; \node[] at(A_6) {0}; \node[] at(A_7) {1}; \node[] at(A_8) {*};
+
+\foreach \x in {A_9,A_{10},A_{11},A_{12}} { \node[] at(\x) {\#};  }
+
+\node[draw,arrow box,anchor=north,arrow box arrows={north:1cm,east:.5cm,west:.5cm},label=east:{R},label=west:{L}] (fsc) at(A_6.south) {FSM};
+
+\node[anchor=west] at($(fsc.north east)+(-2mm,5mm)$) {read/write head};
+
+\draw[red,dashed] ({$(A_0)+(-5mm,0)$} |- {$(fsc)+(0,-5mm)$}) rectangle ($(A_{12})+(5mm,10mm)$); 
+
+\node[anchor=north west] at(A_0.south) {input tape};
+
+\node[align=center] (b) at($(fsc)+(0,-10mm)$) {(b) 读写头移动. \\开始时, 读写头指向最左端的`*'所在的单元格};
+\end{scope}
+
+\node[anchor=north] at($(a)!.5!(b) +(0,-5mm)$) {FSM: Finite State Machine};
+\end{tikzpicture}
+\caption{图灵机工作原理}
+\end{figure}
+\end{comment}
+%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{用C++ 的map<Key,Value>集合表示图灵机状态转移函数集合(指令集)}
+
+\begin{figure}[H]
+	\centering
+	\begin{tikzpicture}[shorten >=1pt,node distance=.8cm,on grid,auto, initial text=, every state/.style={minimum size=2mm},every label/.style={font=\scriptsize},my/.style={draw,shape=ellipse, minimum width=3cm,minimum height=5cm}]
+	\node[my] (e1) {};
+	\node[my] (e2) [right=4cm of e1] {};
+	\node[state,label=left:{$(q_1,\sigma_1)$}] (l1) at(e1) {};
+	\node[state,label=left:{$(q_2,\sigma_2)$}] (l2) [above right= of l1] {};
+	\node[state,label=left:{$(q_3,\sigma_3)$}] (l3) [below= of l1] {};
+	\node[state,label=left:{$(q_4,\sigma_4)$}] (l4) [above=1.5cm of l1] {};
+	\node[state,label=right:{$(p_1,\gamma_1,d_1)$}] (r1) at(e2) {};
+	\node[state,label=right:{$(p_2,\gamma_2,d_2)$}] (r2) [above=1.5cm of r1,xshift=-.2cm] {};
+	\node[state,label=right:{$(p_3,\gamma_3,d_3)$}] (r3) [below= of r1] {};
+	
+	\path[->]
+	(l1) edge[] node[]{$\delta$} (r1)
+	(l2) edge[bend left] node[pos=.4]{$\delta$} (r1)
+	(l3) edge[bend right] node[]{$\delta$} (r3)
+	(l4) edge[] node[]{$\delta$} (r2)
+	;
+	
+	\node[] (a) at($(e1.south)!.5!(e2.south)+(0,-.5cm)$) {(a) $\delta:Q\times\Gamma\to Q\times\Gamma\times\{L,R,N\}$};
+	
+	\begin{scope}[xshift=7.5cm]
+	\node[my] (e1) {};
+	\node[my] (e2) [right=4cm of e1] {};
+	\node[state,label=left:{$k_1$}] (l1) at(e1) {};
+	\node[state,label=left:{$k_2$}] (l2) [above right= of l1] {};
+	\node[state,label=left:{$k_3$}] (l3) [below= of l1] {};
+	\node[state,label=left:{$k_4$}] (l4) [above=1.5cm of l1] {};
+	\node[state,label=right:{$v_1$}] (r1) at(e2) {};
+	\node[state,label=right:{$v_2$}] (r2) [above=1.5cm of r1,xshift=-.2cm] {};
+	\node[state,label=right:{$v_3$}] (r3) [below= of r1] {};
+	
+	\path[->]
+	(l1) edge[] node[]{map} (r1)
+	(l2) edge[bend left] node[pos=.4]{map} (r1)
+	(l3) edge[bend right] node[]{map} (r3)
+	(l4) edge[] node[]{map} (r2)
+	;
+	
+	\node[] (b) at($(e1.south)!.5!(e2.south)+(0,-.5cm)$) {(b) map<Key,Value>};
+	\end{scope}
+	
+	\draw[dashed,red] ($(a)!.5!(b)$) -- +(0,6cm);
+	
+	\node[anchor=north,text width=14cm,rounded corners,dashed,draw] at($(a.south)!.5!(b.south)$) {
+		\vspace{-.2cm}
+		\begin{itemize}
+		\item 状态转移函数是一个映射$\delta:Q\times\Gamma\to Q\times\Gamma\times\{L,R,N\}$, 即集合\{(状态, 输入符号)\}中的每一元素，都有集合\{(新状态, 输出符号, 纸带移动方向)\}中的唯一元素与之对应。
+		
+		\item 状态转移函数集合表示图灵机$M$的指令集合: 当前状态\textvisiblespace 输入符号\textvisiblespace 输出符号\textvisiblespace 纸带移动方向\textvisiblespace 新状态。
+		
+		\item C++的键值对集合map<Key,Value> 表示一个映射map: Key$\to$Value. 即集合\{key\}中的每一元素，都有集合\{value\}中的唯一元素与之对应。
+		
+		\item 因此, 用C++ 的map<Key,Value>集合可以自然的表示图灵机状态转移函数集合(指令集)
+		\end{itemize}
+	};
+	\end{tikzpicture}
+	\caption{用C++ 的map<Key,Value>集合表示图灵机状态转移函数集合(指令集)。}
+\end{figure}
+
+\section{解法一：map<FromState,ToState>  mapStates;}
+
+\begin{lstlisting}
+#include<iostream>
+#include<map>
+
+using namespace std;
+
+class FromState
+{
+	public:
+	string state; // 当前状态, 以INIT状态开始，STOP状态结束 
+	char sigma;   // 输入符号 
+	// 为了将此类作为map的key使用, 必须重载此函数。  
+	bool operator < (const FromState & t) const
+	{
+		bool ret = true;
+		if (state == t.state) ret = (sigma < t.sigma) ? true : false;
+		else ret = (state < t.state) ? true : false;
+		return ret;
+	}	
+};
+
+class ToState
+{  
+	public:
+	string state; // 新状态 
+	char replace; // 输出符号 
+	char move;    // 纸带移动方向 
+};
+
+// 全局变量, 记录图灵机指令集，输入字符串，当前状态，读写头位置 
+map<FromState,ToState>  mapStates; // 图灵机状态机，描述图灵机指令集: 当前状态 输入符号 输出符号 纸带移动方向 新状态 
+string input = ""; // 图灵机输入字符串, 即输入纸带上的符号序列 
+string currentState = "INIT"; // 从INIT状态开始 
+string::iterator pos = input.end()-1; // 图灵机读写头位置，开始时指向Input的最右端 
+
+// 测试打印mapStates and input 
+void print()
+{
+	map<FromState,ToState>::iterator iter;
+	iter = mapStates.begin();
+	while(iter != mapStates.end()) 
+	{
+		cout << "FromState: " << iter->first.state << ", Input char: " << iter->first.sigma << endl; 
+		cout << "ToState: " << iter->second.state << ", Output char: " << iter->second.replace << ", move: " << iter->second.move << endl; 
+		cout << "-------------" << endl;
+		iter++;
+	}
+	cout << "Input: " << input << endl;
+} 
+
+// 从标准输入读取图灵机指令集, 生成C++键值对mapStates集合
+// 图灵机输入: input 
+void init()
+{
+	int n; // 图灵机指令数 
+	FromState k; 
+	ToState v;
+	cin >> n; 
+	for(int i=0; i<n; i++)
+	{
+		cin >>  k.state >> k.sigma >> v.replace >> v.move >> v.state;
+		// 插入键值对mapStates集合
+		mapStates.insert(pair<FromState,ToState>(k,v));
+	}
+	cin >> input; 
+}
+
+// 运行图灵机, 从INIT状态开始至STOP状态结束
+void run()
+{
+	char inputchar;
+	FromState k;
+	ToState v;
+	
+	pos = input.end()-1; //指向input的最右端'#'  
+	while(*pos == '#') pos--; 
+	
+	//当前pos指向input的最右端'*' 
+	
+	while(currentState!="STOP")
+	{
+		k.state=currentState; // 当前状态 
+		k.sigma=*pos; // 输入符号 
+		v = mapStates[k]; // 由k获得映射目标v 
+		currentState=v.state; // 更新当前状态 
+		*pos=v.replace; // 重写读写头指向的纸带方格为输出符号 
+		if(v.move == 'R') pos--; // 纸带右移 
+		else if(v.move == 'L') pos++; // 纸带左移 
+	}
+}
+
+int main()
+{
+	
+	init();
+	run(); 
+	// print(); // 测试 
+	
+	// 输出纸带有效部分内容(两个分节符'*'之间的字符) 
+	string::size_type leftpos = input.find('*') + 1;
+	string::size_type rightpos = input.rfind('*') -1;
+	cout << input.substr(leftpos,rightpos-leftpos+1) << endl; 
+	
+	return 0;	
+}
+\end{lstlisting}
+
+\section{解法二：map<string,ToState>  mapStates;}
+
+\begin{lstlisting}
+#include<iostream>
+#include<map>
+
+using namespace std;
+
+typedef struct fromState
+{
+	string state; // 当前状态, 以INIT状态开始，STOP状态结束  
+	char sigma;   // 输入符号 
+	string key; // key=sigma+state;  for map<key,value> 
+} FromState;
+
+typedef struct toState
+{  
+	string state;  // 新状态 
+	char replace;  // 输出符号 
+	char move;     // 纸带移动方向 
+} ToState;
+
+// 全局变量, 记录图灵机指令集，输入字符串，当前状态，读写头位置 
+map<string,ToState>  mapStates; // 图灵机状态机，描述图灵机指令集: 当前状态 输入符号 输出符号 纸带移动方向 新状态 
+string input = ""; // 图灵机输入字符串 
+string currentState = "INIT"; // 从INIT状态开始 
+string::iterator pos = input.end()-1; // 图灵机读写头位置，开始时指向Input的最右端 
+
+// 测试打印mapStates and input 
+void print()
+{
+	map<string,ToState>::iterator iter;
+	iter = mapStates.begin();
+	while(iter != mapStates.end()) 
+	{
+		cout << "FromState: " << iter->first.substr(1) << ", Input char: " << iter->first[0] << endl; 
+		cout << "ToState: " << iter->second.state << ", Output char: " << iter->second.replace << ", move: " << iter->second.move << endl; 
+		cout << "-------------" << endl;
+		iter++;
+	}
+	cout << "Input: " << input << endl;
+} 
+
+// 从标准输入读取图灵机指令集, 生成C++键值对mapStates集合
+// 图灵机输入: input 
+void init()
+{
+	int n; // 图灵机指令数 
+	FromState k; 
+	ToState v;
+	cin >> n; 
+	for(int i=0; i<n; i++)
+	{
+		cin >>  k.state >> k.sigma >> v.replace >> v.move >> v.state;
+		k.key=k.sigma+k.state;
+		// 插入键值对mapStates集合
+		mapStates.insert(pair<string,ToState>(k.key,v));
+	}
+	cin >> input; 
+}
+
+// 运行图灵机, 从INIT状态开始至STOP状态结束
+void run()
+{
+	char inputchar;
+	FromState k;
+	ToState v;
+	
+	pos = input.end()-1; //指向input的最右端'#'  
+	while(*pos == '#') pos--;
+	
+	//当前pos指向input的最右端'*' 
+	
+	while(currentState!="STOP")
+	{
+		k.state=currentState; // 当前状态 
+		k.sigma=*pos; // 输入符号 
+		v = mapStates[k.sigma+k.state]; // 由k获得映射目标v 
+		currentState=v.state; // 更新当前状态
+		*pos=v.replace; // 重写读写头指向的纸带方格为输出符号 
+		if(v.move == 'R') pos--; // 纸带右移 
+		else if(v.move == 'L') pos++; // 纸带左移 
+	}
+}
+
+int main()
+{
+	
+	init();
+	run(); 
+	// print(); // 测试 
+	
+	// 输出纸带有效部分内容(两个分节符'*'之间的字符) 
+	string::size_type leftpos = input.find('*') + 1;
+	string::size_type rightpos = input.rfind('*') -1;
+	cout << input.substr(leftpos,rightpos-leftpos+1) << endl; 
+	
+	return 0;	
+}
+\end{lstlisting}
+
+
