@@ -1,0 +1,180 @@
+%%%%%%%%%%%%%%%%%%%%% chapter.tex %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+% sample chapter
+%
+% Use this file as a template for your own input.
+%
+%%%%%%%%%%%%%%%%%%%%%%%% Springer-Verlag %%%%%%%%%%%%%%%%%%%%%%%%%%
+%\motto{Use the template \emph{chapter.tex} to style the various elements of your chapter content.}
+\chapter{提交代码片段题型练习}  
+
+提交代码片段即是根据题目要求，仅复制相关代码片段，然后粘贴至提交页面指定区域即可。
+
+\section{字符串压缩}
+
+\section*{问题描述：}
+
+有一种简单的字符串压缩算法，对于字符串中连续出现的同一个英文字符，用该字符加上连续出现的次数来表示（连续出现次数小于3时不压缩）。
+
+例如，字符串aaaaabbbabaaaaaaaaaaaaabbbb可压缩为a5b3aba13b4。
+
+请设计一个程序，采用该压缩方法对字符串压缩并输出。请编写一个函数compress，采用该压缩方法对字符串src进行压缩。函数定义如下:
+char *compress(char *src);
+返回值：
+指向压缩后的字符串数据
+参数：
+src：输入/输出参数，输入表示待压缩字符串，输出表示压缩后的字符串
+
+\textcolor{blue}{注意：函数声明已包含在主程序中，不需要自己定义。只需要提交自定义的函数代码。}
+
+\begin{lstlisting}[frame=none]
+主程序如下:
+#include<stdio.h>
+#include<string.h>
+#include<stdlib.h>
+char *compress(char *src);
+int main()
+{
+	char src[100];
+	scanf("%s",src);
+	
+	char *ps = compress(src);
+	
+	puts(ps);
+	return 0;
+}
+\end{lstlisting}
+
+\textbf{主函数输入说明：} 输入第一行为源字符串src（长度小于100），该字符串只包含大小写字母。
+
+\textbf{主函数输出说明：} 输出压缩后的字符串。
+
+\textbf{输入样例: } aaaaabbbabaaaaaaaaaaaaabbbb
+
+\textbf{输出样例: } a5b3aba13b4
+
+\section{函数\lstinline|char *compress(char *src)|设计分析}
+
+\begin{enumerate}[(1)]
+	\item 关键局部变量:
+	
+	 \lstinline|char *p1,*p2; // p1,p2指向每次读取src的区间| 
+	
+	 \lstinline|char dest[100]; // 存储压缩字符串| 
+	 
+	 \lstinline|int count; // 连续相同字符计数| 
+	
+	\item 首先指针$p_1,p_2$指向字符串第一个字符, 
+	
+	$\underset{p_1,p_2}{\underset{\uparrow}{a}}aaaabcccccd$
+	
+	\item \lstinline|count=0; while(*p1==*p2) {p2++; count++;}|
+	
+	$\underset{p_1}{\underset{\uparrow}{a}}aaaa\underset{p_2}{\underset{\uparrow}{b}}cccccd$
+	
+	\item $*p_1$添加至dest末尾.
+	
+	\lstinline|char tmp[2]; tmp[0]=*p1; tmp[1]='\0'; strcat(dest,tmp);|
+	
+	\item \lstinline|if (count>=3)|, 将其转换为字符串strCount, 添加至dest末尾. 对于\lstinline|count=1,2|的情况处理简单(略).
+	
+	\lstinline|strcat(dest,strCount);|
+	
+	\item \lstinline|p1=p2;| 重复step (2)至(5), 直至src结束.
+	
+	$aaaaa\underset{p_1,p2}{\underset{\uparrow}{b}}cccccd$ 
+	
+	\item \lstinline|strcpy(src,dest); return src;| 
+	
+	 \lstinline|return dest; //直接返回dest是错误的.| 
+	 
+	 因为指针变量dest是局部变量，dest中存储的地址, 离开函数后会失效。 
+	  
+\end{enumerate}
+
+
+
+\section{解法一：自定义函数将count转为字符串}
+
+\begin{lstlisting}
+// 整数转字符串，要求p以'\0'结尾. 
+// 参考课件递归函数部分【例: 生成正整数对应的二进制字符串】 
+// 完成同样功能stdlib.h中库函数char *itoa(int i,char *s,int radix);  
+void IntStr(int count,char *p)
+{
+	char r[2];
+	// 如果多于两位数，递归，未计算的count压入栈中 
+	if (count>=10) IntStr(count/10,p); 
+	// pop栈中的count 
+	r[0]=count%10+'0'; 
+	r[1]='\0'; // 确保字符串以'\0'结尾  
+	strcat(p,r); 
+}
+
+char *compress(char *src)
+{
+	// p1,p2指向每次读取src的区间，dest存储压缩字符串。 
+	char *p1=src,*p2=src,dest[100]={'\0'};
+	int count; // 连续相同字符计数 
+	char tmp[100];
+	
+	// 读取p1,p2指向的src中的区间，如果相同字符, p2++; 
+	while(*p2!='\0')
+	{
+		count=0;
+		while(*p1==*p2)	{ p2++; count++; }
+		if(count==1) { tmp[0]=*p1; tmp[1]='\0'; strcat(dest,tmp); }  // 追加字符本身 
+		else if(count==2) // 追加2个字符本身 
+		{ tmp[0]=*p1; tmp[1]=*p1; tmp[2]='\0'; strcat(dest,tmp); }
+		else // count>=3 
+		{
+			tmp[0]=*p1; tmp[1]='\0'; strcat(dest,tmp); // 追加字符本身
+			tmp[0]='\0'; // 确保字符串以'\0'结尾  
+			IntStr(count,tmp); // // 转换count为数字字符串
+			strcat(dest,tmp); // 追加count字符串 
+		}
+		p1=p2; // 准备下轮读取 
+	}
+	strcpy(src,dest); // src存储的地址与主函数共享 
+	return src;  // 返回来自参数的指针变量传输的地址.
+	// 不能返回dest. 因为指针变量dest是局部变量，dest中存储的地址, 离开函数后会失效。 
+	// return dest;  
+}
+\end{lstlisting}
+
+\section{解法二：使用stdlib.h中的库函数char *itoa(int i,char *s,int radix), 将count转为字符串}
+
+\begin{lstlisting}
+// 使用库函数count转为字符串 
+char *compress(char *src)
+{
+	// p1,p2指向每次读取src的区间，dest存储压缩字符串。 
+	char *p1=src,*p2=src,dest[100]={'\0'};
+	int count; // 连续相同字符计数 
+	char tmp[100];
+	
+	// 读取p1,p2指向的src中的区间，如果相同字符, p2++; 
+	while(*p2!='\0')
+	{
+		count=0;
+		while(*p1==*p2) { p2++; count++; }
+		if(count==1) { tmp[0]=*p1; tmp[1]='\0'; strcat(dest,tmp); } // 追加字符本身 
+		else if(count==2) // 追加2个字符本身 
+		{ tmp[0]=*p1; tmp[1]=*p1; tmp[2]='\0'; strcat(dest,tmp); }
+		else // count>=3 
+		{
+			tmp[0]=*p1; tmp[1]='\0'; strcat(dest,tmp); // 追加字符本身 
+			tmp[0]='\0'; // 确保字符串以'\0'结尾  
+			itoa(count,tmp,10);//转count为数字字符串, 10表示转为十进制数字 
+			strcat(dest,tmp); // 追加count字符串 
+		}
+		p1=p2; // 准备下轮读取 
+	}
+	strcpy(src,dest); // src存储的地址与主函数共享 
+	return src;  // 返回来自参数的指针变量传输的地址.
+	// 不能返回dest. 因为指针变量dest是局部变量，dest中存储的地址, 离开函数后会失效。 
+	// return dest;  
+}
+\end{lstlisting}
+
+
